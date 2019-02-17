@@ -65,3 +65,33 @@ func (c noParam) Param() (ret interface{}) {
 func (c noParam) Validate() (ok bool) {
 	return true
 }
+
+type returnStrArr struct {
+}
+
+func (c returnStrArr) Decode(msg *marionette.Message) (ret []string, err error) {
+	if msg.Error != nil {
+		err = msg.Error
+		return
+	}
+
+	err = recode(msg, &ret)
+	return
+}
+
+type returnStr struct {
+}
+
+func (c returnStr) Decode(msg *marionette.Message) (ret string, err error) {
+	if msg.Error != nil {
+		err = msg.Error
+		return
+	}
+
+	resp := nonObjResp{Value: &ret}
+	if err = recode(msg, &resp); err != nil {
+		return
+	}
+
+	return
+}

@@ -1,22 +1,11 @@
 package ito
 
-import marionette "github.com/raohwork/marionette-go"
-
 // GetWindowHandles represents "WebDriver:GetWindowHandles" command
 //
 // See https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L1345
 type GetWindowHandles struct {
 	noParam
-}
-
-func (c *GetWindowHandles) Decode(msg *marionette.Message) (ids []string, err error) {
-	if msg.Error != nil {
-		err = msg.Error
-		return
-	}
-
-	err = recode(msg, &ids)
-	return
+	returnStrArr
 }
 
 func (c *GetWindowHandles) Command() (ret string) {
@@ -28,20 +17,7 @@ func (c *GetWindowHandles) Command() (ret string) {
 // See https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L1325
 type GetWindowHandle struct {
 	noParam
-}
-
-func (c *GetWindowHandle) Decode(msg *marionette.Message) (id string, err error) {
-	if msg.Error != nil {
-		err = msg.Error
-		return
-	}
-
-	resp := nonObjResp{Value: &id}
-	if err = recode(msg, &resp); err != nil {
-		return
-	}
-
-	return
+	returnStr
 }
 
 func (c *GetWindowHandle) Command() (ret string) {
@@ -53,16 +29,7 @@ func (c *GetWindowHandle) Command() (ret string) {
 // See https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L1388
 type GetChromeWindowHandles struct {
 	noParam
-}
-
-func (c *GetChromeWindowHandles) Decode(msg *marionette.Message) (ids []string, err error) {
-	if msg.Error != nil {
-		err = msg.Error
-		return
-	}
-
-	err = recode(msg, &ids)
-	return
+	returnStrArr
 }
 
 func (c *GetChromeWindowHandles) Command() (ret string) {
@@ -74,20 +41,7 @@ func (c *GetChromeWindowHandles) Command() (ret string) {
 // See https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L1360
 type GetChromeWindowHandle struct {
 	noParam
-}
-
-func (c *GetChromeWindowHandle) Decode(msg *marionette.Message) (id string, err error) {
-	if msg.Error != nil {
-		err = msg.Error
-		return
-	}
-
-	resp := nonObjResp{Value: &id}
-	if err = recode(msg, &resp); err != nil {
-		return
-	}
-
-	return
+	returnStr
 }
 
 func (c *GetChromeWindowHandle) Command() (ret string) {
