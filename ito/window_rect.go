@@ -38,14 +38,8 @@ func (c *SetWindowRect) Command() (ret string) {
 	return "WebDriver:SetWindowRect"
 }
 
-func (c *SetWindowRect) Param() (ret map[string]interface{}) {
-	ret = map[string]interface{}{
-		"x":      c.Rect.X,
-		"y":      c.Rect.Y,
-		"width":  c.Rect.W,
-		"height": c.Rect.H,
-	}
-	return
+func (c *SetWindowRect) Param() (ret interface{}) {
+	return &c.Rect
 }
 
 func (c *SetWindowRect) Validate() (ok bool) {

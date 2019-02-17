@@ -104,7 +104,7 @@ func (c *Conn) ResultChan() (ch chan *Message) {
 }
 
 // Send sends a command message to the server
-func (c *Conn) Send(cmd string, param map[string]interface{}) (id uint32, err error) {
+func (c *Conn) Send(cmd string, param interface{}) (id uint32, err error) {
 	if c == nil {
 		return 0, errors.New("connection has not initialized")
 	}

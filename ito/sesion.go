@@ -42,8 +42,8 @@ func (c *NewSession) Command() (ret string) {
 	return "WebDriver:NewSession"
 }
 
-func (c *NewSession) Param() (ret map[string]interface{}) {
-	ret = map[string]interface{}{}
+func (c *NewSession) Param() (data interface{}) {
+	ret := map[string]interface{}{}
 	cap := parameter(map[string]interface{}{})
 
 	if c.SessionID != "" {
@@ -62,7 +62,7 @@ func (c *NewSession) Param() (ret map[string]interface{}) {
 		ret["capabilities"] = cap
 	}
 
-	return
+	return ret
 }
 
 func (c *NewSession) Validate() (ok bool) {

@@ -17,7 +17,7 @@ import (
 type Ito interface {
 	// Below are called by client (Shirogane)
 	Command() string
-	Param() map[string]interface{}
+	Param() interface{}
 	Validate() bool
 }
 
@@ -58,7 +58,7 @@ func (p parameter) SetP(key string, data interface{}) {
 
 type noParam struct{}
 
-func (c noParam) Param() (ret map[string]interface{}) {
+func (c noParam) Param() (ret interface{}) {
 	return
 }
 
