@@ -203,4 +203,28 @@ func TestSyncClient(t *testing.T) {
 	} else {
 		t.Logf("js reply: %s", asyncJSResp)
 	}
+
+	// open a alert dialog
+	cJS.Script = `setTimeout(() => alert('test'), 0)`
+	try(cJS)
+	time.Sleep(100 * time.Millisecond)
+	cDlgText := &ito.GetAlertText{}
+	if data, err := cDlgText.Decode(try(cDlgText)); err != nil {
+		t.Errorf("Error decoding GetAlertText response: %s", err)
+	} else {
+		if data != "test" {
+			t.Errorf("expect alert('test'), got %s", data)
+		}
+	}
+	try(&ito.AcceptAlert{})
+
+	try(cJS)
+	time.Sleep(100 * time.Millisecond)
+	try(&ito.DismissAlert{})
+
+	cJS.Script = `setTimeout(() => prompt('test'), 0)`
+	try(cJS)
+	time.Sleep(100 * time.Millisecond)
+	try(&ito.SendAlertText{Text: "test2"})
+	try(&ito.DismissAlert{})
 }
