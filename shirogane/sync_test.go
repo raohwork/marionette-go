@@ -101,6 +101,13 @@ func TestSyncClient(t *testing.T) {
 	try(&ito.SwitchToWindow{Name: newID})
 	try(&ito.CloseWindow{})
 	try(&ito.SwitchToWindow{Name: curid})
+	try(&ito.SetTimeouts{Timeouts: &marionette.Timeouts{
+		Implicit: 30000,
+		PageLoad: 30000,
+		Script:   30000,
+	}})
+	(&ito.GetTimeouts{}).Decode(try(&ito.GetTimeouts{}))
+	(&ito.GetCapabilities{}).Decode(try(&ito.GetCapabilities{}))
 
 	cFindEl := &ito.FindElement{
 		Using: marionette.Selector,
