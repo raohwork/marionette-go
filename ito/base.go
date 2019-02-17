@@ -61,6 +61,12 @@ func (p parameter) SetB(key string, data bool) {
 	}
 }
 
+func (p parameter) SetNotB(key string, data bool) {
+	if !data {
+		p[key] = !data
+	}
+}
+
 func (p parameter) SetP(key string, data interface{}) {
 	if data != nil {
 		p[key] = data
