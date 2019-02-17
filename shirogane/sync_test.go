@@ -100,4 +100,61 @@ func TestSyncClient(t *testing.T) {
 	try(&ito.SwitchToWindow{Name: curid})
 	try(&ito.SwitchToWindow{Name: newID})
 	try(&ito.CloseWindow{})
+	try(&ito.SwitchToWindow{Name: curid})
+
+	cFindEl := &ito.FindElement{
+		Using: marionette.Selector,
+		Value: `input[name="q"]`,
+	}
+	msg = try(cFindEl)
+	el, err := cFindEl.Decode(msg)
+	if err != nil {
+		t.Errorf("Error decoding FindElement response: %s", err)
+	} else {
+		t.Logf("element: %+v", el)
+	}
+	try(&ito.ElementClick{Element: el})
+	try(&ito.ElementSendKeys{Element: el, Text: "test"})
+	try(&ito.ElementClear{Element: el})
+
+	cFindEl.Value = "form"
+	el, _ = cFindEl.Decode(try(cFindEl))
+	msg = try(&ito.FindElements{
+		Using:       marionette.Selector,
+		Value:       "a",
+		RootElement: el,
+	})
+	if _, err := (&ito.FindElements{}).Decode(msg); err != nil {
+		t.Errorf("Error decoding FindElements response: %s", err)
+	}
+
+	try(&ito.GetActiveElement{})
+
+	cGetProp := &ito.GetElementAttribute{
+		Element: el,
+		Name:    "id",
+	}
+	if id, err := cGetProp.Decode(try(cGetProp)); err != nil {
+		t.Errorf("Error decoding GetElementAttribute response: %s", err)
+	} else {
+		t.Logf(`element id="%s"`, id)
+	}
+
+	cGetCSS := &ito.GetElementCSSValue{
+		Element: el,
+		Prop:    "max-width",
+	}
+	if ret, err := cGetCSS.Decode(try(cGetCSS)); err != nil {
+		t.Errorf("Error decoding GetElementCSSValue response: %s", err)
+	} else {
+		t.Logf(`element css="%s"`, ret)
+	}
+
+	(&ito.GetElementProperty{}).Decode(try(&ito.GetElementProperty{Element: el, Name: "isConnected"}))
+	(&ito.GetElementRect{}).Decode(try(&ito.GetElementRect{Element: el}))
+	(&ito.GetElementTagName{}).Decode(try(&ito.GetElementTagName{Element: el}))
+	(&ito.GetElementText{}).Decode(try(&ito.GetElementText{Element: el}))
+	(&ito.IsElementDisplayed{}).Decode(try(&ito.IsElementDisplayed{Element: el}))
+	(&ito.IsElementEnabled{}).Decode(try(&ito.IsElementEnabled{Element: el}))
+	(&ito.IsElementSelected{}).Decode(try(&ito.IsElementSelected{Element: el}))
 }
