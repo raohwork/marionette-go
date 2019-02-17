@@ -64,7 +64,6 @@ func TestSyncClient(t *testing.T) {
 	}
 
 	cHandle := &ito.GetWindowHandle{}
-	try(cHandle)
 	msg = try(cHandle)
 	curid, err := cHandle.Decode(msg)
 	if err != nil {
@@ -75,4 +74,17 @@ func TestSyncClient(t *testing.T) {
 
 	try(&ito.GetChromeWindowHandles{})
 	try(&ito.GetChromeWindowHandle{})
+
+	cRect := &ito.GetWindowRect{}
+	msg = try(cRect)
+	rect, err := cRect.Decode(msg)
+	if err != nil {
+		t.Errorf("Error decoding GetWindowRect response: %s", err)
+	} else {
+		t.Logf("window rect: %+v", rect)
+	}
+	try(&ito.FullscreenWindow{})
+	try(&ito.MinimizeWindow{})
+	try(&ito.MaximizeWindow{})
+	try(&ito.SetWindowRect{Rect: rect})
 }

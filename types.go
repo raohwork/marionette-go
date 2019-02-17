@@ -48,3 +48,10 @@ type Capabilities struct {
 	SpecialPointerOrigin bool   `json:"moz:useNonSpecCompliantPointerOrigin,omitempty"`
 	WebdriverClick       bool   `json:"moz:webdriverClick,omitempty"`
 }
+
+type Rect struct {
+	X int `json:"x"`
+	Y int `json:"y"`
+	W int `json:"width"`
+	H int `json:"height"`
+}

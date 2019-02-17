@@ -55,3 +55,13 @@ func (p parameter) SetP(key string, data interface{}) {
 		p[key] = data
 	}
 }
+
+type noParam struct{}
+
+func (c noParam) Param() (ret map[string]interface{}) {
+	return
+}
+
+func (c noParam) Validate() (ok bool) {
+	return true
+}
