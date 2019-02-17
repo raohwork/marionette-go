@@ -2,6 +2,7 @@ package marionette
 
 import "encoding/json"
 
+// Proxy represents proxy info
 type Proxy struct {
 	Type          string   `json:"proxyType,omitempty"`
 	AutoconfigUrl string   `json:"proxyAutoconfigUrl,omitempty"`
@@ -17,12 +18,17 @@ type Proxy struct {
 	NoProxy       []string `json:"noProxy,omitempty"`
 }
 
+// Timeouts represnets timeout values
+//
+// Refer driver.js for further info
+// https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js
 type Timeouts struct {
 	Implicit int `json:"implicit,omitempty"`
 	PageLoad int `json:"pageLoad,omitempty"`
 	Script   int `json:"script,omitempty"`
 }
 
+// Capabilities represents marionette server capabilities
 type Capabilities struct {
 	// web driver
 	BrowserName               string    `json:"browserName,omitempty"`
@@ -51,6 +57,7 @@ type Capabilities struct {
 	WebdriverClick       bool   `json:"moz:webdriverClick,omitempty"`
 }
 
+// Rect represents size/placement info about a window/element/...
 type Rect struct {
 	X int `json:"x"`
 	Y int `json:"y"`
@@ -58,6 +65,7 @@ type Rect struct {
 	H int `json:"height"`
 }
 
+// FindStrategy denotes how you find element
 type FindStrategy string
 
 const (
@@ -74,12 +82,14 @@ const (
 )
 
 const (
+	// Type of WebElements
 	ElementType       = "element-6066-11e4-a52e-4f735466cecf"
 	WindowType        = "window-fcc6-11e5-b4f8-330a88ab9d7f"
 	FrameType         = "frame-075b-4da1-b6ba-e579c2d3230a"
 	ChromeElementType = "chromeelement-9fc5-4b51-a3c8-01716eedeb04"
 )
 
+// WebElement is an element (window/frame/html element) referenced by an UUID
 type WebElement struct {
 	Type string
 	UUID string

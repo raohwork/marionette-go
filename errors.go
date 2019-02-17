@@ -2,6 +2,7 @@ package marionette
 
 import "fmt"
 
+// ErrType denotes type of error returned from marionette server
 type ErrType string
 
 const (
@@ -33,6 +34,7 @@ const (
 	ErrUnsupportedOperation    = ErrType("unsupported operation")
 )
 
+// ErrDriver is error returned from marionette server
 type ErrDriver struct {
 	Type       ErrType `json:"error"`
 	Message    string  `json:"message"`
@@ -51,6 +53,7 @@ func (e *ErrDriver) String() (ret string) {
 	})
 }
 
+// ErrResponseDecode denotes we are failed to decode incoming data as Message
 type ErrResponseDecode struct {
 	Err error
 }
@@ -63,6 +66,7 @@ func (e *ErrResponseDecode) String() (ret string) {
 	return e.Err.Error()
 }
 
+// ErrConnection denotes some network related problem occured
 type ErrConnection struct {
 	When   string
 	Origin error

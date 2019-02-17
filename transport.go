@@ -7,6 +7,7 @@ import (
 	"strconv"
 )
 
+// handles marionette protocol format
 type transport struct {
 	conn io.ReadWriter
 }

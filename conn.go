@@ -32,7 +32,7 @@ type Conn struct {
 	transport transport
 }
 
-// ConnectTo creates a Conn instance to connect to remote marionette server
+// ConnectTo creates a Conn instance by connecting to remote marionette server
 //
 // It just creates a net.TCPConn with default parameter, tries to enable tcp
 // keepalive and pass it to NewConn(tcpconn, 0).
