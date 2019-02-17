@@ -2,6 +2,9 @@ package ito
 
 import marionette "github.com/raohwork/marionette-go"
 
+// NewSession represents "WebDriver:NewSession" command
+//
+// See https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L587
 type NewSession struct {
 	PageLoadStrategy     string // can be none/eager/normal
 	AcceptInsecureCerts  bool
@@ -13,25 +16,25 @@ type NewSession struct {
 	SessionID            string
 }
 
-func (s *NewSession) Command() (ret string) {
+func (c *NewSession) Command() (ret string) {
 	return "WebDriver:NewSession"
 }
 
-func (s *NewSession) Param() (ret map[string]interface{}) {
+func (c *NewSession) Param() (ret map[string]interface{}) {
 	ret = map[string]interface{}{}
 	cap := parameter(map[string]interface{}{})
 
-	if s.SessionID != "" {
-		ret["sessionId"] = s.SessionID
+	if c.SessionID != "" {
+		ret["sessionId"] = c.SessionID
 	}
 
-	cap.SetS("pageLoadStrategy", s.PageLoadStrategy)
-	cap.SetB("acceptInsecureCerts", s.AcceptInsecureCerts)
-	cap.SetP("timeouts", s.Timeouts)
-	cap.SetP("proxy", s.Proxy)
-	cap.SetB("moz:accessibilityChecks", s.AccessibilityChecks)
-	cap.SetB("moz:useNonSpecCompliantPointerOrigin", s.SpecialPointerOrigin)
-	cap.SetB("moz:webdriverClick", s.WebdriverClick)
+	cap.SetS("pageLoadStrategy", c.PageLoadStrategy)
+	cap.SetB("acceptInsecureCerts", c.AcceptInsecureCerts)
+	cap.SetP("timeouts", c.Timeouts)
+	cap.SetP("proxy", c.Proxy)
+	cap.SetB("moz:accessibilityChecks", c.AccessibilityChecks)
+	cap.SetB("moz:useNonSpecCompliantPointerOrigin", c.SpecialPointerOrigin)
+	cap.SetB("moz:webdriverClick", c.WebdriverClick)
 
 	if len(cap) > 0 {
 		ret["capabilities"] = cap
@@ -40,6 +43,6 @@ func (s *NewSession) Param() (ret map[string]interface{}) {
 	return
 }
 
-func (s *NewSession) Validate() (ok bool) {
+func (c *NewSession) Validate() (ok bool) {
 	return true
 }
