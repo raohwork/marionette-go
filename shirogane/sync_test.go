@@ -84,7 +84,20 @@ func TestSyncClient(t *testing.T) {
 		t.Logf("window rect: %+v", rect)
 	}
 	try(&ito.FullscreenWindow{})
-	try(&ito.MinimizeWindow{})
+	// try(&ito.MinimizeWindow{})
 	try(&ito.MaximizeWindow{})
 	try(&ito.SetWindowRect{Rect: rect})
+
+	cNewWin := &ito.NewWindow{Type: "tab", Focus: true}
+	msg = try(cNewWin)
+	newID, _, err := cNewWin.Decode(msg)
+	if err != nil {
+		t.Errorf("Error decoding NewWindow response: %s", err)
+	} else {
+		t.Logf("new window handle: %s", newID)
+	}
+
+	try(&ito.SwitchToWindow{Name: curid})
+	try(&ito.SwitchToWindow{Name: newID})
+	try(&ito.CloseWindow{})
 }
