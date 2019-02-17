@@ -16,7 +16,8 @@ func (c returnRect) Decode(msg *marionette.Message) (rect marionette.Rect, err e
 
 // GetWindowRect defines "WebDriver:GetWindowRect" command
 //
-// See https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L1399
+// See GeckoDriver.prototype.getWindowRect
+// https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L1399
 type GetWindowRect struct {
 	returnRect
 	noParam
@@ -28,7 +29,8 @@ func (c *GetWindowRect) Command() (ret string) {
 
 // SetWindowRect defines "WebDriver:SetWindowRect" command
 //
-// See https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L1422
+// See GeckoDriver.prototype.setWindowRect
+// https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L1422
 type SetWindowRect struct {
 	returnRect
 	Rect marionette.Rect
@@ -48,7 +50,8 @@ func (c *SetWindowRect) Validate() (ok bool) {
 
 // MinimizeWindow defines "WebDriver:MinimizeWindow" command
 //
-// See https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L3017
+// See GeckoDriver.prototype.minimizeWindow
+// https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L3017
 type MinimizeWindow GetWindowRect
 
 func (c *MinimizeWindow) Command() (ret string) {
@@ -57,7 +60,8 @@ func (c *MinimizeWindow) Command() (ret string) {
 
 // MaximizeWindow defines "WebDriver:MaximizeWindow" command
 //
-// See https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L3066
+// See GeckoDriver.prototype.maximizeWindow
+// https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L3066
 type MaximizeWindow GetWindowRect
 
 func (c *MaximizeWindow) Decode(msg *marionette.Message) (rect marionette.Rect, err error) {

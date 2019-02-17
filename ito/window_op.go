@@ -4,7 +4,8 @@ import marionette "github.com/raohwork/marionette-go"
 
 // NewWindow defines "WebDriver:NewWindow" command
 //
-// See https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L2712
+// See GeckoDriver.prototype.newWindow
+// https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L2712
 type NewWindow struct {
 	Type  string `json:"type,omitempty"` // can be tab (default) or window
 	Focus bool   `json:"focus,omitempty"`
@@ -42,7 +43,8 @@ func (c *NewWindow) Validate() (ok bool) {
 
 // SwitchToWindow defines "WebDriver:SwitchToWindow" command
 //
-// See https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L1493
+// See GeckoDriver.prototype.switchToWindow
+// https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L1493
 type SwitchToWindow struct {
 	Name    string // required
 	NoFocus bool
@@ -65,7 +67,8 @@ func (c *SwitchToWindow) Validate() (ok bool) {
 
 // CloseWindow defines "WebDriver:CloseWindow" command
 //
-// See https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L2772
+// See GeckoDriver.prototype.close
+// https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L2772
 type CloseWindow struct {
 	noParam
 	returnStrArr
@@ -77,7 +80,8 @@ func (c *CloseWindow) Command() (ret string) {
 
 // CloseChromeWindow defines "WebDriver:CloseChromeWindow" command
 //
-// See https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L2816
+// See GeckoDriver.prototype.closeChromeWindow
+// https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L2816
 type CloseChromeWindow struct {
 	noParam
 	returnStrArr

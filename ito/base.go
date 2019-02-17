@@ -1,5 +1,10 @@
 // Package ito contains supported commands to control marionette
 //
+// All commands has related entry in
+// https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js
+//
+// You may refer to the link above for further info of how the command works.
+//
 // The name "ito" is a Japanese word means "string". In the Japanese comic
 // "Karakuri Circus", a marionette is controlled by its controller using strings.
 package ito
@@ -21,15 +26,21 @@ type Ito interface {
 	Validate() bool
 }
 
+// simple function to save some time
 func recode(msg *marionette.Message, resp interface{}) (err error) {
 	buf, _ := json.Marshal(msg.Data)
 	return json.Unmarshal(buf, resp)
 }
 
+// non object return value
+//
+// Marionette server returns object values (object, array) as-is, but wraps non-obj
+// values in fake object like {"value": "return value"}.
 type nonObjResp struct {
 	Value interface{} `json:"value"`
 }
 
+// simple helper to deal with complex parameter
 type parameter map[string]interface{}
 
 func (p parameter) SetS(key, data string) {
@@ -56,6 +67,7 @@ func (p parameter) SetP(key string, data interface{}) {
 	}
 }
 
+// mixin for commands which needs no parameter
 type noParam struct{}
 
 func (c noParam) Param() (ret interface{}) {
@@ -66,6 +78,7 @@ func (c noParam) Validate() (ok bool) {
 	return true
 }
 
+// mixin for commands which returns []string
 type returnStrArr struct {
 }
 
@@ -79,6 +92,7 @@ func (c returnStrArr) Decode(msg *marionette.Message) (ret []string, err error) 
 	return
 }
 
+// mixin for commands which returns bool
 type returnBool struct {
 }
 
@@ -96,6 +110,7 @@ func (c returnBool) Decode(msg *marionette.Message) (ret bool, err error) {
 	return
 }
 
+// mixin for commands which returns string
 type returnStr struct {
 }
 
@@ -113,6 +128,7 @@ func (c returnStr) Decode(msg *marionette.Message) (ret string, err error) {
 	return
 }
 
+// mixin for commands which returns WebElement
 type returnElem struct {
 }
 
@@ -139,6 +155,7 @@ func (c returnElem) Decode(msg *marionette.Message) (el *marionette.WebElement, 
 	return
 }
 
+// mixin for commands which returns []WebElement
 type returnElems struct {
 }
 
@@ -171,6 +188,7 @@ func (c returnElems) Decode(msg *marionette.Message) (el []*marionette.WebElemen
 	return
 }
 
+// mixin for commands which returns string/bool/number
 type returnMixed struct {
 }
 

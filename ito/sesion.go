@@ -6,7 +6,8 @@ import (
 
 // NewSession represents "WebDriver:NewSession" command
 //
-// See https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L587
+// See GeckoDriver.prototype.newSession
+// https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L587
 type NewSession struct {
 	PageLoadStrategy     string // can be none/eager/normal
 	AcceptInsecureCerts  bool

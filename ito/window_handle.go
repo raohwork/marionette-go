@@ -2,7 +2,8 @@ package ito
 
 // GetWindowHandles represents "WebDriver:GetWindowHandles" command
 //
-// See https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L1345
+// See GeckoDriver.prototype.getWindowHandles
+// https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L1345
 type GetWindowHandles struct {
 	noParam
 	returnStrArr
@@ -14,7 +15,8 @@ func (c *GetWindowHandles) Command() (ret string) {
 
 // GetWindowHandle represents "WebDriver:GetWindowHandle" command
 //
-// See https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L1325
+// See GeckoDriver.prototype.getWindowHandle
+// https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L1325
 type GetWindowHandle struct {
 	noParam
 	returnStr
@@ -26,7 +28,8 @@ func (c *GetWindowHandle) Command() (ret string) {
 
 // GetChromeWindowHandles represents "WebDriver:GetChromeWindowHandles" command
 //
-// See https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L1388
+// See GeckoDriver.prototype.getChromeWindowHandles
+// https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L1388
 type GetChromeWindowHandles struct {
 	noParam
 	returnStrArr
@@ -38,7 +41,8 @@ func (c *GetChromeWindowHandles) Command() (ret string) {
 
 // GetChromeWindowHandle represents "WebDriver:GetChromeWindowHandle" command
 //
-// See https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L1360
+// See GeckoDriver.prototype.getChromeWindowHandle
+// https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L1360
 type GetChromeWindowHandle struct {
 	noParam
 	returnStr
