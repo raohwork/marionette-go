@@ -44,9 +44,9 @@ func TestSyncClient(t *testing.T) {
 		return resp
 	}
 
-	sess := &ito.NewSession{}
-	msg := try(sess)
-	id, caps, err := sess.Decode(msg)
+	cSess := &ito.NewSession{}
+	msg := try(cSess)
+	id, caps, err := cSess.Decode(msg)
 	if err != nil {
 		t.Errorf("Error decoding NewSession response: %s", err)
 	} else {
@@ -54,8 +54,25 @@ func TestSyncClient(t *testing.T) {
 		t.Logf("capabilities: %+v", caps)
 	}
 
-	try(&ito.GetWindowHandles{})
-	try(&ito.GetWindowHandle{})
+	cHandles := &ito.GetWindowHandles{}
+	msg = try(cHandles)
+	handles, err := cHandles.Decode(msg)
+	if err != nil {
+		t.Errorf("Error decoding GetWindowHandles response: %s", err)
+	} else {
+		t.Logf("window handles: %+v", handles)
+	}
+
+	cHandle := &ito.GetWindowHandle{}
+	try(cHandle)
+	msg = try(cHandle)
+	curid, err := cHandle.Decode(msg)
+	if err != nil {
+		t.Errorf("Error decoding GetWindowHandle response: %s", err)
+	} else {
+		t.Logf("current handle: %s", curid)
+	}
+
 	try(&ito.GetChromeWindowHandles{})
 	try(&ito.GetChromeWindowHandle{})
 }
