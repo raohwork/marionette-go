@@ -8,12 +8,14 @@ import (
 	"github.com/raohwork/marionette-go/ito"
 )
 
+// Sync is very basic synchronized client
 type Sync struct {
 	Conn *marionette.Conn
 
 	lock sync.Mutex
 }
 
+// Send sends a command to marionette server, blocks until it gets the response
 func (s *Sync) Send(cmd ito.Ito) (resp *marionette.Message, err error) {
 	s.lock.Lock()
 	defer s.lock.Unlock()

@@ -9,6 +9,7 @@ import (
 	"github.com/raohwork/marionette-go/ito"
 )
 
+// Async is very basic asynchronized client
 type Async struct {
 	Conn *marionette.Conn
 
@@ -19,6 +20,9 @@ type Async struct {
 	cancel context.CancelFunc
 }
 
+// Send sends a command to server, returns a channel immediately
+//
+// The client will close the channel once message is transmitted.
 func (s *Async) Send(cmd ito.Ito) (resp chan *marionette.Message, err error) {
 	s.mapLock.Lock()
 	defer s.mapLock.Unlock()
@@ -42,12 +46,14 @@ func (s *Async) Send(cmd ito.Ito) (resp chan *marionette.Message, err error) {
 	return
 }
 
+// Start runs the main loop to recieve/dispatch messages
 func (s *Async) Start() {
 	s.pending = map[uint32]chan *marionette.Message{}
 	s.ctx, s.cancel = context.WithCancel(context.Background())
 	s.mainLoop()
 }
 
+// Stop stops the main loop and clear pending requests
 func (s *Async) Stop() {
 	s.cancel()
 }
