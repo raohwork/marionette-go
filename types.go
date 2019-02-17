@@ -98,3 +98,13 @@ type WebElement struct {
 func (el *WebElement) MarshalJSON() (data []byte, err error) {
 	return json.Marshal(el.UUID)
 }
+
+type Cookie struct {
+	Name     string `json:"name"`
+	Value    string `json:"value"`
+	Path     string `json:"path,omitempty"`
+	Domain   string `json:"domain,omitempty"`
+	Secure   bool   `json:"secure,omitempty"`
+	HttpOnly bool   `json:"httpOnly,omitempty"`
+	Expiry   int64  `json:"expiry,omitempty"`
+}

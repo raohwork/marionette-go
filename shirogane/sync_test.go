@@ -227,4 +227,24 @@ func TestSyncClient(t *testing.T) {
 	time.Sleep(100 * time.Millisecond)
 	try(&ito.SendAlertText{Text: "test2"})
 	try(&ito.DismissAlert{})
+
+	cGetCookies := &ito.GetCookies{}
+	msg = try(cGetCookies)
+	cookies, err := cGetCookies.Decode(msg)
+	if err != nil {
+		t.Errorf("Error decoding GetCookies response: %s", err)
+	}
+	try(&ito.AddCookie{Cookie: &marionette.Cookie{
+		Name:  "marionette",
+		Value: "puppet",
+	}})
+	msg = try(cGetCookies)
+	ncookies, err := cGetCookies.Decode(msg)
+	if err != nil {
+		t.Errorf("Error decoding GetCookies response: %s", err)
+	}
+	if x, y := len(cookies), len(ncookies); x != y-1 {
+		t.Errorf("Expected %d cookies, got %d", x+1, y)
+	}
+	try(&ito.DeleteAllCookies{})
 }
