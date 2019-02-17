@@ -186,4 +186,21 @@ func TestSyncClient(t *testing.T) {
 	(&ito.IsElementDisplayed{}).Decode(try(&ito.IsElementDisplayed{Element: el}))
 	(&ito.IsElementEnabled{}).Decode(try(&ito.IsElementEnabled{Element: el}))
 	(&ito.IsElementSelected{}).Decode(try(&ito.IsElementSelected{Element: el}))
+
+	cJS := &ito.ExecuteScript{Script: `return {x:"test"}`}
+	msg = try(cJS)
+	var jsResp map[string]string
+	if err := cJS.Decode(msg, &jsResp); err != nil {
+		t.Errorf("Error decoding ExecuteJavascript response: %s", err)
+	} else {
+		t.Logf("js reply: %+v", jsResp)
+	}
+	cAsyncJS := &ito.ExecuteAsyncScript{Script: `arguments[0]("test")`}
+	msg = try(cAsyncJS)
+	var asyncJSResp string
+	if err := cAsyncJS.Decode(msg, &asyncJSResp); err != nil {
+		t.Errorf("Error decoding ExecuteAsyncJavascript response: %s", err)
+	} else {
+		t.Logf("js reply: %s", asyncJSResp)
+	}
 }
