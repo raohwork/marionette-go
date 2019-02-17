@@ -79,10 +79,102 @@ func (c returnStrArr) Decode(msg *marionette.Message) (ret []string, err error) 
 	return
 }
 
+type returnBool struct {
+}
+
+func (c returnBool) Decode(msg *marionette.Message) (ret bool, err error) {
+	if msg.Error != nil {
+		err = msg.Error
+		return
+	}
+
+	resp := nonObjResp{Value: &ret}
+	if err = recode(msg, &resp); err != nil {
+		return
+	}
+
+	return
+}
+
 type returnStr struct {
 }
 
 func (c returnStr) Decode(msg *marionette.Message) (ret string, err error) {
+	if msg.Error != nil {
+		err = msg.Error
+		return
+	}
+
+	resp := nonObjResp{Value: &ret}
+	if err = recode(msg, &resp); err != nil {
+		return
+	}
+
+	return
+}
+
+type returnElem struct {
+}
+
+func (c returnElem) Decode(msg *marionette.Message) (el *marionette.WebElement, err error) {
+	if msg.Error != nil {
+		err = msg.Error
+		return
+	}
+
+	arr := map[string]string{}
+	resp := nonObjResp{Value: &arr}
+	if err = recode(msg, &resp); err != nil {
+		return
+	}
+
+	for k, v := range arr {
+		el = &marionette.WebElement{
+			Type: k,
+			UUID: v,
+		}
+		break
+	}
+
+	return
+}
+
+type returnElems struct {
+}
+
+func (c returnElems) Decode(msg *marionette.Message) (el []*marionette.WebElement, err error) {
+	if msg.Error != nil {
+		err = msg.Error
+		return
+	}
+
+	arr := []map[string]string{}
+	if err = recode(msg, &arr); err != nil {
+		return
+	}
+
+	dec := func(m map[string]string) {
+		for k, v := range m {
+			el = append(el, &marionette.WebElement{
+				Type: k,
+				UUID: v,
+			})
+			break
+		}
+	}
+
+	el = make([]*marionette.WebElement, 0, len(arr))
+	for _, m := range arr {
+		dec(m)
+	}
+
+	return
+}
+
+type returnMixed struct {
+}
+
+func (c returnMixed) Decode(msg *marionette.Message) (ret interface{}, err error) {
 	if msg.Error != nil {
 		err = msg.Error
 		return

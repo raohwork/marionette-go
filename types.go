@@ -1,5 +1,7 @@
 package marionette
 
+import "encoding/json"
+
 type Proxy struct {
 	Type          string   `json:"proxyType,omitempty"`
 	AutoconfigUrl string   `json:"proxyAutoconfigUrl,omitempty"`
@@ -54,4 +56,35 @@ type Rect struct {
 	Y int `json:"y"`
 	W int `json:"width"`
 	H int `json:"height"`
+}
+
+type FindStrategy string
+
+const (
+	ClassName       FindStrategy = "class name"
+	Selector        FindStrategy = "css selector"
+	ID              FindStrategy = "id"
+	Name            FindStrategy = "name"
+	LinkText        FindStrategy = "link text"
+	PartialLinkText FindStrategy = "partial link text"
+	TagName         FindStrategy = "tag name"
+	XPath           FindStrategy = "xpath"
+	Anon            FindStrategy = "anon"
+	AnonAttribute   FindStrategy = "anon attribute"
+)
+
+const (
+	ElementType       = "element-6066-11e4-a52e-4f735466cecf"
+	WindowType        = "window-fcc6-11e5-b4f8-330a88ab9d7f"
+	FrameType         = "frame-075b-4da1-b6ba-e579c2d3230a"
+	ChromeElementType = "chromeelement-9fc5-4b51-a3c8-01716eedeb04"
+)
+
+type WebElement struct {
+	Type string
+	UUID string
+}
+
+func (el *WebElement) MarshalJSON() (data []byte, err error) {
+	return json.Marshal(el.UUID)
 }
