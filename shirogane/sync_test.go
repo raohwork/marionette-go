@@ -247,4 +247,10 @@ func TestSyncClient(t *testing.T) {
 		t.Errorf("Expected %d cookies, got %d", x+1, y)
 	}
 	try(&ito.DeleteAllCookies{})
+
+	try(&ito.MozSetContext{Context: marionette.ChromeContext})
+	(&ito.MozGetContext{}).Decode(try(&ito.MozGetContext{}))
+	try(&ito.MozSetContext{Context: marionette.ContentContext})
+
+	try(&ito.CloseWindow{})
 }
