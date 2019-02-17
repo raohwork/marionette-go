@@ -32,12 +32,19 @@ func TestSyncClient(t *testing.T) {
 	defer conn.Close()
 
 	s := &Sync{Conn: conn}
-	cmd := &ito.NewSession{}
 
-	resp, err := s.Send(cmd)
-	if err != nil {
-		t.Fatalf("Unexpected error: %s", err)
+	try := func(cmd ito.Ito) {
+		resp, err := s.Send(cmd)
+		if err != nil {
+			t.Fatalf("Unexpected error: %s", err)
+		}
+
+		t.Logf("Result: %+v", resp)
 	}
 
-	t.Logf("Result: %+v", resp)
+	try(&ito.NewSession{})
+	try(&ito.GetWindowHandles{})
+	try(&ito.GetWindowHandle{})
+	try(&ito.GetChromeWindowHandles{})
+	try(&ito.GetChromeWindowHandle{})
 }
