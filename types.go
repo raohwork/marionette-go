@@ -33,7 +33,7 @@ type Capabilities struct {
 	SetWindowRect             bool      `json:"setWindowRect,omitempty"`
 	Timeouts                  *Timeouts `json:"timeouts,omitempty"`
 	StrictFileInteractability bool      `json:"strictFileInteractability,omitempty"`
-	UnhandledPromptBehavior   bool      `json:"unhandledPromptBehavior,omitempty"`
+	UnhandledPromptBehavior   string    `json:"unhandledPromptBehavior,omitempty"`
 
 	// features
 	Rotatable bool `json:"rotatable,omitempty"`

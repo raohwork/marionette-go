@@ -1,6 +1,8 @@
 package ito
 
-import marionette "github.com/raohwork/marionette-go"
+import (
+	marionette "github.com/raohwork/marionette-go"
+)
 
 // NewSession represents "WebDriver:NewSession" command
 //
@@ -14,6 +16,26 @@ type NewSession struct {
 	SpecialPointerOrigin bool
 	WebdriverClick       bool
 	SessionID            string
+}
+
+func (c *NewSession) Decode(msg *marionette.Message) (
+	id string, cap *marionette.Capabilities, err error,
+) {
+	if msg.Error != nil {
+		err = msg.Error
+		return
+	}
+
+	var resp struct {
+		ID  string                   `json:"sessionId"`
+		Cap *marionette.Capabilities `json:"capabilities"`
+	}
+	if err = recode(msg, &resp); err == nil {
+		id = resp.ID
+		cap = resp.Cap
+	}
+
+	return
 }
 
 func (c *NewSession) Command() (ret string) {

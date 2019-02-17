@@ -33,16 +33,27 @@ func TestSyncClient(t *testing.T) {
 
 	s := &Sync{Conn: conn}
 
-	try := func(cmd ito.Ito) {
+	try := func(cmd ito.Ito) *marionette.Message {
 		resp, err := s.Send(cmd)
 		if err != nil {
 			t.Fatalf("Unexpected error: %s", err)
 		}
 
 		t.Logf("Result: %+v", resp)
+
+		return resp
 	}
 
-	try(&ito.NewSession{})
+	sess := &ito.NewSession{}
+	msg := try(sess)
+	id, caps, err := sess.Decode(msg)
+	if err != nil {
+		t.Errorf("Error decoding NewSession response: %s", err)
+	} else {
+		t.Logf("session id: %s", id)
+		t.Logf("capabilities: %+v", caps)
+	}
+
 	try(&ito.GetWindowHandles{})
 	try(&ito.GetWindowHandle{})
 	try(&ito.GetChromeWindowHandles{})
