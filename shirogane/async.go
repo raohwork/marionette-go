@@ -24,6 +24,8 @@ type Async struct {
 // Send sends a command to server, returns a channel immediately
 //
 // The client will close the channel once message is transmitted.
+//
+// Calling Send() on a stopped client leads to nil pointer panic!
 func (s *Async) Send(cmd ito.Ito) (resp chan *marionette.Message, err error) {
 	s.mapLock.Lock()
 	defer s.mapLock.Unlock()
@@ -84,7 +86,7 @@ func (s *Async) mainLoop() {
 				}
 				close(x)
 			}
-			s.pending = map[uint32]chan *marionette.Message{}
+			s.pending = nil
 			close(s.running)
 			return
 		case x := <-s.Conn.ResultChan():
@@ -97,14 +99,11 @@ func (s *Async) dispatch(msg *marionette.Message) {
 	s.mapLock.Lock()
 	defer s.mapLock.Unlock()
 
-	ch, ok := s.pending[msg.Serial]
-	if !ok {
-		// should never happen
-		// but if it does happen
-		// all we can do is ㄇㄉㄈㄎ
+	if s.pending == nil {
+		// stopped
 		return
 	}
-
+	ch := s.pending[msg.Serial]
 	delete(s.pending, msg.Serial)
 	ch <- msg
 	close(ch)
