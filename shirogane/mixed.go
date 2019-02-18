@@ -12,7 +12,7 @@ type Mixed struct {
 	client *Async
 }
 
-// Start connects to marionette server and start the mainloop
+// Start connects to marionette server and start the mainloop in background
 func (s *Mixed) Start() (err error) {
 	addr := s.Addr
 	if addr == "" {
@@ -25,7 +25,14 @@ func (s *Mixed) Start() (err error) {
 
 	s.client = &Async{Conn: conn}
 	s.client.Start()
-	return conn.Wait()
+
+	return
+}
+
+// Wait waits until main loop stopped and disconnected
+func (s *Mixed) Wait() {
+	s.client.Wait()
+	s.client.Conn.Wait()
 }
 
 // Close exits the mainloop and release all related resources

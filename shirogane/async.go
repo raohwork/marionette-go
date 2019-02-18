@@ -16,8 +16,9 @@ type Async struct {
 	mapLock sync.Mutex
 	pending map[uint32]chan *marionette.Message
 
-	ctx    context.Context
-	cancel context.CancelFunc
+	ctx     context.Context
+	cancel  context.CancelFunc
+	running chan struct{}
 }
 
 // Send sends a command to server, returns a channel immediately
@@ -46,13 +47,19 @@ func (s *Async) Send(cmd ito.Ito) (resp chan *marionette.Message, err error) {
 	return
 }
 
-// Start runs the main loop to recieve/dispatch messages
+// Start runs the main loop at background to recieve/dispatch messages
 func (s *Async) Start() {
 	s.mapLock.Lock()
 	s.pending = map[uint32]chan *marionette.Message{}
 	s.ctx, s.cancel = context.WithCancel(context.Background())
+	s.running = make(chan struct{})
 	s.mapLock.Unlock()
-	s.mainLoop()
+	go s.mainLoop()
+}
+
+// Wait blocks until main loop stops
+func (s *Async) Wait() {
+	<-s.running
 }
 
 // Stop stops the main loop and clear pending requests
@@ -78,6 +85,7 @@ func (s *Async) mainLoop() {
 				close(x)
 			}
 			s.pending = map[uint32]chan *marionette.Message{}
+			close(s.running)
 			return
 		case x := <-s.Conn.ResultChan():
 			s.dispatch(x)
