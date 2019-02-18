@@ -48,8 +48,10 @@ func (s *Async) Send(cmd ito.Ito) (resp chan *marionette.Message, err error) {
 
 // Start runs the main loop to recieve/dispatch messages
 func (s *Async) Start() {
+	s.mapLock.Lock()
 	s.pending = map[uint32]chan *marionette.Message{}
 	s.ctx, s.cancel = context.WithCancel(context.Background())
+	s.mapLock.Unlock()
 	s.mainLoop()
 }
 
