@@ -72,6 +72,8 @@ func (s *Async) Stop() {
 func (s *Async) mainLoop() {
 	for {
 		select {
+		case x := <-s.Conn.ResultChan():
+			s.dispatch(x)
 		case <-s.ctx.Done():
 			s.mapLock.Lock()
 			defer s.mapLock.Unlock()
@@ -89,8 +91,6 @@ func (s *Async) mainLoop() {
 			s.pending = nil
 			close(s.running)
 			return
-		case x := <-s.Conn.ResultChan():
-			s.dispatch(x)
 		}
 	}
 }
