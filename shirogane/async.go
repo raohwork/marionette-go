@@ -35,7 +35,7 @@ func (s *Async) Send(cmd ito.Ito) (resp chan *marionette.Message, err error) {
 		return nil, errors.New("invalid command")
 	}
 
-	id, err := s.Conn.Send(cmd.Command(), cmd.Param)
+	id, err := s.Conn.Send(cmd.Command(), cmd.Param())
 	if err != nil {
 		return
 	}
