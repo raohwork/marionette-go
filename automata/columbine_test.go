@@ -6,6 +6,7 @@ import (
 	"os"
 	"testing"
 
+	marionette "github.com/raohwork/marionette-go"
 	"github.com/raohwork/marionette-go/shirogane"
 )
 
@@ -146,5 +147,55 @@ func TestColumbineConcurrent(t *testing.T) {
 			}
 
 		})
+	}
+}
+
+func TestColumbineWaitForOK(t *testing.T) {
+	mixed, _ := connect(t)
+	defer mixed.Close()
+	lbl := []string{"a", "b", "c", "d", "e"}
+	c, err := NewColumbine(mixed, lbl)
+	if err != nil {
+		t.Fatalf("Unexpected error when creating Columbine: %s", err)
+	}
+
+	tab := c.GetTab("a")
+	js := `setTimeout(() => document.querySelector('div').setAttribute('class', 'test'), 3000);`
+
+	ch := make(chan error, 1)
+	go func() {
+		_, err := tab.WaitFor("div.test", 5)
+		ch <- err
+		close(ch)
+	}()
+
+	tab.ExecuteScript(js, nil)
+	if err = <-ch; err != nil {
+		t.Errorf("unexpected error: %s", err)
+	}
+}
+
+func TestColumbineWaitForFail(t *testing.T) {
+	mixed, _ := connect(t)
+	defer mixed.Close()
+	lbl := []string{"a", "b", "c", "d", "e"}
+	c, err := NewColumbine(mixed, lbl)
+	if err != nil {
+		t.Fatalf("Unexpected error when creating Columbine: %s", err)
+	}
+
+	tab := c.GetTab("b")
+	_, err = tab.WaitFor("div.test", 5)
+	if err == nil {
+		t.Fatal("expected driver error, got nothing")
+	}
+
+	e, ok := err.(*marionette.ErrDriver)
+	if !ok {
+		t.Fatalf("expected driver error, got %s", err)
+	}
+
+	if e.Type != marionette.ErrNoSuchElement {
+		t.Fatalf("unexpected err: %s", err)
 	}
 }
