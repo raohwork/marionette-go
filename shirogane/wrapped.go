@@ -7,78 +7,81 @@ import (
 	"github.com/raohwork/marionette-go/ito"
 )
 
-// Wrapped is another Mixed client which wraps supported commands as method
-type Wrapped struct {
-	Mixed
+// Ashihana is a client which wraps supported commands as method
+//
+// The name comes from Japnese comic "Karakuri circus", which is the last name of
+// main characters in Kuroga.
+type Ashihana struct {
+	Kuroga
 }
 
-func (s *Wrapped) AcceptAlert() (err error) {
+func (s *Ashihana) AcceptAlert() (err error) {
 	cmd := &ito.AcceptAlert{}
 	_, err = s.Sync(cmd)
 	return
 }
 
-func (s *Wrapped) AddCookie(cookie *marionette.Cookie) (err error) {
+func (s *Ashihana) AddCookie(cookie *marionette.Cookie) (err error) {
 	cmd := &ito.AddCookie{Cookie: cookie}
 	_, err = s.Sync(cmd)
 	return
 }
 
-func (s *Wrapped) Back() (err error) {
+func (s *Ashihana) Back() (err error) {
 	cmd := &ito.Back{}
 	_, err = s.Sync(cmd)
 	return
 }
 
-func (s *Wrapped) CloseChromeWindow() (handles []string, err error) {
+func (s *Ashihana) CloseChromeWindow() (handles []string, err error) {
 	cmd := &ito.CloseChromeWindow{}
 	msg, err := s.Sync(cmd)
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) CloseWindow() (handles []string, err error) {
+func (s *Ashihana) CloseWindow() (handles []string, err error) {
 	cmd := &ito.CloseWindow{}
 	msg, err := s.Sync(cmd)
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) DeleteAllCookies() (err error) {
+func (s *Ashihana) DeleteAllCookies() (err error) {
 	cmd := &ito.DeleteAllCookies{}
 	_, err = s.Sync(cmd)
 	return
 }
 
-func (s *Wrapped) DeleteCookie(name string) (err error) {
+func (s *Ashihana) DeleteCookie(name string) (err error) {
 	cmd := &ito.DeleteCookie{Name: name}
 	_, err = s.Sync(cmd)
 	return
 }
 
-func (s *Wrapped) DismissAlert() (err error) {
+func (s *Ashihana) DismissAlert() (err error) {
 	cmd := &ito.DismissAlert{}
 	_, err = s.Sync(cmd)
 	return
 }
 
-func (s *Wrapped) ElementClear(el *marionette.WebElement) (err error) {
+func (s *Ashihana) ElementClear(el *marionette.WebElement) (err error) {
 	cmd := &ito.ElementClear{Element: el}
 	_, err = s.Sync(cmd)
 	return
 }
 
-func (s *Wrapped) ElementClick(el *marionette.WebElement) (err error) {
+func (s *Ashihana) ElementClick(el *marionette.WebElement) (err error) {
 	cmd := &ito.ElementClick{Element: el}
 	_, err = s.Sync(cmd)
 	return
 }
 
-func (s *Wrapped) ElementSendKeys(el *marionette.WebElement, text string) (err error) {
+func (s *Ashihana) ElementSendKeys(el *marionette.WebElement, text string) (err error) {
 	cmd := &ito.ElementSendKeys{Element: el, Text: text}
 	_, err = s.Sync(cmd)
 	return
 }
 
-func (s *Wrapped) ExecuteAsyncScript(script string, args ...interface{}) (
+func (s *Ashihana) ExecuteAsyncScript(script string, args ...interface{}) (
 	ch chan interface{}, err error,
 ) {
 	cmd := &ito.ExecuteAsyncScript{
@@ -106,7 +109,7 @@ func (s *Wrapped) ExecuteAsyncScript(script string, args ...interface{}) (
 	return
 }
 
-func (s *Wrapped) ExecuteAsyncScriptIn(
+func (s *Ashihana) ExecuteAsyncScriptIn(
 	sandbox, script string, args ...interface{},
 ) (
 	ch chan interface{}, err error,
@@ -138,7 +141,7 @@ func (s *Wrapped) ExecuteAsyncScriptIn(
 	return
 }
 
-func (s *Wrapped) ExecuteScript(
+func (s *Ashihana) ExecuteScript(
 	script string, data interface{}, args ...interface{},
 ) (err error) {
 	cmd := &ito.ExecuteScript{
@@ -149,7 +152,7 @@ func (s *Wrapped) ExecuteScript(
 	return cmd.Decode(msg, data)
 }
 
-func (s *Wrapped) ExecuteScriptIn(
+func (s *Ashihana) ExecuteScriptIn(
 	sandbox, script string, data interface{}, args ...interface{},
 ) (err error) {
 	cmd := &ito.ExecuteScript{
@@ -162,7 +165,7 @@ func (s *Wrapped) ExecuteScriptIn(
 	return cmd.Decode(msg, data)
 }
 
-func (s *Wrapped) FindElement(
+func (s *Ashihana) FindElement(
 	by marionette.FindStrategy, qstr string, root *marionette.WebElement,
 ) (ret *marionette.WebElement, err error) {
 	cmd := &ito.FindElement{
@@ -174,7 +177,7 @@ func (s *Wrapped) FindElement(
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) FindElements(
+func (s *Ashihana) FindElements(
 	by marionette.FindStrategy, qstr string, root *marionette.WebElement,
 ) (ret []*marionette.WebElement, err error) {
 	cmd := &ito.FindElements{
@@ -186,19 +189,19 @@ func (s *Wrapped) FindElements(
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) Forward() (err error) {
+func (s *Ashihana) Forward() (err error) {
 	cmd := &ito.Forward{}
 	_, err = s.Sync(cmd)
 	return
 }
 
-func (s *Wrapped) FullscreenWindow() (err error) {
+func (s *Ashihana) FullscreenWindow() (err error) {
 	cmd := &ito.FullscreenWindow{}
 	_, err = s.Sync(cmd)
 	return
 }
 
-func (s *Wrapped) GetActiveElement() (ret *marionette.WebElement, err error) {
+func (s *Ashihana) GetActiveElement() (ret *marionette.WebElement, err error) {
 	cmd := &ito.GetActiveElement{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -207,7 +210,7 @@ func (s *Wrapped) GetActiveElement() (ret *marionette.WebElement, err error) {
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) GetActiveFrame() (ret *marionette.WebElement, err error) {
+func (s *Ashihana) GetActiveFrame() (ret *marionette.WebElement, err error) {
 	cmd := &ito.GetActiveFrame{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -216,7 +219,7 @@ func (s *Wrapped) GetActiveFrame() (ret *marionette.WebElement, err error) {
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) GetAlertText() (ret string, err error) {
+func (s *Ashihana) GetAlertText() (ret string, err error) {
 	cmd := &ito.GetAlertText{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -225,7 +228,7 @@ func (s *Wrapped) GetAlertText() (ret string, err error) {
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) GetCapabilities() (ret *marionette.Capabilities, err error) {
+func (s *Ashihana) GetCapabilities() (ret *marionette.Capabilities, err error) {
 	cmd := &ito.GetCapabilities{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -234,7 +237,7 @@ func (s *Wrapped) GetCapabilities() (ret *marionette.Capabilities, err error) {
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) GetChromeWindowHandle() (ret string, err error) {
+func (s *Ashihana) GetChromeWindowHandle() (ret string, err error) {
 	cmd := &ito.GetChromeWindowHandle{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -243,7 +246,7 @@ func (s *Wrapped) GetChromeWindowHandle() (ret string, err error) {
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) GetChromeWindowHandles() (ret []string, err error) {
+func (s *Ashihana) GetChromeWindowHandles() (ret []string, err error) {
 	cmd := &ito.GetChromeWindowHandles{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -252,7 +255,7 @@ func (s *Wrapped) GetChromeWindowHandles() (ret []string, err error) {
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) GetCookies() (ret []*marionette.Cookie, err error) {
+func (s *Ashihana) GetCookies() (ret []*marionette.Cookie, err error) {
 	cmd := &ito.GetCookies{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -261,7 +264,7 @@ func (s *Wrapped) GetCookies() (ret []*marionette.Cookie, err error) {
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) GetCurrentURL() (ret string, err error) {
+func (s *Ashihana) GetCurrentURL() (ret string, err error) {
 	cmd := &ito.GetCurrentURL{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -270,7 +273,7 @@ func (s *Wrapped) GetCurrentURL() (ret string, err error) {
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) GetElementAttribute(
+func (s *Ashihana) GetElementAttribute(
 	el *marionette.WebElement, key string,
 ) (ret string, err error) {
 	cmd := &ito.GetElementAttribute{
@@ -284,7 +287,7 @@ func (s *Wrapped) GetElementAttribute(
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) GetElementCSSValue(
+func (s *Ashihana) GetElementCSSValue(
 	el *marionette.WebElement, key string,
 ) (ret string, err error) {
 	cmd := &ito.GetElementCSSValue{
@@ -298,7 +301,7 @@ func (s *Wrapped) GetElementCSSValue(
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) GetElementProperty(
+func (s *Ashihana) GetElementProperty(
 	el *marionette.WebElement, key string,
 ) (ret interface{}, err error) {
 	cmd := &ito.GetElementProperty{
@@ -312,7 +315,7 @@ func (s *Wrapped) GetElementProperty(
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) GetElementRect(
+func (s *Ashihana) GetElementRect(
 	el *marionette.WebElement,
 ) (ret marionette.Rect, err error) {
 	cmd := &ito.GetElementRect{
@@ -325,7 +328,7 @@ func (s *Wrapped) GetElementRect(
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) GetElementTagName(
+func (s *Ashihana) GetElementTagName(
 	el *marionette.WebElement,
 ) (ret string, err error) {
 	cmd := &ito.GetElementTagName{
@@ -338,7 +341,7 @@ func (s *Wrapped) GetElementTagName(
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) GetElementText(el *marionette.WebElement) (ret string, err error) {
+func (s *Ashihana) GetElementText(el *marionette.WebElement) (ret string, err error) {
 	cmd := &ito.GetElementText{
 		Element: el,
 	}
@@ -349,7 +352,7 @@ func (s *Wrapped) GetElementText(el *marionette.WebElement) (ret string, err err
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) GetPageSource() (ret string, err error) {
+func (s *Ashihana) GetPageSource() (ret string, err error) {
 	cmd := &ito.GetPageSource{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -358,7 +361,7 @@ func (s *Wrapped) GetPageSource() (ret string, err error) {
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) GetTimeouts() (ret *marionette.Timeouts, err error) {
+func (s *Ashihana) GetTimeouts() (ret *marionette.Timeouts, err error) {
 	cmd := &ito.GetTimeouts{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -367,7 +370,7 @@ func (s *Wrapped) GetTimeouts() (ret *marionette.Timeouts, err error) {
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) GetTitle() (ret string, err error) {
+func (s *Ashihana) GetTitle() (ret string, err error) {
 	cmd := &ito.GetTitle{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -376,7 +379,7 @@ func (s *Wrapped) GetTitle() (ret string, err error) {
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) GetWindowHandle() (ret string, err error) {
+func (s *Ashihana) GetWindowHandle() (ret string, err error) {
 	cmd := &ito.GetWindowHandle{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -385,7 +388,7 @@ func (s *Wrapped) GetWindowHandle() (ret string, err error) {
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) GetWindowHandles() (ret []string, err error) {
+func (s *Ashihana) GetWindowHandles() (ret []string, err error) {
 	cmd := &ito.GetWindowHandles{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -394,7 +397,7 @@ func (s *Wrapped) GetWindowHandles() (ret []string, err error) {
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) GetWindowRect() (ret marionette.Rect, err error) {
+func (s *Ashihana) GetWindowRect() (ret marionette.Rect, err error) {
 	cmd := &ito.GetWindowRect{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -403,7 +406,7 @@ func (s *Wrapped) GetWindowRect() (ret marionette.Rect, err error) {
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) IsElementDisplayed(
+func (s *Ashihana) IsElementDisplayed(
 	el *marionette.WebElement, key string,
 ) (ret bool, err error) {
 	cmd := &ito.IsElementDisplayed{
@@ -416,7 +419,7 @@ func (s *Wrapped) IsElementDisplayed(
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) IsElementEnabled(
+func (s *Ashihana) IsElementEnabled(
 	el *marionette.WebElement, key string,
 ) (ret bool, err error) {
 	cmd := &ito.IsElementEnabled{
@@ -429,7 +432,7 @@ func (s *Wrapped) IsElementEnabled(
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) IsElementSelected(
+func (s *Ashihana) IsElementSelected(
 	el *marionette.WebElement, key string,
 ) (ret bool, err error) {
 	cmd := &ito.IsElementSelected{
@@ -442,25 +445,25 @@ func (s *Wrapped) IsElementSelected(
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) MaximizeWindow() (err error) {
+func (s *Ashihana) MaximizeWindow() (err error) {
 	cmd := &ito.MaximizeWindow{}
 	_, err = s.Sync(cmd)
 	return
 }
 
-func (s *Wrapped) MinimizeWindow() (err error) {
+func (s *Ashihana) MinimizeWindow() (err error) {
 	cmd := &ito.MinimizeWindow{}
 	_, err = s.Sync(cmd)
 	return
 }
 
-func (s *Wrapped) Navigate(url string) (err error) {
+func (s *Ashihana) Navigate(url string) (err error) {
 	cmd := &ito.Navigate{URL: url}
 	_, err = s.Sync(cmd)
 	return
 }
 
-func (s *Wrapped) NewSession() (id string, cap *marionette.Capabilities, err error) {
+func (s *Ashihana) NewSession() (id string, cap *marionette.Capabilities, err error) {
 	cmd := &ito.NewSession{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -470,7 +473,7 @@ func (s *Wrapped) NewSession() (id string, cap *marionette.Capabilities, err err
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) NewWindow(typ string, focus bool) (id, winType string, err error) {
+func (s *Ashihana) NewWindow(typ string, focus bool) (id, winType string, err error) {
 	cmd := &ito.NewWindow{Type: typ, Focus: focus}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -480,25 +483,25 @@ func (s *Wrapped) NewWindow(typ string, focus bool) (id, winType string, err err
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) Refresh() (err error) {
+func (s *Ashihana) Refresh() (err error) {
 	cmd := &ito.Refresh{}
 	_, err = s.Sync(cmd)
 	return
 }
 
-func (s *Wrapped) SendAlertText(text string) (err error) {
+func (s *Ashihana) SendAlertText(text string) (err error) {
 	cmd := &ito.SendAlertText{Text: text}
 	_, err = s.Sync(cmd)
 	return
 }
 
-func (s *Wrapped) SetTimeouts(t *marionette.Timeouts) (err error) {
+func (s *Ashihana) SetTimeouts(t *marionette.Timeouts) (err error) {
 	cmd := &ito.SetTimeouts{Timeouts: t}
 	_, err = s.Sync(cmd)
 	return
 }
 
-func (s *Wrapped) SetWindowRect(
+func (s *Ashihana) SetWindowRect(
 	r marionette.Rect,
 ) (ret marionette.Rect, err error) {
 	cmd := &ito.SetWindowRect{Rect: r}
@@ -510,7 +513,7 @@ func (s *Wrapped) SetWindowRect(
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) SwitchToFrame(
+func (s *Ashihana) SwitchToFrame(
 	el *marionette.WebElement, id interface{}, focus bool,
 ) (err error) {
 	cmd := &ito.SwitchToFrame{
@@ -524,25 +527,25 @@ func (s *Wrapped) SwitchToFrame(
 	return
 }
 
-func (s *Wrapped) SwitchToParentFrame() (err error) {
+func (s *Ashihana) SwitchToParentFrame() (err error) {
 	cmd := &ito.SwitchToParentFrame{}
 	_, err = s.Sync(cmd)
 	return
 }
 
-func (s *Wrapped) SwitchToWindow(handle string) (err error) {
+func (s *Ashihana) SwitchToWindow(handle string) (err error) {
 	cmd := &ito.SwitchToWindow{Name: handle}
 	_, err = s.Sync(cmd)
 	return
 }
 
-func (s *Wrapped) SwitchToWindowBG(handle string) (err error) {
+func (s *Ashihana) SwitchToWindowBG(handle string) (err error) {
 	cmd := &ito.SwitchToWindow{Name: handle, NoFocus: true}
 	_, err = s.Sync(cmd)
 	return
 }
 
-func (s *Wrapped) TakeScreenshot() (img string, err error) {
+func (s *Ashihana) TakeScreenshot() (img string, err error) {
 	cmd := &ito.TakeScreenshot{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -552,7 +555,7 @@ func (s *Wrapped) TakeScreenshot() (img string, err error) {
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) TakeScreenshotBytes() (img []byte, err error) {
+func (s *Ashihana) TakeScreenshotBytes() (img []byte, err error) {
 	str, err := s.TakeScreenshot()
 	if err != nil {
 		return
@@ -561,7 +564,7 @@ func (s *Wrapped) TakeScreenshotBytes() (img []byte, err error) {
 	return base64.StdEncoding.DecodeString(str)
 }
 
-func (s *Wrapped) MozGetContext() (ret string, err error) {
+func (s *Ashihana) MozGetContext() (ret string, err error) {
 	cmd := &ito.MozGetContext{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -571,7 +574,7 @@ func (s *Wrapped) MozGetContext() (ret string, err error) {
 	return cmd.Decode(msg)
 }
 
-func (s *Wrapped) MozSetContext(context string) (ret string, err error) {
+func (s *Ashihana) MozSetContext(context string) (ret string, err error) {
 	cmd := &ito.MozSetContext{Context: context}
 	msg, err := s.Sync(cmd)
 	if err != nil {

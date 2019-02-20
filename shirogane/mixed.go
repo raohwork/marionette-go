@@ -5,7 +5,19 @@ import (
 	"github.com/raohwork/marionette-go/ito"
 )
 
-// Mixed is basic mixed mode client
+// Kuroga abstracts an async client which supports blocking and non-blocking call
+//
+// The name comes from Japnese comic "Karakuri circus", which denotes a group of
+// people earn their life by controlling marionette.
+type Kuroga interface {
+	Start() (err error)
+	Close() (err error)
+	Wait()
+	Sync(cmd ito.Ito) (msg *marionette.Message, err error)
+	Async(cmd ito.Ito) (ch chan *marionette.Message, err error)
+}
+
+// Mixed is an asychronous client supports both blocking and non-blocking call
 type Mixed struct {
 	Addr string // marionette server address, use 127.0.0.1:2828 if leave empty
 
