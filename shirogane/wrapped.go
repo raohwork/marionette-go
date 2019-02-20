@@ -463,6 +463,28 @@ func (s *Ashihana) Navigate(url string) (err error) {
 	return
 }
 
+// NavigateAsync runs Navigate command asynchronously
+func (s *Ashihana) NavigateAsync(url string) (ch chan error) {
+	cmd := &ito.Navigate{URL: url}
+	ch = make(chan error, 1)
+	c, err := s.Async(cmd)
+	if err != nil {
+		ch <- err
+		close(ch)
+		return
+	}
+
+	go func(c chan *marionette.Message, ch chan error) {
+		msg := <-c
+		if msg != nil && msg.Error != nil {
+			ch <- msg.Error
+		}
+		close(ch)
+	}(c, ch)
+
+	return
+}
+
 func (s *Ashihana) NewSession() (id string, cap *marionette.Capabilities, err error) {
 	cmd := &ito.NewSession{}
 	msg, err := s.Sync(cmd)
