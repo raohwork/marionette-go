@@ -67,6 +67,7 @@ func (s *Async) Wait() {
 // Stop stops the main loop and clear pending requests
 func (s *Async) Stop() {
 	s.cancel()
+	s.Wait()
 }
 
 func (s *Async) mainLoop() {
