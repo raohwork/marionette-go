@@ -88,6 +88,11 @@ func (t *Tab) MozSetContext(s string) (a string, err error) {
 	panic(errors.New("MozSetContext is not supported in Columbine"))
 }
 
+// GetName returns current tab name
+func (t *Tab) GetName() (ret string) {
+	return t.myMixed.name
+}
+
 // WaitFor periodically check if specified element presents
 //
 // It makes few attempts (specified in "tries") to run FindElement command, and
