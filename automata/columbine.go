@@ -175,9 +175,29 @@ func NewColumbine(m shirogane.Kuroga, tabs []string) (ret *Columbine, err error)
 
 	wanted := len(tabs)
 	// open new tabs if needed
+	// Firefox 65 does not supports NewWindow command yet
+	fx65workround := false
 	for x := len(curTabs); x < wanted; x++ {
-		if _, _, err = ret.client.NewWindow("tab", false); err != nil {
-			return
+		if !fx65workround {
+			_, _, err = ret.client.NewWindow("tab", false)
+			if err != nil {
+				e, ok := err.(*marionette.ErrDriver)
+				if !ok {
+					return
+				}
+				if e.Type != marionette.ErrUnknownCommand {
+					return
+				}
+				fx65workround = true
+			}
+		}
+		if fx65workround {
+			err = ret.client.ExecuteScript(
+				`window.open('about:blank')`, nil,
+			)
+			if err != nil {
+				return
+			}
 		}
 	}
 	// close old tabs if needed
