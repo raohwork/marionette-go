@@ -315,9 +315,7 @@ func (s *Ashihana) GetElementProperty(
 	return cmd.Decode(msg)
 }
 
-func (s *Ashihana) GetElementRect(
-	el *marionette.WebElement,
-) (ret marionette.Rect, err error) {
+func (s *Ashihana) GetElementRect(el *marionette.WebElement) (ret marionette.Rect, err error) {
 	cmd := &ito.GetElementRect{
 		Element: el,
 	}
@@ -328,9 +326,7 @@ func (s *Ashihana) GetElementRect(
 	return cmd.Decode(msg)
 }
 
-func (s *Ashihana) GetElementTagName(
-	el *marionette.WebElement,
-) (ret string, err error) {
+func (s *Ashihana) GetElementTagName(el *marionette.WebElement) (ret string, err error) {
 	cmd := &ito.GetElementTagName{
 		Element: el,
 	}
@@ -406,9 +402,7 @@ func (s *Ashihana) GetWindowRect() (ret marionette.Rect, err error) {
 	return cmd.Decode(msg)
 }
 
-func (s *Ashihana) IsElementDisplayed(
-	el *marionette.WebElement, key string,
-) (ret bool, err error) {
+func (s *Ashihana) IsElementDisplayed(el *marionette.WebElement) (ret bool, err error) {
 	cmd := &ito.IsElementDisplayed{
 		Element: el,
 	}
@@ -419,9 +413,7 @@ func (s *Ashihana) IsElementDisplayed(
 	return cmd.Decode(msg)
 }
 
-func (s *Ashihana) IsElementEnabled(
-	el *marionette.WebElement, key string,
-) (ret bool, err error) {
+func (s *Ashihana) IsElementEnabled(el *marionette.WebElement) (ret bool, err error) {
 	cmd := &ito.IsElementEnabled{
 		Element: el,
 	}
@@ -432,9 +424,7 @@ func (s *Ashihana) IsElementEnabled(
 	return cmd.Decode(msg)
 }
 
-func (s *Ashihana) IsElementSelected(
-	el *marionette.WebElement, key string,
-) (ret bool, err error) {
+func (s *Ashihana) IsElementSelected(el *marionette.WebElement) (ret bool, err error) {
 	cmd := &ito.IsElementSelected{
 		Element: el,
 	}
