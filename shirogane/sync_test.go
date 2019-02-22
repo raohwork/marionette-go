@@ -121,23 +121,6 @@ func TestSyncClient(t *testing.T) {
 	(&ito.GetTitle{}).Decode(try(&ito.GetTitle{}))
 	(&ito.GetCurrentURL{}).Decode(try(&ito.GetCurrentURL{}))
 
-	t.Run("screenshot", func(t *testing.T) {
-		cAnchors := &ito.FindElements{Using: marionette.Selector, Value: "a"}
-		elems, err := cAnchors.Decode(try(cAnchors))
-		if err != nil {
-			t.Fatalf("failed to find elements: %s", err)
-		}
-		cScrShot := &ito.TakeScreenshot{Highlights: elems}
-		if png, err := cScrShot.Decode(try(cScrShot)); err != nil {
-			t.Errorf("Error decoding TakeScreenshot response: %s", err)
-		} else {
-			buf, err := base64.StdEncoding.DecodeString(png)
-			if err == nil {
-				ioutil.WriteFile("shot.png", buf, 0600)
-			}
-		}
-	})
-
 	cFindEl := &ito.FindElement{
 		Using: marionette.Selector,
 		Value: `input[name="q"]`,
@@ -187,12 +170,34 @@ func TestSyncClient(t *testing.T) {
 	}
 
 	(&ito.GetElementProperty{}).Decode(try(&ito.GetElementProperty{Element: el, Name: "isConnected"}))
-	(&ito.GetElementRect{}).Decode(try(&ito.GetElementRect{Element: el}))
 	(&ito.GetElementTagName{}).Decode(try(&ito.GetElementTagName{Element: el}))
 	(&ito.GetElementText{}).Decode(try(&ito.GetElementText{Element: el}))
 	(&ito.IsElementDisplayed{}).Decode(try(&ito.IsElementDisplayed{Element: el}))
 	(&ito.IsElementEnabled{}).Decode(try(&ito.IsElementEnabled{Element: el}))
 	(&ito.IsElementSelected{}).Decode(try(&ito.IsElementSelected{Element: el}))
+
+	cFindEl.Value = "a"
+	el, _ = cFindEl.Decode(try(cFindEl))
+
+	cElRect := &ito.GetElementRect{Element: el}
+	rect, err = cElRect.Decode(try(cElRect))
+	if err != nil {
+		t.Errorf("Error decoding GetElementRect response: %s", err)
+	}
+
+	t.Run("screenshot", func(t *testing.T) {
+		cScrShot := &ito.TakeScreenshot{
+			Highlights: []*marionette.WebElement{el},
+		}
+		if png, err := cScrShot.Decode(try(cScrShot)); err != nil {
+			t.Errorf("Error decoding TakeScreenshot response: %s", err)
+		} else {
+			buf, err := base64.StdEncoding.DecodeString(png)
+			if err == nil {
+				ioutil.WriteFile("shot.png", buf, 0600)
+			}
+		}
+	})
 
 	cJS := &ito.ExecuteScript{Script: `return {x:"test"}`}
 	msg = try(cJS)
