@@ -59,10 +59,10 @@ type Capabilities struct {
 
 // Rect represents size/placement info about a window/element/...
 type Rect struct {
-	X int `json:"x"`
-	Y int `json:"y"`
-	W int `json:"width"`
-	H int `json:"height"`
+	X float64 `json:"x"`
+	Y float64 `json:"y"`
+	W float64 `json:"width"`
+	H float64 `json:"height"`
 }
 
 // FindStrategy denotes how you find element

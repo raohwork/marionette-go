@@ -199,6 +199,7 @@ func TestSyncClient(t *testing.T) {
 		}
 	})
 
+	// js
 	cJS := &ito.ExecuteScript{Script: `return {x:"test"}`}
 	msg = try(cJS)
 	var jsResp map[string]string
@@ -263,6 +264,17 @@ func TestSyncClient(t *testing.T) {
 	try(&ito.MozSetContext{Context: marionette.ChromeContext})
 	(&ito.MozGetContext{}).Decode(try(&ito.MozGetContext{}))
 	try(&ito.MozSetContext{Context: marionette.ContentContext})
+
+	// actions
+	chain := marionette.ActionChain{}
+	chain.
+		MouseMoveTo(int(rect.X+rect.W/2), int(rect.Y+rect.H/2), 100).
+		MouseDown(marionette.MouseLeft).
+		MouseUp(marionette.MouseLeft)
+	cAct := &ito.PerformActions{
+		Actions: chain,
+	}
+	try(cAct)
 
 	try(&ito.CloseWindow{})
 }

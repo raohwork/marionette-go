@@ -625,6 +625,36 @@ func (s *Ashihana) ScreenshotElementBytes(el *marionette.WebElement) (img []byte
 	return base64.StdEncoding.DecodeString(str)
 }
 
+func (s *Ashihana) PerformActions(act marionette.ActionChain) (errCh chan error) {
+	cmd := &ito.PerformActions{Actions: act}
+	errCh = make(chan error, 1)
+	ch, err := s.Async(cmd)
+	if err != nil {
+		errCh <- err
+		close(errCh)
+		return
+	}
+
+	go func() {
+		_ = <-ch
+		errCh <- nil
+		close(errCh)
+	}()
+
+	return
+}
+
+func (s *Ashihana) PerformActionsSync(act marionette.ActionChain) (err error) {
+	ch := s.PerformActions(act)
+	return <-ch
+}
+
+func (s *Ashihana) ReleaseActions() (err error) {
+	cmd := &ito.ReleaseActions{}
+	_, err = s.Sync(cmd)
+	return
+}
+
 func (s *Ashihana) MozGetContext() (ret string, err error) {
 	cmd := &ito.MozGetContext{}
 	msg, err := s.Sync(cmd)
