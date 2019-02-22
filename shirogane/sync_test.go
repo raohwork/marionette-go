@@ -121,15 +121,22 @@ func TestSyncClient(t *testing.T) {
 	(&ito.GetTitle{}).Decode(try(&ito.GetTitle{}))
 	(&ito.GetCurrentURL{}).Decode(try(&ito.GetCurrentURL{}))
 
-	cScrShot := &ito.TakeScreenshot{}
-	if png, err := cScrShot.Decode(try(cScrShot)); err != nil {
-		t.Errorf("Error decoding TakeScreenshot response: %s", err)
-	} else {
-		buf, err := base64.StdEncoding.DecodeString(png)
-		if err == nil {
-			ioutil.WriteFile("shot.png", buf, 0600)
+	t.Run("screenshot", func(t *testing.T) {
+		cAnchors := &ito.FindElements{Using: marionette.Selector, Value: "a"}
+		elems, err := cAnchors.Decode(try(cAnchors))
+		if err != nil {
+			t.Fatalf("failed to find elements: %s", err)
 		}
-	}
+		cScrShot := &ito.TakeScreenshot{Highlights: elems}
+		if png, err := cScrShot.Decode(try(cScrShot)); err != nil {
+			t.Errorf("Error decoding TakeScreenshot response: %s", err)
+		} else {
+			buf, err := base64.StdEncoding.DecodeString(png)
+			if err == nil {
+				ioutil.WriteFile("shot.png", buf, 0600)
+			}
+		}
+	})
 
 	cFindEl := &ito.FindElement{
 		Using: marionette.Selector,

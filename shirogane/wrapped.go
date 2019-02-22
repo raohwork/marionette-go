@@ -557,8 +557,10 @@ func (s *Ashihana) SwitchToWindowBG(handle string) (err error) {
 	return
 }
 
-func (s *Ashihana) TakeScreenshot() (img string, err error) {
-	cmd := &ito.TakeScreenshot{}
+func (s *Ashihana) ScreenshotDocument(
+	highlights []*marionette.WebElement,
+) (img string, err error) {
+	cmd := &ito.TakeScreenshot{Highlights: highlights}
 	msg, err := s.Sync(cmd)
 	if err != nil {
 		return
@@ -567,8 +569,55 @@ func (s *Ashihana) TakeScreenshot() (img string, err error) {
 	return cmd.Decode(msg)
 }
 
-func (s *Ashihana) TakeScreenshotBytes() (img []byte, err error) {
-	str, err := s.TakeScreenshot()
+func (s *Ashihana) ScreenshotDocumentBytes(
+	highlights []*marionette.WebElement,
+) (img []byte, err error) {
+	str, err := s.ScreenshotDocument(highlights)
+	if err != nil {
+		return
+	}
+
+	return base64.StdEncoding.DecodeString(str)
+}
+
+func (s *Ashihana) ScreenshotViewport(
+	highlights []*marionette.WebElement,
+) (img string, err error) {
+	cmd := &ito.TakeScreenshot{
+		ViewportOnly: true,
+		Highlights:   highlights,
+	}
+	msg, err := s.Sync(cmd)
+	if err != nil {
+		return
+	}
+
+	return cmd.Decode(msg)
+}
+
+func (s *Ashihana) ScreenshotViewportBytes(
+	highlights []*marionette.WebElement,
+) (img []byte, err error) {
+	str, err := s.ScreenshotViewport(highlights)
+	if err != nil {
+		return
+	}
+
+	return base64.StdEncoding.DecodeString(str)
+}
+
+func (s *Ashihana) ScreenshotElement(el *marionette.WebElement) (img string, err error) {
+	cmd := &ito.TakeScreenshot{Element: el}
+	msg, err := s.Sync(cmd)
+	if err != nil {
+		return
+	}
+
+	return cmd.Decode(msg)
+}
+
+func (s *Ashihana) ScreenshotElementBytes(el *marionette.WebElement) (img []byte, err error) {
+	str, err := s.ScreenshotElement(el)
 	if err != nil {
 		return
 	}
