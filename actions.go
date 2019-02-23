@@ -52,7 +52,7 @@ var validSubType = map[ActionSubType]ActionType{
 type ActionSequence struct {
 	ID          string        `json:"id"`
 	Type        ActionType    `json:"type"`
-	PointerType string        `json:"pointerType"` // currently only "mouse" is supported
+	PointerType string        `json:"pointerType,omitempty"` // currently only "mouse" is supported
 	Actions     []*ActionItem `json:"actions"`
 }
 
