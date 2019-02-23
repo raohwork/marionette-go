@@ -108,3 +108,20 @@ type Cookie struct {
 	HttpOnly bool   `json:"httpOnly,omitempty"`
 	Expiry   int64  `json:"expiry,omitempty"`
 }
+
+const (
+	// screen orientations
+	PORTRAIT            = "portrait"
+	LANDSCAPE           = "landscape"
+	PORTRAIT_PRIMARY    = "portrait-primary"
+	LANDSCAPE_PRIMARY   = "landscape-primary"
+	PORTRAIT_SECONDARY  = "portrait-secondary"
+	LANDSCAPE_SECONDARY = "landscape-secondary"
+)
+
+const (
+	// window types
+	FirefoxWindow     = "navigator:browser"
+	GeckoViewWindow   = "navigator:geckoview"
+	ThunderbirdWindow = "mail:3pane"
+)

@@ -261,9 +261,12 @@ func TestSyncClient(t *testing.T) {
 	}
 	try(&ito.DeleteAllCookies{})
 
+	// marionette
 	try(&ito.MozSetContext{Context: marionette.ChromeContext})
 	(&ito.MozGetContext{}).Decode(try(&ito.MozGetContext{}))
 	try(&ito.MozSetContext{Context: marionette.ContentContext})
+	try(&ito.MozGetScreenOrientation{})
+	try(&ito.MozGetWindowType{})
 
 	// actions
 	chain := marionette.ActionChain{}

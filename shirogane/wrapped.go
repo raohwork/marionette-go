@@ -674,3 +674,32 @@ func (s *Ashihana) MozSetContext(context string) (ret string, err error) {
 
 	return cmd.Decode(msg)
 }
+
+func (s *Ashihana) MozGetWindowType() (ret string, err error) {
+	cmd := &ito.MozGetWindowType{}
+	msg, err := s.Sync(cmd)
+	if err != nil {
+		return
+	}
+
+	return cmd.Decode(msg)
+}
+
+func (s *Ashihana) MozGetScreenOrientation() (ret string, err error) {
+	cmd := &ito.MozGetScreenOrientation{}
+	msg, err := s.Sync(cmd)
+	if err != nil {
+		return
+	}
+
+	return cmd.Decode(msg)
+}
+
+func (s *Ashihana) MozSetScreenOrientation(v string) (err error) {
+	cmd := &ito.MozSetScreenOrientation{Value: v}
+	msg, err := s.Sync(cmd)
+	if err == nil {
+		err = msg.Error
+	}
+	return
+}
