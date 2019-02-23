@@ -25,7 +25,9 @@ func (c *ExecuteScript) Decode(msg *marionette.Message, dest interface{}) (err e
 	}
 
 	var resp nonObjResp
-	resp.Value = dest
+	if dest != nil {
+		resp.Value = dest
+	}
 	return recode(msg, &resp)
 }
 
