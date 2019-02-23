@@ -92,6 +92,7 @@ func (c *Conn) Close() (err error) {
 	}
 	c.cancel()
 	close(c.ch)
+	close(c.errch)
 	return c.conn.Close()
 }
 
