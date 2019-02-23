@@ -680,7 +680,7 @@ func (s *Ashihana) ScreenshotElementBytes(el *marionette.WebElement) (img []byte
 	return base64.StdEncoding.DecodeString(str)
 }
 
-func (s *Ashihana) PerformActions(act marionette.ActionChain) (errCh chan error) {
+func (s *Ashihana) PerformActionsAsync(act marionette.ActionChain) (errCh chan error) {
 	cmd := &ito.PerformActions{Actions: act}
 	errCh = make(chan error, 1)
 	ch, err := s.Async(cmd)
@@ -699,9 +699,9 @@ func (s *Ashihana) PerformActions(act marionette.ActionChain) (errCh chan error)
 	return
 }
 
-func (s *Ashihana) PerformActionsSync(act marionette.ActionChain) (err error) {
-	ch := s.PerformActions(act)
-	return <-ch
+func (s *Ashihana) PerformActions(act marionette.ActionChain) (err error) {
+	cmd := &ito.PerformActions{Actions: act}
+	return s.runSync(cmd)
 }
 
 func (s *Ashihana) ReleaseActions() (err error) {
