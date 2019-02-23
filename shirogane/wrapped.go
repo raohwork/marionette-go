@@ -15,22 +15,27 @@ type Ashihana struct {
 	Kuroga
 }
 
+func (s *Ashihana) runSync(cmd ito.Ito) (err error) {
+	msg, err := s.Sync(cmd)
+	if err == nil {
+		err = msg.Error
+	}
+	return
+}
+
 func (s *Ashihana) AcceptAlert() (err error) {
 	cmd := &ito.AcceptAlert{}
-	_, err = s.Sync(cmd)
-	return
+	return s.runSync(cmd)
 }
 
 func (s *Ashihana) AddCookie(cookie *marionette.Cookie) (err error) {
 	cmd := &ito.AddCookie{Cookie: cookie}
-	_, err = s.Sync(cmd)
-	return
+	return s.runSync(cmd)
 }
 
 func (s *Ashihana) Back() (err error) {
 	cmd := &ito.Back{}
-	_, err = s.Sync(cmd)
-	return
+	return s.runSync(cmd)
 }
 
 func (s *Ashihana) CloseChromeWindow() (handles []string, err error) {
@@ -53,32 +58,27 @@ func (s *Ashihana) DeleteAllCookies() (err error) {
 
 func (s *Ashihana) DeleteCookie(name string) (err error) {
 	cmd := &ito.DeleteCookie{Name: name}
-	_, err = s.Sync(cmd)
-	return
+	return s.runSync(cmd)
 }
 
 func (s *Ashihana) DismissAlert() (err error) {
 	cmd := &ito.DismissAlert{}
-	_, err = s.Sync(cmd)
-	return
+	return s.runSync(cmd)
 }
 
 func (s *Ashihana) ElementClear(el *marionette.WebElement) (err error) {
 	cmd := &ito.ElementClear{Element: el}
-	_, err = s.Sync(cmd)
-	return
+	return s.runSync(cmd)
 }
 
 func (s *Ashihana) ElementClick(el *marionette.WebElement) (err error) {
 	cmd := &ito.ElementClick{Element: el}
-	_, err = s.Sync(cmd)
-	return
+	return s.runSync(cmd)
 }
 
 func (s *Ashihana) ElementSendKeys(el *marionette.WebElement, text string) (err error) {
 	cmd := &ito.ElementSendKeys{Element: el, Text: text}
-	_, err = s.Sync(cmd)
-	return
+	return s.runSync(cmd)
 }
 
 func (s *Ashihana) ExecuteAsyncScript(script string, args ...interface{}) (
@@ -191,14 +191,12 @@ func (s *Ashihana) FindElements(
 
 func (s *Ashihana) Forward() (err error) {
 	cmd := &ito.Forward{}
-	_, err = s.Sync(cmd)
-	return
+	return s.runSync(cmd)
 }
 
 func (s *Ashihana) FullscreenWindow() (err error) {
 	cmd := &ito.FullscreenWindow{}
-	_, err = s.Sync(cmd)
-	return
+	return s.runSync(cmd)
 }
 
 func (s *Ashihana) GetActiveElement() (ret *marionette.WebElement, err error) {
@@ -437,20 +435,17 @@ func (s *Ashihana) IsElementSelected(el *marionette.WebElement) (ret bool, err e
 
 func (s *Ashihana) MaximizeWindow() (err error) {
 	cmd := &ito.MaximizeWindow{}
-	_, err = s.Sync(cmd)
-	return
+	return s.runSync(cmd)
 }
 
 func (s *Ashihana) MinimizeWindow() (err error) {
 	cmd := &ito.MinimizeWindow{}
-	_, err = s.Sync(cmd)
-	return
+	return s.runSync(cmd)
 }
 
 func (s *Ashihana) Navigate(url string) (err error) {
 	cmd := &ito.Navigate{URL: url}
-	_, err = s.Sync(cmd)
-	return
+	return s.runSync(cmd)
 }
 
 // NavigateAsync runs Navigate command asynchronously
@@ -497,20 +492,17 @@ func (s *Ashihana) NewWindow(typ string, focus bool) (id, winType string, err er
 
 func (s *Ashihana) Refresh() (err error) {
 	cmd := &ito.Refresh{}
-	_, err = s.Sync(cmd)
-	return
+	return s.runSync(cmd)
 }
 
 func (s *Ashihana) SendAlertText(text string) (err error) {
 	cmd := &ito.SendAlertText{Text: text}
-	_, err = s.Sync(cmd)
-	return
+	return s.runSync(cmd)
 }
 
 func (s *Ashihana) SetTimeouts(t *marionette.Timeouts) (err error) {
 	cmd := &ito.SetTimeouts{Timeouts: t}
-	_, err = s.Sync(cmd)
-	return
+	return s.runSync(cmd)
 }
 
 func (s *Ashihana) SetWindowRect(
@@ -535,26 +527,22 @@ func (s *Ashihana) SwitchToFrame(
 	if id != nil {
 		cmd.ID = id
 	}
-	_, err = s.Sync(cmd)
-	return
+	return s.runSync(cmd)
 }
 
 func (s *Ashihana) SwitchToParentFrame() (err error) {
 	cmd := &ito.SwitchToParentFrame{}
-	_, err = s.Sync(cmd)
-	return
+	return s.runSync(cmd)
 }
 
 func (s *Ashihana) SwitchToWindow(handle string) (err error) {
 	cmd := &ito.SwitchToWindow{Name: handle}
-	_, err = s.Sync(cmd)
-	return
+	return s.runSync(cmd)
 }
 
 func (s *Ashihana) SwitchToWindowBG(handle string) (err error) {
 	cmd := &ito.SwitchToWindow{Name: handle, NoFocus: true}
-	_, err = s.Sync(cmd)
-	return
+	return s.runSync(cmd)
 }
 
 func (s *Ashihana) ScreenshotDocument(
@@ -651,8 +639,7 @@ func (s *Ashihana) PerformActionsSync(act marionette.ActionChain) (err error) {
 
 func (s *Ashihana) ReleaseActions() (err error) {
 	cmd := &ito.ReleaseActions{}
-	_, err = s.Sync(cmd)
-	return
+	return s.runSync(cmd)
 }
 
 func (s *Ashihana) MozGetContext() (ret string, err error) {
