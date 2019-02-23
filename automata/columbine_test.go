@@ -120,34 +120,38 @@ func TestColumbineConcurrent(t *testing.T) {
 	js := `const el = document.createElement('div');` +
 		`el.innerText=arguments[0];` +
 		`document.querySelector('body').appendChild(el);`
-	for _, l := range lbl {
-		t.Run("thread-"+l, func(t *testing.T) {
-			tab := c.GetTab(l)
+	t.Run("group", func(t *testing.T) {
+		for _, l := range lbl {
+			l := l
+			t.Run("thread-"+l, func(t *testing.T) {
+				t.Parallel()
+				tab := c.GetTab(l)
 
-			err := tab.ExecuteScript(js, nil, l)
-			if err != nil {
-				t.Fatalf(
-					"unexpected error when running js in tab %s: %s",
-					l,
-					err,
-				)
-			}
+				err := tab.ExecuteScript(js, nil, l)
+				if err != nil {
+					t.Fatalf(
+						"unexpected error when running js in tab %s: %s",
+						l,
+						err,
+					)
+				}
 
-			src, err := tab.GetPageSource()
-			if err != nil {
-				t.Fatalf(
-					"unexpected error when retrieving page source: %s",
-					err,
-				)
-			}
-			if s := fmt.Sprintf(htmlTmpl, l+l, l); src != s {
-				t.Fatalf(
-					"unexpected source for tab %s: %s", l, src,
-				)
-			}
+				src, err := tab.GetPageSource()
+				if err != nil {
+					t.Fatalf(
+						"unexpected error when retrieving page source: %s",
+						err,
+					)
+				}
+				if s := fmt.Sprintf(htmlTmpl, l+l, l); src != s {
+					t.Fatalf(
+						"unexpected source for tab %s: %s", l, src,
+					)
+				}
 
-		})
-	}
+			})
+		}
+	})
 }
 
 func TestColumbineWaitForOK(t *testing.T) {
