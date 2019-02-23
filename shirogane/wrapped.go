@@ -62,8 +62,7 @@ func (s *Ashihana) CloseWindow() (handles []string, err error) {
 // DeleteAllCookies deletes all cookie of the document
 func (s *Ashihana) DeleteAllCookies() (err error) {
 	cmd := &ito.DeleteAllCookies{}
-	_, err = s.Sync(cmd)
-	return
+	return s.runSync(cmd)
 }
 
 // DeleteCookie deletes specified cookie
