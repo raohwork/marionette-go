@@ -81,8 +81,14 @@ func (s *Ashihana) ElementSendKeys(el *marionette.WebElement, text string) (err 
 	return s.runSync(cmd)
 }
 
+// ScriptResult is the result returned from script
+type ScriptResult struct {
+	Result interface{}
+	Err    error
+}
+
 func (s *Ashihana) ExecuteAsyncScript(script string, args ...interface{}) (
-	ch chan interface{}, err error,
+	ch chan ScriptResult, err error,
 ) {
 	cmd := &ito.ExecuteAsyncScript{
 		Script: script,
@@ -94,16 +100,15 @@ func (s *Ashihana) ExecuteAsyncScript(script string, args ...interface{}) (
 		return
 	}
 
-	ch = make(chan interface{})
+	ch = make(chan ScriptResult)
 	go func() {
 		defer close(ch)
 		var data interface{}
 		err := cmd.Decode(<-msgch, &data)
-		if err != nil {
-			ch <- err
-			return
+		ch <- ScriptResult{
+			Result: data,
+			Err:    err,
 		}
-		ch <- data
 	}()
 
 	return
@@ -112,7 +117,7 @@ func (s *Ashihana) ExecuteAsyncScript(script string, args ...interface{}) (
 func (s *Ashihana) ExecuteAsyncScriptIn(
 	sandbox, script string, args ...interface{},
 ) (
-	ch chan interface{}, err error,
+	ch chan ScriptResult, err error,
 ) {
 	cmd := &ito.ExecuteAsyncScript{
 		Script:       script,
@@ -126,16 +131,15 @@ func (s *Ashihana) ExecuteAsyncScriptIn(
 		return
 	}
 
-	ch = make(chan interface{})
+	ch = make(chan ScriptResult)
 	go func() {
 		defer close(ch)
 		var data interface{}
 		err := cmd.Decode(<-msgch, &data)
-		if err != nil {
-			ch <- err
-			return
+		ch <- ScriptResult{
+			Result: data,
+			Err:    err,
 		}
-		ch <- data
 	}()
 
 	return
@@ -165,28 +169,91 @@ func (s *Ashihana) ExecuteScriptIn(
 	return cmd.Decode(msg, data)
 }
 
-func (s *Ashihana) FindElement(
+// ElementResult is the result returned from FindElement
+type ElementResult struct {
+	Result *marionette.WebElement
+	Err    error
+}
+
+func (s *Ashihana) FindElementAsync(
 	by marionette.FindStrategy, qstr string, root *marionette.WebElement,
-) (ret *marionette.WebElement, err error) {
+) (ch chan ElementResult, err error) {
 	cmd := &ito.FindElement{
 		Using:       by,
 		Value:       qstr,
 		RootElement: root,
 	}
-	msg, err := s.Sync(cmd)
-	return cmd.Decode(msg)
+	msgCh, err := s.Async(cmd)
+	if err != nil {
+		return
+	}
+
+	ch = make(chan ElementResult)
+	go func() {
+		defer close(ch)
+		msg := <-msgCh
+		el, err := cmd.Decode(msg)
+		ch <- ElementResult{
+			Result: el,
+			Err:    err,
+		}
+	}()
+
+	return
 }
 
-func (s *Ashihana) FindElements(
+func (s *Ashihana) FindElement(
 	by marionette.FindStrategy, qstr string, root *marionette.WebElement,
-) (ret []*marionette.WebElement, err error) {
+) (ret *marionette.WebElement, err error) {
+	ch, err := s.FindElementAsync(by, qstr, root)
+	if err != nil {
+		return
+	}
+	res := <-ch
+	return res.Result, res.Err
+}
+
+// ElementResults is the result returned from FindElements
+type ElementResults struct {
+	Result []*marionette.WebElement
+	Err    error
+}
+
+func (s *Ashihana) FindElementsAsync(
+	by marionette.FindStrategy, qstr string, root *marionette.WebElement,
+) (ch chan ElementResults, err error) {
 	cmd := &ito.FindElements{
 		Using:       by,
 		Value:       qstr,
 		RootElement: root,
 	}
-	msg, err := s.Sync(cmd)
-	return cmd.Decode(msg)
+	msgCh, err := s.Async(cmd)
+	if err != nil {
+		return
+	}
+
+	ch = make(chan ElementResults)
+	go func() {
+		defer close(ch)
+		res, err := cmd.Decode(<-msgCh)
+		ch <- ElementResults{
+			Result: res,
+			Err:    err,
+		}
+	}()
+
+	return
+}
+
+func (s *Ashihana) FindElements(
+	by marionette.FindStrategy, qstr string, root *marionette.WebElement,
+) (ret []*marionette.WebElement, err error) {
+	ch, err := s.FindElementsAsync(by, qstr, root)
+	if err != nil {
+		return
+	}
+	res := <-ch
+	return res.Result, res.Err
 }
 
 func (s *Ashihana) Forward() (err error) {
