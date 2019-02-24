@@ -1,4 +1,4 @@
-package ito
+package mncmd
 
 // AcceptAlert defines "WebDriver:AcceptAlert" command
 //

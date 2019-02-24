@@ -5,7 +5,7 @@ import (
 	"sync"
 
 	marionette "github.com/raohwork/marionette-go"
-	"github.com/raohwork/marionette-go/ito"
+	"github.com/raohwork/marionette-go/mncmd"
 )
 
 // Sync is very basic synchronized client
@@ -16,7 +16,7 @@ type Sync struct {
 }
 
 // Send sends a command to marionette server, blocks until it gets the response
-func (s *Sync) Send(cmd ito.Ito) (resp *marionette.Message, err error) {
+func (s *Sync) Send(cmd mncmd.Command) (resp *marionette.Message, err error) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 

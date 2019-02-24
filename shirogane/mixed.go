@@ -2,7 +2,7 @@ package shirogane
 
 import (
 	marionette "github.com/raohwork/marionette-go"
-	"github.com/raohwork/marionette-go/ito"
+	"github.com/raohwork/marionette-go/mncmd"
 )
 
 // Kuroga abstracts an async client which supports blocking and non-blocking call
@@ -13,8 +13,8 @@ type Kuroga interface {
 	Start() (err error)
 	Close()
 	Wait()
-	Sync(cmd ito.Ito) (msg *marionette.Message, err error)
-	Async(cmd ito.Ito) (ch chan *marionette.Message, err error)
+	Sync(cmd mncmd.Command) (msg *marionette.Message, err error)
+	Async(cmd mncmd.Command) (ch chan *marionette.Message, err error)
 }
 
 // Mixed is an asychronous client supports both blocking and non-blocking call
@@ -54,7 +54,7 @@ func (s *Mixed) Close() {
 }
 
 // Sync send command synchronously (block until response actually)
-func (s *Mixed) Sync(cmd ito.Ito) (msg *marionette.Message, err error) {
+func (s *Mixed) Sync(cmd mncmd.Command) (msg *marionette.Message, err error) {
 	msgch, err := s.client.Send(cmd)
 	if err != nil {
 		return
@@ -66,6 +66,6 @@ func (s *Mixed) Sync(cmd ito.Ito) (msg *marionette.Message, err error) {
 }
 
 // Async send command asynchronously
-func (s *Mixed) Async(cmd ito.Ito) (ch chan *marionette.Message, err error) {
+func (s *Mixed) Async(cmd mncmd.Command) (ch chan *marionette.Message, err error) {
 	return s.client.Send(cmd)
 }

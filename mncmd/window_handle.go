@@ -1,4 +1,4 @@
-package ito
+package mncmd
 
 // GetWindowHandles represents "WebDriver:GetWindowHandles" command
 //

@@ -1,4 +1,4 @@
-package ito
+package mncmd
 
 import (
 	marionette "github.com/raohwork/marionette-go"

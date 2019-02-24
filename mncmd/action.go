@@ -1,8 +1,8 @@
-package ito
+package mncmd
 
 import marionette "github.com/raohwork/marionette-go"
 
-// Perform defines "WebDriver:PerformActions" command
+// PerformActions defines "WebDriver:PerformActions" command
 //
 // I'm not link to source here as the code in driver.js heavily depends on several
 // source files.

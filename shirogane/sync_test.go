@@ -9,7 +9,7 @@ import (
 	"time"
 
 	marionette "github.com/raohwork/marionette-go"
-	"github.com/raohwork/marionette-go/ito"
+	"github.com/raohwork/marionette-go/mncmd"
 )
 
 var addr string
@@ -36,7 +36,7 @@ func TestSyncClient(t *testing.T) {
 
 	s := &Sync{Conn: conn}
 
-	try := func(cmd ito.Ito) *marionette.Message {
+	try := func(cmd mncmd.Command) *marionette.Message {
 		resp, err := s.Send(cmd)
 		if err != nil {
 			t.Fatalf("Unexpected error: %s", err)
@@ -47,7 +47,7 @@ func TestSyncClient(t *testing.T) {
 		return resp
 	}
 
-	cSess := &ito.NewSession{}
+	cSess := &mncmd.NewSession{}
 	msg := try(cSess)
 	id, caps, err := cSess.Decode(msg)
 	if err != nil {
@@ -57,7 +57,7 @@ func TestSyncClient(t *testing.T) {
 		t.Logf("capabilities: %+v", caps)
 	}
 
-	cHandles := &ito.GetWindowHandles{}
+	cHandles := &mncmd.GetWindowHandles{}
 	msg = try(cHandles)
 	handles, err := cHandles.Decode(msg)
 	if err != nil {
@@ -66,7 +66,7 @@ func TestSyncClient(t *testing.T) {
 		t.Logf("window handles: %+v", handles)
 	}
 
-	cHandle := &ito.GetWindowHandle{}
+	cHandle := &mncmd.GetWindowHandle{}
 	msg = try(cHandle)
 	curid, err := cHandle.Decode(msg)
 	if err != nil {
@@ -75,10 +75,10 @@ func TestSyncClient(t *testing.T) {
 		t.Logf("current handle: %s", curid)
 	}
 
-	try(&ito.GetChromeWindowHandles{})
-	try(&ito.GetChromeWindowHandle{})
+	try(&mncmd.GetChromeWindowHandles{})
+	try(&mncmd.GetChromeWindowHandle{})
 
-	cRect := &ito.GetWindowRect{}
+	cRect := &mncmd.GetWindowRect{}
 	msg = try(cRect)
 	rect, err := cRect.Decode(msg)
 	if err != nil {
@@ -86,12 +86,12 @@ func TestSyncClient(t *testing.T) {
 	} else {
 		t.Logf("window rect: %+v", rect)
 	}
-	try(&ito.FullscreenWindow{})
-	// try(&ito.MinimizeWindow{})
-	try(&ito.MaximizeWindow{})
-	try(&ito.SetWindowRect{Rect: rect})
+	try(&mncmd.FullscreenWindow{})
+	// try(&mncmd.MinimizeWindow{})
+	try(&mncmd.MaximizeWindow{})
+	try(&mncmd.SetWindowRect{Rect: rect})
 
-	cNewWin := &ito.NewWindow{Type: "tab", Focus: true}
+	cNewWin := &mncmd.NewWindow{Type: "tab", Focus: true}
 	msg = try(cNewWin)
 	newID, _, err := cNewWin.Decode(msg)
 	if err != nil {
@@ -100,28 +100,28 @@ func TestSyncClient(t *testing.T) {
 		t.Logf("new window handle: %s", newID)
 	}
 
-	try(&ito.SwitchToWindow{Name: curid})
-	try(&ito.SwitchToWindow{Name: newID})
-	try(&ito.CloseWindow{})
-	try(&ito.SwitchToWindow{Name: curid})
-	try(&ito.SetTimeouts{Timeouts: &marionette.Timeouts{
+	try(&mncmd.SwitchToWindow{Name: curid})
+	try(&mncmd.SwitchToWindow{Name: newID})
+	try(&mncmd.CloseWindow{})
+	try(&mncmd.SwitchToWindow{Name: curid})
+	try(&mncmd.SetTimeouts{Timeouts: &marionette.Timeouts{
 		Implicit: 30000,
 		PageLoad: 30000,
 		Script:   30000,
 	}})
-	(&ito.GetTimeouts{}).Decode(try(&ito.GetTimeouts{}))
-	(&ito.GetCapabilities{}).Decode(try(&ito.GetCapabilities{}))
+	(&mncmd.GetTimeouts{}).Decode(try(&mncmd.GetTimeouts{}))
+	(&mncmd.GetCapabilities{}).Decode(try(&mncmd.GetCapabilities{}))
 
-	try(&ito.Refresh{})
-	(&ito.GetPageSource{}).Decode(try(&ito.GetPageSource{}))
-	try(&ito.Navigate{URL: "https://google.com"})
+	try(&mncmd.Refresh{})
+	(&mncmd.GetPageSource{}).Decode(try(&mncmd.GetPageSource{}))
+	try(&mncmd.Navigate{URL: "https://google.com"})
 	time.Sleep(time.Second)
-	try(&ito.Back{})
-	try(&ito.Forward{})
-	(&ito.GetTitle{}).Decode(try(&ito.GetTitle{}))
-	(&ito.GetCurrentURL{}).Decode(try(&ito.GetCurrentURL{}))
+	try(&mncmd.Back{})
+	try(&mncmd.Forward{})
+	(&mncmd.GetTitle{}).Decode(try(&mncmd.GetTitle{}))
+	(&mncmd.GetCurrentURL{}).Decode(try(&mncmd.GetCurrentURL{}))
 
-	cFindEl := &ito.FindElement{
+	cFindEl := &mncmd.FindElement{
 		Using: marionette.Selector,
 		Value: `input[name="q"]`,
 	}
@@ -132,24 +132,24 @@ func TestSyncClient(t *testing.T) {
 	} else {
 		t.Logf("element: %+v", el)
 	}
-	try(&ito.ElementClick{Element: el})
-	try(&ito.ElementSendKeys{Element: el, Text: "test"})
-	try(&ito.ElementClear{Element: el})
+	try(&mncmd.ElementClick{Element: el})
+	try(&mncmd.ElementSendKeys{Element: el, Text: "test"})
+	try(&mncmd.ElementClear{Element: el})
 
 	cFindEl.Value = "form"
 	el, _ = cFindEl.Decode(try(cFindEl))
-	msg = try(&ito.FindElements{
+	msg = try(&mncmd.FindElements{
 		Using:       marionette.Selector,
 		Value:       "a",
 		RootElement: el,
 	})
-	if _, err := (&ito.FindElements{}).Decode(msg); err != nil {
+	if _, err := (&mncmd.FindElements{}).Decode(msg); err != nil {
 		t.Errorf("Error decoding FindElements response: %s", err)
 	}
 
-	try(&ito.GetActiveElement{})
+	try(&mncmd.GetActiveElement{})
 
-	cGetProp := &ito.GetElementAttribute{
+	cGetProp := &mncmd.GetElementAttribute{
 		Element: el,
 		Name:    "id",
 	}
@@ -159,7 +159,7 @@ func TestSyncClient(t *testing.T) {
 		t.Logf(`element id="%s"`, id)
 	}
 
-	cGetCSS := &ito.GetElementCSSValue{
+	cGetCSS := &mncmd.GetElementCSSValue{
 		Element: el,
 		Prop:    "max-width",
 	}
@@ -169,24 +169,24 @@ func TestSyncClient(t *testing.T) {
 		t.Logf(`element css="%s"`, ret)
 	}
 
-	(&ito.GetElementProperty{}).Decode(try(&ito.GetElementProperty{Element: el, Name: "isConnected"}))
-	(&ito.GetElementTagName{}).Decode(try(&ito.GetElementTagName{Element: el}))
-	(&ito.GetElementText{}).Decode(try(&ito.GetElementText{Element: el}))
-	(&ito.IsElementDisplayed{}).Decode(try(&ito.IsElementDisplayed{Element: el}))
-	(&ito.IsElementEnabled{}).Decode(try(&ito.IsElementEnabled{Element: el}))
-	(&ito.IsElementSelected{}).Decode(try(&ito.IsElementSelected{Element: el}))
+	(&mncmd.GetElementProperty{}).Decode(try(&mncmd.GetElementProperty{Element: el, Name: "isConnected"}))
+	(&mncmd.GetElementTagName{}).Decode(try(&mncmd.GetElementTagName{Element: el}))
+	(&mncmd.GetElementText{}).Decode(try(&mncmd.GetElementText{Element: el}))
+	(&mncmd.IsElementDisplayed{}).Decode(try(&mncmd.IsElementDisplayed{Element: el}))
+	(&mncmd.IsElementEnabled{}).Decode(try(&mncmd.IsElementEnabled{Element: el}))
+	(&mncmd.IsElementSelected{}).Decode(try(&mncmd.IsElementSelected{Element: el}))
 
 	cFindEl.Value = "a"
 	el, _ = cFindEl.Decode(try(cFindEl))
 
-	cElRect := &ito.GetElementRect{Element: el}
+	cElRect := &mncmd.GetElementRect{Element: el}
 	rect, err = cElRect.Decode(try(cElRect))
 	if err != nil {
 		t.Errorf("Error decoding GetElementRect response: %s", err)
 	}
 
 	t.Run("screenshot", func(t *testing.T) {
-		cScrShot := &ito.TakeScreenshot{
+		cScrShot := &mncmd.TakeScreenshot{
 			Highlights: []*marionette.WebElement{el},
 		}
 		if png, err := cScrShot.Decode(try(cScrShot)); err != nil {
@@ -200,7 +200,7 @@ func TestSyncClient(t *testing.T) {
 	})
 
 	// js
-	cJS := &ito.ExecuteScript{Script: `return {x:"test"}`}
+	cJS := &mncmd.ExecuteScript{Script: `return {x:"test"}`}
 	msg = try(cJS)
 	var jsResp map[string]string
 	if err := cJS.Decode(msg, &jsResp); err != nil {
@@ -208,7 +208,7 @@ func TestSyncClient(t *testing.T) {
 	} else {
 		t.Logf("js reply: %+v", jsResp)
 	}
-	cAsyncJS := &ito.ExecuteAsyncScript{Script: `arguments[0]("test")`}
+	cAsyncJS := &mncmd.ExecuteAsyncScript{Script: `arguments[0]("test")`}
 	msg = try(cAsyncJS)
 	var asyncJSResp string
 	if err := cAsyncJS.Decode(msg, &asyncJSResp); err != nil {
@@ -221,7 +221,7 @@ func TestSyncClient(t *testing.T) {
 	cJS.Script = `setTimeout(() => alert('test'), 0)`
 	try(cJS)
 	time.Sleep(100 * time.Millisecond)
-	cDlgText := &ito.GetAlertText{}
+	cDlgText := &mncmd.GetAlertText{}
 	if data, err := cDlgText.Decode(try(cDlgText)); err != nil {
 		t.Errorf("Error decoding GetAlertText response: %s", err)
 	} else {
@@ -229,25 +229,25 @@ func TestSyncClient(t *testing.T) {
 			t.Errorf("expect alert('test'), got %s", data)
 		}
 	}
-	try(&ito.AcceptAlert{})
+	try(&mncmd.AcceptAlert{})
 
 	try(cJS)
 	time.Sleep(100 * time.Millisecond)
-	try(&ito.DismissAlert{})
+	try(&mncmd.DismissAlert{})
 
 	cJS.Script = `setTimeout(() => prompt('test'), 0)`
 	try(cJS)
 	time.Sleep(100 * time.Millisecond)
-	try(&ito.SendAlertText{Text: "test2"})
-	try(&ito.DismissAlert{})
+	try(&mncmd.SendAlertText{Text: "test2"})
+	try(&mncmd.DismissAlert{})
 
-	cGetCookies := &ito.GetCookies{}
+	cGetCookies := &mncmd.GetCookies{}
 	msg = try(cGetCookies)
 	cookies, err := cGetCookies.Decode(msg)
 	if err != nil {
 		t.Errorf("Error decoding GetCookies response: %s", err)
 	}
-	try(&ito.AddCookie{Cookie: &marionette.Cookie{
+	try(&mncmd.AddCookie{Cookie: &marionette.Cookie{
 		Name:  "marionette",
 		Value: "puppet",
 	}})
@@ -259,14 +259,14 @@ func TestSyncClient(t *testing.T) {
 	if x, y := len(cookies), len(ncookies); x != y-1 {
 		t.Errorf("Expected %d cookies, got %d", x+1, y)
 	}
-	try(&ito.DeleteAllCookies{})
+	try(&mncmd.DeleteAllCookies{})
 
 	// marionette
-	try(&ito.MozSetContext{Context: marionette.ChromeContext})
-	(&ito.MozGetContext{}).Decode(try(&ito.MozGetContext{}))
-	try(&ito.MozSetContext{Context: marionette.ContentContext})
-	try(&ito.MozGetScreenOrientation{})
-	try(&ito.MozGetWindowType{})
+	try(&mncmd.MozSetContext{Context: marionette.ChromeContext})
+	(&mncmd.MozGetContext{}).Decode(try(&mncmd.MozGetContext{}))
+	try(&mncmd.MozSetContext{Context: marionette.ContentContext})
+	try(&mncmd.MozGetScreenOrientation{})
+	try(&mncmd.MozGetWindowType{})
 
 	// actions
 	chain := marionette.ActionChain{}
@@ -274,10 +274,10 @@ func TestSyncClient(t *testing.T) {
 		MouseMoveTo(int(rect.X+rect.W/2), int(rect.Y+rect.H/2), 100).
 		MouseDown(marionette.MouseLeft).
 		MouseUp(marionette.MouseLeft)
-	cAct := &ito.PerformActions{
+	cAct := &mncmd.PerformActions{
 		Actions: chain,
 	}
 	try(cAct)
 
-	try(&ito.CloseWindow{})
+	try(&mncmd.CloseWindow{})
 }

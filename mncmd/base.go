@@ -1,13 +1,10 @@
-// Package ito contains supported commands to control marionette
+// Package mncmd contains supported commands to control marionette
 //
 // All commands has related entry in
 // https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js
 //
 // You may refer to the link above for further info of how the command works.
-//
-// The name "ito" is a Japanese word means "string". In the Japanese comic
-// "Karakuri Circus", a marionette is controlled by its controller using strings.
-package ito
+package mncmd
 
 import (
 	"encoding/json"
@@ -15,12 +12,11 @@ import (
 	marionette "github.com/raohwork/marionette-go"
 )
 
-// Ito defines a command
+// Command defines a command
 //
 // Even not defined here, many commands implement a "Decode" method, which decodes
 // marionette.Message to corresponding data types.
-type Ito interface {
-	// Below are called by client (Shirogane)
+type Command interface {
 	Command() string
 	Param() interface{}
 	Validate() bool

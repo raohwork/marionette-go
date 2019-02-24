@@ -6,7 +6,7 @@ import (
 	"sync"
 
 	marionette "github.com/raohwork/marionette-go"
-	"github.com/raohwork/marionette-go/ito"
+	"github.com/raohwork/marionette-go/mncmd"
 )
 
 // Async is very basic asynchronized client
@@ -26,7 +26,7 @@ type Async struct {
 // The client will close the channel once message is transmitted.
 //
 // Calling Send() on a stopped client leads to nil pointer panic!
-func (s *Async) Send(cmd ito.Ito) (resp chan *marionette.Message, err error) {
+func (s *Async) Send(cmd mncmd.Command) (resp chan *marionette.Message, err error) {
 	s.mapLock.Lock()
 	defer s.mapLock.Unlock()
 
