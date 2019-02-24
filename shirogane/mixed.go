@@ -11,7 +11,7 @@ import (
 // people earn their life by controlling marionette.
 type Kuroga interface {
 	Start() (err error)
-	Close() (err error)
+	Close()
 	Wait()
 	Sync(cmd ito.Ito) (msg *marionette.Message, err error)
 	Async(cmd ito.Ito) (ch chan *marionette.Message, err error)
@@ -48,9 +48,9 @@ func (s *Mixed) Wait() {
 }
 
 // Close exits the mainloop and release all related resources
-func (s *Mixed) Close() (err error) {
+func (s *Mixed) Close() {
 	s.client.Stop()
-	return s.client.Conn.Close()
+	s.client.Conn.Close()
 }
 
 // Sync send command synchronously (block until response actually)

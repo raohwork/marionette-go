@@ -76,24 +76,20 @@ func NewConn(tcpconn *net.TCPConn, resultBufferSize uint) (ret *Conn, err error)
 	return
 }
 
-// Wait blocks until first transport error
-//
-// You SHOULD close the connection after Wait() return.
+// Wait blocks until first transport error, or nil if connnection is closed without error
 func (c *Conn) Wait() (err error) {
+	if c == nil {
+		return
+	}
 	return <-c.errch
 }
 
-// Close disconnect from marionette server and release allocated resources
-//
-// Since it closes the result channel, calling it multiple times leads to panic.
-func (c *Conn) Close() (err error) {
+// Close disconnect from marionette server
+func (c *Conn) Close() {
 	if c == nil {
-		return nil
+		return
 	}
 	c.cancel()
-	close(c.ch)
-	close(c.errch)
-	return c.conn.Close()
 }
 
 // ResultChan retrieves the channel instance for reading results.
@@ -164,7 +160,14 @@ func (c *Conn) receiveMessage() (id uint32, e error, resp interface{}) {
 	return
 }
 
+func (c *Conn) shutdown() {
+	close(c.ch)
+	close(c.errch)
+	c.conn.Close()
+}
+
 func (c *Conn) receiver() {
+	defer c.shutdown()
 	for {
 		select {
 		case <-c.ctx.Done():
