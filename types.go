@@ -2,6 +2,19 @@ package marionette
 
 import "encoding/json"
 
+const (
+	ChromeContext  = "chrome"
+	ContentContext = "content"
+)
+
+// Message represents messages to/from marionette server
+type Message struct {
+	Type   int
+	Serial uint32
+	Error  error
+	Data   interface{}
+}
+
 // Proxy represents proxy info
 type Proxy struct {
 	Type          string   `json:"proxyType,omitempty"`

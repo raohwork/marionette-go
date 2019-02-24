@@ -1,67 +1,36 @@
-package marionette
+package mnsender
 
 import (
 	"context"
 	"encoding/json"
 	"errors"
-	"net"
-)
+	"io"
 
-const (
-	ChromeContext  = "chrome"
-	ContentContext = "content"
+	marionette "github.com/raohwork/marionette-go"
 )
-
-// Message represents messages to/from marionette server
-type Message struct {
-	Type   int
-	Serial uint32
-	Error  error
-	Data   interface{}
-}
 
 // Conn represents a cnnection to Marionette server
 type Conn struct {
-	conn   *net.TCPConn
+	conn   io.ReadWriteCloser
 	serial uint32
 	ctx    context.Context
 	cancel context.CancelFunc
-	ch     chan *Message
+	ch     chan *marionette.Message
 	errch  chan error
 
 	transport transport
 }
 
-// ConnectTo creates a Conn instance by connecting to remote marionette server
-//
-// It just creates a net.TCPConn with default parameter, tries to enable tcp
-// keepalive and pass it to NewConn(tcpconn, 0).
-func ConnectTo(addr string) (ret *Conn, err error) {
-	tcpaddr, err := net.ResolveTCPAddr("tcp", addr)
-	if err != nil {
-		return
-	}
-
-	tcpconn, err := net.DialTCP("tcp", nil, tcpaddr)
-	if err != nil {
-		return
-	}
-
-	tcpconn.SetKeepAlive(true)
-
-	return NewConn(tcpconn, 0)
-}
-
 // NewConn creates a Conn instance with user initialized tcp connection
 //
 // The resultBufferSize is capacity of the result channel.
-func NewConn(tcpconn *net.TCPConn, resultBufferSize uint) (ret *Conn, err error) {
+func NewConn(c io.ReadWriteCloser, resultBufferSize uint) (ret *Conn, err error) {
 	ret = &Conn{
-		conn:      tcpconn,
+		conn:      c,
 		serial:    1,
-		ch:        make(chan *Message, resultBufferSize),
+		ch:        make(chan *marionette.Message, resultBufferSize),
 		errch:     make(chan error, 1),
-		transport: transport{conn: tcpconn},
+		transport: transport{conn: c},
 	}
 	ret.ctx, ret.cancel = context.WithCancel(context.Background())
 
@@ -93,7 +62,7 @@ func (c *Conn) Close() {
 }
 
 // ResultChan retrieves the channel instance for reading results.
-func (c *Conn) ResultChan() (ch chan *Message) {
+func (c *Conn) ResultChan() (ch chan *marionette.Message) {
 	if c == nil {
 		return nil
 	}
@@ -115,7 +84,7 @@ func (c *Conn) Send(cmd string, param interface{}) (id uint32, err error) {
 	}
 
 	if err = c.transport.Send(data); err != nil {
-		return 0, &ErrConnection{
+		return 0, &marionette.ErrConnection{
 			When:   "send",
 			Origin: err,
 		}
@@ -127,13 +96,13 @@ func (c *Conn) Send(cmd string, param interface{}) (id uint32, err error) {
 
 func (c *Conn) receiveMessage() (id uint32, e error, resp interface{}) {
 	f := func(err error) (a uint32, b error, r interface{}) {
-		e := &ErrResponseDecode{
+		e := &marionette.ErrResponseDecode{
 			Err: err,
 		}
 		return id, e, resp
 	}
 
-	var eDriver ErrDriver
+	var eDriver marionette.ErrDriver
 	var typ uint32
 	arr := [4]interface{}{
 		&typ,
@@ -187,7 +156,7 @@ func (c *Conn) doReceive() (err error) {
 		return
 	}
 
-	c.ch <- &Message{
+	c.ch <- &marionette.Message{
 		Type:   1,
 		Serial: id,
 		Data:   data,

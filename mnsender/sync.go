@@ -1,4 +1,4 @@
-package shirogane
+package mnsender
 
 import (
 	"errors"
@@ -10,7 +10,7 @@ import (
 
 // Sync is very basic synchronized client
 type Sync struct {
-	Conn *marionette.Conn
+	Conn *Conn
 
 	lock sync.Mutex
 }

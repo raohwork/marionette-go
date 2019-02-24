@@ -1,21 +1,19 @@
-package shirogane
+package mnclient
 
 import (
 	"encoding/base64"
 
 	marionette "github.com/raohwork/marionette-go"
 	"github.com/raohwork/marionette-go/mncmd"
+	"github.com/raohwork/marionette-go/mnsender"
 )
 
-// Ashihana is a client which wraps supported commands as method
-//
-// The name comes from Japnese comic "Karakuri circus", which is the last name of
-// main characters in Kuroga.
-type Ashihana struct {
-	Kuroga
+// Commander is a client mixin which wraps supported commands into methods
+type Commander struct {
+	mnsender.Sender
 }
 
-func (s *Ashihana) runSync(cmd mncmd.Command) (err error) {
+func (s *Commander) runSync(cmd mncmd.Command) (err error) {
 	msg, err := s.Sync(cmd)
 	if err == nil {
 		err = msg.Error
@@ -24,19 +22,19 @@ func (s *Ashihana) runSync(cmd mncmd.Command) (err error) {
 }
 
 // AcceptAlert presses the "OK" button of the modal dialog
-func (s *Ashihana) AcceptAlert() (err error) {
+func (s *Commander) AcceptAlert() (err error) {
 	cmd := &mncmd.AcceptAlert{}
 	return s.runSync(cmd)
 }
 
 // AddCookie adds a cookie to the document
-func (s *Ashihana) AddCookie(cookie *marionette.Cookie) (err error) {
+func (s *Commander) AddCookie(cookie *marionette.Cookie) (err error) {
 	cmd := &mncmd.AddCookie{Cookie: cookie}
 	return s.runSync(cmd)
 }
 
 // Back presses the "Back" button on the browser toolbar
-func (s *Ashihana) Back() (err error) {
+func (s *Commander) Back() (err error) {
 	cmd := &mncmd.Back{}
 	return s.runSync(cmd)
 }
@@ -44,7 +42,7 @@ func (s *Ashihana) Back() (err error) {
 // CloseChromeWindow closes current active chrome window
 //
 // It returns a list of currently opened chrome window
-func (s *Ashihana) CloseChromeWindow() (handles []string, err error) {
+func (s *Commander) CloseChromeWindow() (handles []string, err error) {
 	cmd := &mncmd.CloseChromeWindow{}
 	msg, err := s.Sync(cmd)
 	return cmd.Decode(msg)
@@ -53,44 +51,44 @@ func (s *Ashihana) CloseChromeWindow() (handles []string, err error) {
 // CloseChromeWindow closes current active window/tab
 //
 // It returns a list of currently opened window/tab
-func (s *Ashihana) CloseWindow() (handles []string, err error) {
+func (s *Commander) CloseWindow() (handles []string, err error) {
 	cmd := &mncmd.CloseWindow{}
 	msg, err := s.Sync(cmd)
 	return cmd.Decode(msg)
 }
 
 // DeleteAllCookies deletes all cookie of the document
-func (s *Ashihana) DeleteAllCookies() (err error) {
+func (s *Commander) DeleteAllCookies() (err error) {
 	cmd := &mncmd.DeleteAllCookies{}
 	return s.runSync(cmd)
 }
 
 // DeleteCookie deletes specified cookie
-func (s *Ashihana) DeleteCookie(name string) (err error) {
+func (s *Commander) DeleteCookie(name string) (err error) {
 	cmd := &mncmd.DeleteCookie{Name: name}
 	return s.runSync(cmd)
 }
 
 // DismissAlert presses "close" button of the modal dialog
-func (s *Ashihana) DismissAlert() (err error) {
+func (s *Commander) DismissAlert() (err error) {
 	cmd := &mncmd.DismissAlert{}
 	return s.runSync(cmd)
 }
 
 // ElementClear clears the text of the element
-func (s *Ashihana) ElementClear(el *marionette.WebElement) (err error) {
+func (s *Commander) ElementClear(el *marionette.WebElement) (err error) {
 	cmd := &mncmd.ElementClear{Element: el}
 	return s.runSync(cmd)
 }
 
 // ElementClick clicks the element
-func (s *Ashihana) ElementClick(el *marionette.WebElement) (err error) {
+func (s *Commander) ElementClick(el *marionette.WebElement) (err error) {
 	cmd := &mncmd.ElementClick{Element: el}
 	return s.runSync(cmd)
 }
 
 // ElementSendKeys sends keystrokes to the element
-func (s *Ashihana) ElementSendKeys(el *marionette.WebElement, text string) (err error) {
+func (s *Commander) ElementSendKeys(el *marionette.WebElement, text string) (err error) {
 	cmd := &mncmd.ElementSendKeys{Element: el, Text: text}
 	return s.runSync(cmd)
 }
@@ -104,7 +102,7 @@ type ScriptResult struct {
 // ExecuteAsyncScript executes the script in default, mutable sandbox
 //
 // It returns the value passed to callback. Callback is always the last argument.
-func (s *Ashihana) ExecuteAsyncScript(script string, args ...interface{}) (
+func (s *Commander) ExecuteAsyncScript(script string, args ...interface{}) (
 	ch chan ScriptResult, err error,
 ) {
 	cmd := &mncmd.ExecuteAsyncScript{
@@ -136,7 +134,7 @@ func (s *Ashihana) ExecuteAsyncScript(script string, args ...interface{}) (
 // It returns the value passed to callback. Callback is always the last argument.
 //
 // The sandbox is cached on window object for later use
-func (s *Ashihana) ExecuteAsyncScriptIn(
+func (s *Commander) ExecuteAsyncScriptIn(
 	sandbox, script string, args ...interface{},
 ) (
 	ch chan ScriptResult, err error,
@@ -168,7 +166,7 @@ func (s *Ashihana) ExecuteAsyncScriptIn(
 }
 
 // ExecuteScript executes the script in default, mutable sandbox
-func (s *Ashihana) ExecuteScript(
+func (s *Commander) ExecuteScript(
 	script string, data interface{}, args ...interface{},
 ) (err error) {
 	cmd := &mncmd.ExecuteScript{
@@ -182,7 +180,7 @@ func (s *Ashihana) ExecuteScript(
 // ExecuteScriptIn executes the script in specified sandbox
 //
 // The sandbox is cached on window object for later use
-func (s *Ashihana) ExecuteScriptIn(
+func (s *Commander) ExecuteScriptIn(
 	sandbox, script string, data interface{}, args ...interface{},
 ) (err error) {
 	cmd := &mncmd.ExecuteScript{
@@ -202,7 +200,7 @@ type ElementResult struct {
 }
 
 // FindElementAsync finds an element asynchronously
-func (s *Ashihana) FindElementAsync(
+func (s *Commander) FindElementAsync(
 	by marionette.FindStrategy, qstr string, root *marionette.WebElement,
 ) (ch chan ElementResult, err error) {
 	cmd := &mncmd.FindElement{
@@ -230,7 +228,7 @@ func (s *Ashihana) FindElementAsync(
 }
 
 // FindElement finds an element
-func (s *Ashihana) FindElement(
+func (s *Commander) FindElement(
 	by marionette.FindStrategy, qstr string, root *marionette.WebElement,
 ) (ret *marionette.WebElement, err error) {
 	ch, err := s.FindElementAsync(by, qstr, root)
@@ -248,7 +246,7 @@ type ElementResults struct {
 }
 
 // FindElements retrieves all matching elements asynchronously
-func (s *Ashihana) FindElementsAsync(
+func (s *Commander) FindElementsAsync(
 	by marionette.FindStrategy, qstr string, root *marionette.WebElement,
 ) (ch chan ElementResults, err error) {
 	cmd := &mncmd.FindElements{
@@ -275,7 +273,7 @@ func (s *Ashihana) FindElementsAsync(
 }
 
 // FindElemens retrieves all matching elements
-func (s *Ashihana) FindElements(
+func (s *Commander) FindElements(
 	by marionette.FindStrategy, qstr string, root *marionette.WebElement,
 ) (ret []*marionette.WebElement, err error) {
 	ch, err := s.FindElementsAsync(by, qstr, root)
@@ -287,19 +285,19 @@ func (s *Ashihana) FindElements(
 }
 
 // Forward presses the "forward" button on browser toolbar
-func (s *Ashihana) Forward() (err error) {
+func (s *Commander) Forward() (err error) {
 	cmd := &mncmd.Forward{}
 	return s.runSync(cmd)
 }
 
 // FullscreenWindow switches active window to fullscreen mode
-func (s *Ashihana) FullscreenWindow() (err error) {
+func (s *Commander) FullscreenWindow() (err error) {
 	cmd := &mncmd.FullscreenWindow{}
 	return s.runSync(cmd)
 }
 
 // GetActiveElement retrieves active element
-func (s *Ashihana) GetActiveElement() (ret *marionette.WebElement, err error) {
+func (s *Commander) GetActiveElement() (ret *marionette.WebElement, err error) {
 	cmd := &mncmd.GetActiveElement{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -309,7 +307,7 @@ func (s *Ashihana) GetActiveElement() (ret *marionette.WebElement, err error) {
 }
 
 // GetActiveFrame retrieves active frame
-func (s *Ashihana) GetActiveFrame() (ret *marionette.WebElement, err error) {
+func (s *Commander) GetActiveFrame() (ret *marionette.WebElement, err error) {
 	cmd := &mncmd.GetActiveFrame{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -319,7 +317,7 @@ func (s *Ashihana) GetActiveFrame() (ret *marionette.WebElement, err error) {
 }
 
 // GetAlertText retrieves the text label of the modal dialog
-func (s *Ashihana) GetAlertText() (ret string, err error) {
+func (s *Commander) GetAlertText() (ret string, err error) {
 	cmd := &mncmd.GetAlertText{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -329,7 +327,7 @@ func (s *Ashihana) GetAlertText() (ret string, err error) {
 }
 
 // GetCapabilities retrieves browser capabilities
-func (s *Ashihana) GetCapabilities() (ret *marionette.Capabilities, err error) {
+func (s *Commander) GetCapabilities() (ret *marionette.Capabilities, err error) {
 	cmd := &mncmd.GetCapabilities{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -339,7 +337,7 @@ func (s *Ashihana) GetCapabilities() (ret *marionette.Capabilities, err error) {
 }
 
 // GetChromeWindowHandle retrieves current active chrome window handler
-func (s *Ashihana) GetChromeWindowHandle() (ret string, err error) {
+func (s *Commander) GetChromeWindowHandle() (ret string, err error) {
 	cmd := &mncmd.GetChromeWindowHandle{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -349,7 +347,7 @@ func (s *Ashihana) GetChromeWindowHandle() (ret string, err error) {
 }
 
 // GetChromeWindowHandles retrieves all opened chrome window handlers
-func (s *Ashihana) GetChromeWindowHandles() (ret []string, err error) {
+func (s *Commander) GetChromeWindowHandles() (ret []string, err error) {
 	cmd := &mncmd.GetChromeWindowHandles{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -359,7 +357,7 @@ func (s *Ashihana) GetChromeWindowHandles() (ret []string, err error) {
 }
 
 // GetCookies retrieves all cookies of the document
-func (s *Ashihana) GetCookies() (ret []*marionette.Cookie, err error) {
+func (s *Commander) GetCookies() (ret []*marionette.Cookie, err error) {
 	cmd := &mncmd.GetCookies{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -369,7 +367,7 @@ func (s *Ashihana) GetCookies() (ret []*marionette.Cookie, err error) {
 }
 
 // GetCurrentURL retrieves current url
-func (s *Ashihana) GetCurrentURL() (ret string, err error) {
+func (s *Commander) GetCurrentURL() (ret string, err error) {
 	cmd := &mncmd.GetCurrentURL{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -379,7 +377,7 @@ func (s *Ashihana) GetCurrentURL() (ret string, err error) {
 }
 
 // GetElementAttribute retrieves specified attribute of the element
-func (s *Ashihana) GetElementAttribute(
+func (s *Commander) GetElementAttribute(
 	el *marionette.WebElement, key string,
 ) (ret string, err error) {
 	cmd := &mncmd.GetElementAttribute{
@@ -398,7 +396,7 @@ func (s *Ashihana) GetElementAttribute(
 // You should use css names in "key", not js variant
 //
 //    c.GetElementCSSValue(el, "text-align") // not "textAlign"
-func (s *Ashihana) GetElementCSSValue(
+func (s *Commander) GetElementCSSValue(
 	el *marionette.WebElement, key string,
 ) (ret string, err error) {
 	cmd := &mncmd.GetElementCSSValue{
@@ -413,7 +411,7 @@ func (s *Ashihana) GetElementCSSValue(
 }
 
 // GetElementProperty retrieves specified property of the element
-func (s *Ashihana) GetElementProperty(
+func (s *Commander) GetElementProperty(
 	el *marionette.WebElement, key string,
 ) (ret interface{}, err error) {
 	cmd := &mncmd.GetElementProperty{
@@ -430,7 +428,7 @@ func (s *Ashihana) GetElementProperty(
 // GetElementRect retrieves the bounding rect of the element
 //
 // The X(left) and Y(top) are computed aginst origin(top-left) of the document.
-func (s *Ashihana) GetElementRect(el *marionette.WebElement) (ret marionette.Rect, err error) {
+func (s *Commander) GetElementRect(el *marionette.WebElement) (ret marionette.Rect, err error) {
 	cmd := &mncmd.GetElementRect{
 		Element: el,
 	}
@@ -442,7 +440,7 @@ func (s *Ashihana) GetElementRect(el *marionette.WebElement) (ret marionette.Rec
 }
 
 // GetElementTagName retrieves tag name of the element (like "div")
-func (s *Ashihana) GetElementTagName(el *marionette.WebElement) (ret string, err error) {
+func (s *Commander) GetElementTagName(el *marionette.WebElement) (ret string, err error) {
 	cmd := &mncmd.GetElementTagName{
 		Element: el,
 	}
@@ -454,7 +452,7 @@ func (s *Ashihana) GetElementTagName(el *marionette.WebElement) (ret string, err
 }
 
 // GetElementText retrieves text of the element
-func (s *Ashihana) GetElementText(el *marionette.WebElement) (ret string, err error) {
+func (s *Commander) GetElementText(el *marionette.WebElement) (ret string, err error) {
 	cmd := &mncmd.GetElementText{
 		Element: el,
 	}
@@ -466,7 +464,7 @@ func (s *Ashihana) GetElementText(el *marionette.WebElement) (ret string, err er
 }
 
 // GetPageSource retrieves page source of current document
-func (s *Ashihana) GetPageSource() (ret string, err error) {
+func (s *Commander) GetPageSource() (ret string, err error) {
 	cmd := &mncmd.GetPageSource{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -476,7 +474,7 @@ func (s *Ashihana) GetPageSource() (ret string, err error) {
 }
 
 // GetTimeouts retrieves timeout settings of marionette server
-func (s *Ashihana) GetTimeouts() (ret *marionette.Timeouts, err error) {
+func (s *Commander) GetTimeouts() (ret *marionette.Timeouts, err error) {
 	cmd := &mncmd.GetTimeouts{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -486,7 +484,7 @@ func (s *Ashihana) GetTimeouts() (ret *marionette.Timeouts, err error) {
 }
 
 // GetTitle retrieves the text of title bar of current window/tab
-func (s *Ashihana) GetTitle() (ret string, err error) {
+func (s *Commander) GetTitle() (ret string, err error) {
 	cmd := &mncmd.GetTitle{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -496,7 +494,7 @@ func (s *Ashihana) GetTitle() (ret string, err error) {
 }
 
 // GetWindowHandle retrieves the handler of current window
-func (s *Ashihana) GetWindowHandle() (ret string, err error) {
+func (s *Commander) GetWindowHandle() (ret string, err error) {
 	cmd := &mncmd.GetWindowHandle{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -506,7 +504,7 @@ func (s *Ashihana) GetWindowHandle() (ret string, err error) {
 }
 
 // GetWindowHandles retrieves the handlers of all opened window
-func (s *Ashihana) GetWindowHandles() (ret []string, err error) {
+func (s *Commander) GetWindowHandles() (ret []string, err error) {
 	cmd := &mncmd.GetWindowHandles{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -516,7 +514,7 @@ func (s *Ashihana) GetWindowHandles() (ret []string, err error) {
 }
 
 // GetWindowRect retrieves bounding box of current window
-func (s *Ashihana) GetWindowRect() (ret marionette.Rect, err error) {
+func (s *Commander) GetWindowRect() (ret marionette.Rect, err error) {
 	cmd := &mncmd.GetWindowRect{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -526,7 +524,7 @@ func (s *Ashihana) GetWindowRect() (ret marionette.Rect, err error) {
 }
 
 // IsElementDisplayed checks if the element is displayed
-func (s *Ashihana) IsElementDisplayed(el *marionette.WebElement) (ret bool, err error) {
+func (s *Commander) IsElementDisplayed(el *marionette.WebElement) (ret bool, err error) {
 	cmd := &mncmd.IsElementDisplayed{
 		Element: el,
 	}
@@ -538,7 +536,7 @@ func (s *Ashihana) IsElementDisplayed(el *marionette.WebElement) (ret bool, err 
 }
 
 // IsElementEnabled checks if the element is enabled
-func (s *Ashihana) IsElementEnabled(el *marionette.WebElement) (ret bool, err error) {
+func (s *Commander) IsElementEnabled(el *marionette.WebElement) (ret bool, err error) {
 	cmd := &mncmd.IsElementEnabled{
 		Element: el,
 	}
@@ -550,7 +548,7 @@ func (s *Ashihana) IsElementEnabled(el *marionette.WebElement) (ret bool, err er
 }
 
 // IsElementSelected checks if the element is selected
-func (s *Ashihana) IsElementSelected(el *marionette.WebElement) (ret bool, err error) {
+func (s *Commander) IsElementSelected(el *marionette.WebElement) (ret bool, err error) {
 	cmd := &mncmd.IsElementSelected{
 		Element: el,
 	}
@@ -562,25 +560,25 @@ func (s *Ashihana) IsElementSelected(el *marionette.WebElement) (ret bool, err e
 }
 
 // MaximizeWindow maximizes current window
-func (s *Ashihana) MaximizeWindow() (err error) {
+func (s *Commander) MaximizeWindow() (err error) {
 	cmd := &mncmd.MaximizeWindow{}
 	return s.runSync(cmd)
 }
 
 // MinimizeWindow minimizes current window
-func (s *Ashihana) MinimizeWindow() (err error) {
+func (s *Commander) MinimizeWindow() (err error) {
 	cmd := &mncmd.MinimizeWindow{}
 	return s.runSync(cmd)
 }
 
 // Navigate navigates to the url
-func (s *Ashihana) Navigate(url string) (err error) {
+func (s *Commander) Navigate(url string) (err error) {
 	cmd := &mncmd.Navigate{URL: url}
 	return s.runSync(cmd)
 }
 
 // NavigateAsync runs Navigate command asynchronously
-func (s *Ashihana) NavigateAsync(url string) (ch chan error) {
+func (s *Commander) NavigateAsync(url string) (ch chan error) {
 	cmd := &mncmd.Navigate{URL: url}
 	ch = make(chan error, 1)
 	c, err := s.Async(cmd)
@@ -602,7 +600,7 @@ func (s *Ashihana) NavigateAsync(url string) (ch chan error) {
 }
 
 // NewSession creates a new webdriver session
-func (s *Ashihana) NewSession() (id string, cap *marionette.Capabilities, err error) {
+func (s *Commander) NewSession() (id string, cap *marionette.Capabilities, err error) {
 	cmd := &mncmd.NewSession{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -613,7 +611,7 @@ func (s *Ashihana) NewSession() (id string, cap *marionette.Capabilities, err er
 }
 
 // NewWindow opens a new window
-func (s *Ashihana) NewWindow(typ string, focus bool) (id, winType string, err error) {
+func (s *Commander) NewWindow(typ string, focus bool) (id, winType string, err error) {
 	cmd := &mncmd.NewWindow{Type: typ, Focus: focus}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -624,25 +622,25 @@ func (s *Ashihana) NewWindow(typ string, focus bool) (id, winType string, err er
 }
 
 // Refresh presses the "refresh" button on toolbar
-func (s *Ashihana) Refresh() (err error) {
+func (s *Commander) Refresh() (err error) {
 	cmd := &mncmd.Refresh{}
 	return s.runSync(cmd)
 }
 
 // SendAlertText sends keystrokes to the input area of modal dialog
-func (s *Ashihana) SendAlertText(text string) (err error) {
+func (s *Commander) SendAlertText(text string) (err error) {
 	cmd := &mncmd.SendAlertText{Text: text}
 	return s.runSync(cmd)
 }
 
 // SetTimeouts sets timeout settings of marionette server
-func (s *Ashihana) SetTimeouts(t *marionette.Timeouts) (err error) {
+func (s *Commander) SetTimeouts(t *marionette.Timeouts) (err error) {
 	cmd := &mncmd.SetTimeouts{Timeouts: t}
 	return s.runSync(cmd)
 }
 
 // SetWindowRect resizes and moves current window to specified size/position
-func (s *Ashihana) SetWindowRect(
+func (s *Commander) SetWindowRect(
 	r marionette.Rect,
 ) (ret marionette.Rect, err error) {
 	cmd := &mncmd.SetWindowRect{Rect: r}
@@ -655,7 +653,7 @@ func (s *Ashihana) SetWindowRect(
 }
 
 // SwitchToFrame swtich active frame (frameset/iframe or main frame)
-func (s *Ashihana) SwitchToFrame(
+func (s *Commander) SwitchToFrame(
 	el *marionette.WebElement, id interface{}, focus bool,
 ) (err error) {
 	cmd := &mncmd.SwitchToFrame{
@@ -669,25 +667,25 @@ func (s *Ashihana) SwitchToFrame(
 }
 
 // SwitchToParentFrame switches to parent frame
-func (s *Ashihana) SwitchToParentFrame() (err error) {
+func (s *Commander) SwitchToParentFrame() (err error) {
 	cmd := &mncmd.SwitchToParentFrame{}
 	return s.runSync(cmd)
 }
 
 // SwitchToWindow switches to specified window/tab and bring it to foreground
-func (s *Ashihana) SwitchToWindow(handle string) (err error) {
+func (s *Commander) SwitchToWindow(handle string) (err error) {
 	cmd := &mncmd.SwitchToWindow{Name: handle}
 	return s.runSync(cmd)
 }
 
 // SwitchToWindowBG switches to specified window/tab, but does not bring it up
-func (s *Ashihana) SwitchToWindowBG(handle string) (err error) {
+func (s *Commander) SwitchToWindowBG(handle string) (err error) {
 	cmd := &mncmd.SwitchToWindow{Name: handle, NoFocus: true}
 	return s.runSync(cmd)
 }
 
 // ScreenshotDocument takes a screenshot of whole document in base64-encoded png
-func (s *Ashihana) ScreenshotDocument(
+func (s *Commander) ScreenshotDocument(
 	highlights []*marionette.WebElement,
 ) (img string, err error) {
 	cmd := &mncmd.TakeScreenshot{Highlights: highlights}
@@ -700,7 +698,7 @@ func (s *Ashihana) ScreenshotDocument(
 }
 
 // ScreenshotDocumentBytes takes a screenshot of whole document in png
-func (s *Ashihana) ScreenshotDocumentBytes(
+func (s *Commander) ScreenshotDocumentBytes(
 	highlights []*marionette.WebElement,
 ) (img []byte, err error) {
 	str, err := s.ScreenshotDocument(highlights)
@@ -712,7 +710,7 @@ func (s *Ashihana) ScreenshotDocumentBytes(
 }
 
 // ScreenshotViewport takes a screenshot of whole viewport in base64-encoded png
-func (s *Ashihana) ScreenshotViewport(
+func (s *Commander) ScreenshotViewport(
 	highlights []*marionette.WebElement,
 ) (img string, err error) {
 	cmd := &mncmd.TakeScreenshot{
@@ -728,7 +726,7 @@ func (s *Ashihana) ScreenshotViewport(
 }
 
 // ScreenshotViewportBytes takes a screenshot of whole viewport in png
-func (s *Ashihana) ScreenshotViewportBytes(
+func (s *Commander) ScreenshotViewportBytes(
 	highlights []*marionette.WebElement,
 ) (img []byte, err error) {
 	str, err := s.ScreenshotViewport(highlights)
@@ -740,7 +738,7 @@ func (s *Ashihana) ScreenshotViewportBytes(
 }
 
 // ScreenshotElement takes a screenshot of the element in base64-encoded png
-func (s *Ashihana) ScreenshotElement(el *marionette.WebElement) (img string, err error) {
+func (s *Commander) ScreenshotElement(el *marionette.WebElement) (img string, err error) {
 	cmd := &mncmd.TakeScreenshot{Element: el}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -751,7 +749,7 @@ func (s *Ashihana) ScreenshotElement(el *marionette.WebElement) (img string, err
 }
 
 // ScreenshotElementBytes takes a screenshot of the element in png
-func (s *Ashihana) ScreenshotElementBytes(el *marionette.WebElement) (img []byte, err error) {
+func (s *Commander) ScreenshotElementBytes(el *marionette.WebElement) (img []byte, err error) {
 	str, err := s.ScreenshotElement(el)
 	if err != nil {
 		return
@@ -761,7 +759,7 @@ func (s *Ashihana) ScreenshotElementBytes(el *marionette.WebElement) (img []byte
 }
 
 // PerformActionsAsync sends virtual input events to current window asynchronously
-func (s *Ashihana) PerformActionsAsync(act marionette.ActionChain) (errCh chan error) {
+func (s *Commander) PerformActionsAsync(act marionette.ActionChain) (errCh chan error) {
 	cmd := &mncmd.PerformActions{Actions: act}
 	errCh = make(chan error, 1)
 	ch, err := s.Async(cmd)
@@ -781,19 +779,19 @@ func (s *Ashihana) PerformActionsAsync(act marionette.ActionChain) (errCh chan e
 }
 
 // PerformActions sends virtual input events to current window
-func (s *Ashihana) PerformActions(act marionette.ActionChain) (err error) {
+func (s *Commander) PerformActions(act marionette.ActionChain) (err error) {
 	cmd := &mncmd.PerformActions{Actions: act}
 	return s.runSync(cmd)
 }
 
 // ReleaseActions releases all pressed/clicked virtual input devices
-func (s *Ashihana) ReleaseActions() (err error) {
+func (s *Commander) ReleaseActions() (err error) {
 	cmd := &mncmd.ReleaseActions{}
 	return s.runSync(cmd)
 }
 
 // MozGetContext retrieves current context (content or chrome)
-func (s *Ashihana) MozGetContext() (ret string, err error) {
+func (s *Commander) MozGetContext() (ret string, err error) {
 	cmd := &mncmd.MozGetContext{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -804,7 +802,7 @@ func (s *Ashihana) MozGetContext() (ret string, err error) {
 }
 
 // MozSetContext sets current context (content or chrome)
-func (s *Ashihana) MozSetContext(context string) (ret string, err error) {
+func (s *Commander) MozSetContext(context string) (ret string, err error) {
 	cmd := &mncmd.MozSetContext{Context: context}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -821,7 +819,7 @@ func (s *Ashihana) MozSetContext(context string) (ret string, err error) {
 //   - marionette.FirefoxWindow
 //   - marionette.GeckoViewWindow
 //   - marionette.ThunderbirdWindow
-func (s *Ashihana) MozGetWindowType() (ret string, err error) {
+func (s *Commander) MozGetWindowType() (ret string, err error) {
 	cmd := &mncmd.MozGetWindowType{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -832,7 +830,7 @@ func (s *Ashihana) MozGetWindowType() (ret string, err error) {
 }
 
 // MozGetScreenOrientation retrieves screen orientation (valid only in fennec)
-func (s *Ashihana) MozGetScreenOrientation() (ret string, err error) {
+func (s *Commander) MozGetScreenOrientation() (ret string, err error) {
 	cmd := &mncmd.MozGetScreenOrientation{}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -843,7 +841,7 @@ func (s *Ashihana) MozGetScreenOrientation() (ret string, err error) {
 }
 
 // MozSetScreenOrientation sets screen orientation (valid only in fennec)
-func (s *Ashihana) MozSetScreenOrientation(v string) (err error) {
+func (s *Commander) MozSetScreenOrientation(v string) (err error) {
 	cmd := &mncmd.MozSetScreenOrientation{Value: v}
 	msg, err := s.Sync(cmd)
 	if err == nil {
@@ -853,13 +851,13 @@ func (s *Ashihana) MozSetScreenOrientation(v string) (err error) {
 }
 
 // MozAcceptConnections tells current server to enable/disable new connections
-func (s *Ashihana) MozAcceptConnections(enable bool) (err error) {
+func (s *Commander) MozAcceptConnections(enable bool) (err error) {
 	cmd := &mncmd.MozAcceptConnections{Accept: enable}
 	return s.runSync(cmd)
 }
 
 // MozQuit tells current server to quit or restart
-func (s *Ashihana) MozQuit(flags ...string) (ret string, err error) {
+func (s *Commander) MozQuit(flags ...string) (ret string, err error) {
 	cmd := &mncmd.MozQuit{Flags: flags}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -870,7 +868,7 @@ func (s *Ashihana) MozQuit(flags ...string) (ret string, err error) {
 }
 
 // MozInstallAddon installs an addon to the server
-func (s *Ashihana) MozInstallAddon(path string, temp bool) (id string, err error) {
+func (s *Commander) MozInstallAddon(path string, temp bool) (id string, err error) {
 	cmd := &mncmd.MozInstallAddon{Path: path, Temporary: temp}
 	msg, err := s.Sync(cmd)
 	if err != nil {
@@ -881,7 +879,7 @@ func (s *Ashihana) MozInstallAddon(path string, temp bool) (id string, err error
 }
 
 // MozUninstallAddon uninstalls known addon on the server
-func (s *Ashihana) MozUninstallAddon(id string) (err error) {
+func (s *Commander) MozUninstallAddon(id string) (err error) {
 	cmd := &mncmd.MozUninstallAddon{ID: id}
 	return s.runSync(cmd)
 }

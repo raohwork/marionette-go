@@ -1,4 +1,4 @@
-package shirogane
+package mnsender
 
 import (
 	"context"
@@ -9,9 +9,9 @@ import (
 	"github.com/raohwork/marionette-go/mncmd"
 )
 
-// Async is very basic asynchronized client
+// Async is very basic asynchronized command send/receiver
 type Async struct {
-	Conn *marionette.Conn
+	Conn *Conn
 
 	mapLock sync.Mutex
 	pending map[uint32]chan *marionette.Message
