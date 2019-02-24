@@ -1,4 +1,4 @@
-package automata
+package tabmgr
 
 import (
 	"fmt"
@@ -7,7 +7,8 @@ import (
 	"testing"
 
 	marionette "github.com/raohwork/marionette-go"
-	"github.com/raohwork/marionette-go/shirogane"
+	"github.com/raohwork/marionette-go/mnclient"
+	"github.com/raohwork/marionette-go/mnsender"
 )
 
 var addr string
@@ -19,13 +20,16 @@ func init() {
 	}
 }
 
-func connect(t *testing.T) (m *shirogane.Mixed, c *shirogane.Ashihana) {
-	m = &shirogane.Mixed{Addr: addr}
+func connect(t *testing.T) (m mnsender.Sender, c *mnclient.Commander) {
+	m, err := mnsender.NewSenderFromAddr(addr, 0)
+	if err != nil {
+		t.Fatalf("Unexpected error when establishing tcp conn: %s", err)
+	}
 
 	if err := m.Start(); err != nil {
 		t.Fatalf("Unexpected error when connecting to server: %s", err)
 	}
-	c = &shirogane.Ashihana{Kuroga: m}
+	c = &mnclient.Commander{Sender: m}
 	if _, _, err := c.NewSession(); err != nil {
 		t.Fatalf("Unexpected error when create new session: %s", err)
 	}
@@ -33,12 +37,12 @@ func connect(t *testing.T) (m *shirogane.Mixed, c *shirogane.Ashihana) {
 	return
 }
 
-func TestColumbineInit(t *testing.T) {
-	mixed, client := connect(t)
-	defer mixed.Close()
+func TestInit(t *testing.T) {
+	sender, client := connect(t)
+	defer sender.Close()
 
 	lbl := []string{"a", "b", "c", "d", "e"}
-	c, err := NewColumbine(mixed, lbl)
+	c, err := New(sender, lbl)
 	if err != nil {
 		t.Fatalf("Unexpected error when creating Columbine: %s", err)
 	}
@@ -54,10 +58,10 @@ func TestColumbineInit(t *testing.T) {
 }
 
 func TestColumbineOrdered(t *testing.T) {
-	mixed, _ := connect(t)
-	defer mixed.Close()
+	sender, _ := connect(t)
+	defer sender.Close()
 	lbl := []string{"a", "b", "c", "d", "e"}
-	c, err := NewColumbine(mixed, lbl)
+	c, err := New(sender, lbl)
 	if err != nil {
 		t.Fatalf("Unexpected error when creating Columbine: %s", err)
 	}
@@ -80,10 +84,10 @@ func TestColumbineOrdered(t *testing.T) {
 }
 
 func TestColumbineIntersect(t *testing.T) {
-	mixed, _ := connect(t)
-	defer mixed.Close()
+	sender, _ := connect(t)
+	defer sender.Close()
 	lbl := []string{"a", "b", "c", "d", "e"}
-	c, err := NewColumbine(mixed, lbl)
+	c, err := New(sender, lbl)
 	if err != nil {
 		t.Fatalf("Unexpected error when creating Columbine: %s", err)
 	}
@@ -108,10 +112,10 @@ func TestColumbineIntersect(t *testing.T) {
 }
 
 func TestColumbineConcurrent(t *testing.T) {
-	mixed, _ := connect(t)
-	defer mixed.Close()
+	sender, _ := connect(t)
+	defer sender.Close()
 	lbl := []string{"a", "b", "c", "d", "e"}
-	c, err := NewColumbine(mixed, lbl)
+	c, err := New(sender, lbl)
 	if err != nil {
 		t.Fatalf("Unexpected error when creating Columbine: %s", err)
 	}
@@ -155,10 +159,10 @@ func TestColumbineConcurrent(t *testing.T) {
 }
 
 func TestColumbineWaitForOK(t *testing.T) {
-	mixed, _ := connect(t)
-	defer mixed.Close()
+	sender, _ := connect(t)
+	defer sender.Close()
 	lbl := []string{"a", "b", "c", "d", "e"}
-	c, err := NewColumbine(mixed, lbl)
+	c, err := New(sender, lbl)
 	if err != nil {
 		t.Fatalf("Unexpected error when creating Columbine: %s", err)
 	}
@@ -180,10 +184,10 @@ func TestColumbineWaitForOK(t *testing.T) {
 }
 
 func TestColumbineWaitForFail(t *testing.T) {
-	mixed, _ := connect(t)
-	defer mixed.Close()
+	sender, _ := connect(t)
+	defer sender.Close()
 	lbl := []string{"a", "b", "c", "d", "e"}
-	c, err := NewColumbine(mixed, lbl)
+	c, err := New(sender, lbl)
 	if err != nil {
 		t.Fatalf("Unexpected error when creating Columbine: %s", err)
 	}
