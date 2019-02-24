@@ -96,3 +96,86 @@ func (c *MozGetWindowType) Param() (ret interface{}) {
 func (c *MozGetWindowType) Validate() (ok bool) {
 	return true
 }
+
+// MozAcceptConnections defines "Marionette:AcceptConnections" command
+//
+// See GeckoDriver.prototype.acceptConnections
+// https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L3291
+type MozAcceptConnections struct {
+	Accept bool `json:"value"`
+}
+
+func (c *MozAcceptConnections) Command() (ret string) {
+	return "Marionette:AcceptConnections"
+}
+
+func (c *MozAcceptConnections) Param() (ret interface{}) {
+	return c
+}
+
+func (c *MozAcceptConnections) Validate() (ok bool) {
+	return true
+}
+
+// MozQuit defines "Marionette:Quit" command
+//
+// See GeckoDriver.prototype.quit
+// https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L3312
+type MozQuit struct {
+	Flags []string `json:"flags,omitempty"`
+	returnStr
+}
+
+func (c *MozQuit) Command() (ret string) {
+	return "Marionette:Quit"
+}
+
+func (c *MozQuit) Param() (ret interface{}) {
+	return c
+}
+
+func (c *MozQuit) Validate() (ok bool) {
+	return true
+}
+
+// MozInstallAddon defines "Addon:Install" command
+//
+// See GeckoDriver.prototype.installAddon
+// https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L3381
+type MozInstallAddon struct {
+	Path      string `json:"path"`
+	Temporary bool   `json:"temp,omitempty"`
+	returnStr
+}
+
+func (c *MozInstallAddon) Command() (ret string) {
+	return "Addon:Install"
+}
+
+func (c *MozInstallAddon) Param() (ret interface{}) {
+	return c
+}
+
+func (c *MozInstallAddon) Validate() (ok bool) {
+	return c.Path != ""
+}
+
+// MozUninstallAddon defines "Addon:Uninstall" command
+//
+// See GeckoDriver.prototype.uninstallAddon
+// https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L3394
+type MozUninstallAddon struct {
+	ID string `json:"id"`
+}
+
+func (c *MozUninstallAddon) Command() (ret string) {
+	return "Addon:Uninstall"
+}
+
+func (c *MozUninstallAddon) Param() (ret interface{}) {
+	return c
+}
+
+func (c *MozUninstallAddon) Validate() (ok bool) {
+	return c.ID != ""
+}

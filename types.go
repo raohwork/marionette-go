@@ -125,3 +125,13 @@ const (
 	GeckoViewWindow   = "navigator:geckoview"
 	ThunderbirdWindow = "mail:3pane"
 )
+
+const (
+	// quit flags, see
+	// https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIAppStartup
+	QuitConsider              = "eConsiderQuit"
+	QuitAttempt               = "eAttemptQuit"
+	QuitForce                 = "eForceQuit"
+	QuitRestart               = "eRestart"
+	QuitRestartNotSameProfile = "eRestartNotSameProfile"
+)

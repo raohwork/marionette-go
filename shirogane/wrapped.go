@@ -851,3 +851,37 @@ func (s *Ashihana) MozSetScreenOrientation(v string) (err error) {
 	}
 	return
 }
+
+// MozAcceptConnections tells current server to enable/disable new connections
+func (s *Ashihana) MozAcceptConnections(enable bool) (err error) {
+	cmd := &ito.MozAcceptConnections{Accept: enable}
+	return s.runSync(cmd)
+}
+
+// MozQuit tells current server to quit or restart
+func (s *Ashihana) MozQuit(flags ...string) (ret string, err error) {
+	cmd := &ito.MozQuit{Flags: flags}
+	msg, err := s.Sync(cmd)
+	if err != nil {
+		return
+	}
+
+	return cmd.Decode(msg)
+}
+
+// MozInstallAddon installs an addon to the server
+func (s *Ashihana) MozInstallAddon(path string, temp bool) (id string, err error) {
+	cmd := &ito.MozInstallAddon{Path: path, Temporary: temp}
+	msg, err := s.Sync(cmd)
+	if err != nil {
+		return
+	}
+
+	return cmd.Decode(msg)
+}
+
+// MozUninstallAddon uninstalls known addon on the server
+func (s *Ashihana) MozUninstallAddon(id string) (err error) {
+	cmd := &ito.MozUninstallAddon{ID: id}
+	return s.runSync(cmd)
+}
