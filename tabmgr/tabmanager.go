@@ -143,3 +143,18 @@ func (c *TabManager) releaseTab() {
 func (c *TabManager) GetTab(tab string) (ret *Tab) {
 	return c.tabClients[tab]
 }
+
+// Reset set all tabs to a page (default "about:blank")
+func (t *TabManager) Reset(uri string) (err error) {
+	if uri == "" {
+		uri = "about:blank"
+	}
+	for _, tab := range t.tabClients {
+		err = tab.Navigate(uri)
+		if err != nil {
+			return
+		}
+	}
+
+	return
+}

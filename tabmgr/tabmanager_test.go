@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"testing"
+	"time"
 
 	marionette "github.com/raohwork/marionette-go"
 	"github.com/raohwork/marionette-go/mnclient"
@@ -21,7 +22,7 @@ func init() {
 }
 
 func connect(t *testing.T) (m mnsender.Sender, c *mnclient.Commander) {
-	m, err := mnsender.NewSenderFromAddr(addr, 0)
+	m, err := mnsender.NewTCPSender(addr, 0)
 	if err != nil {
 		t.Fatalf("Unexpected error when establishing tcp conn: %s", err)
 	}
@@ -57,14 +58,16 @@ func TestInit(t *testing.T) {
 	}
 }
 
-func TestColumbineOrdered(t *testing.T) {
+func TestOrdered(t *testing.T) {
 	sender, _ := connect(t)
 	defer sender.Close()
 	lbl := []string{"a", "b", "c", "d", "e"}
 	c, err := New(sender, lbl)
 	if err != nil {
-		t.Fatalf("Unexpected error when creating Columbine: %s", err)
+		t.Fatalf("Unexpected error when creating TabManager: %s", err)
 	}
+	c.Reset("")
+	defer c.Reset("about:logo")
 
 	js := `window.title=arguments[0];` +
 		`document.querySelector('head').innerHTML=` +
@@ -73,6 +76,9 @@ func TestColumbineOrdered(t *testing.T) {
 		if err = c.GetTab(l).ExecuteScript(js, nil, l); err != nil {
 			t.Fatalf("failed to set title for %s: %s", l, err)
 		}
+		// wait some time
+		time.Sleep(100 * time.Millisecond)
+
 		var title string
 		if title, err = c.GetTab(l).GetTitle(); err != nil {
 			t.Errorf("failed to get title for %s: %s", l, err)
@@ -83,14 +89,16 @@ func TestColumbineOrdered(t *testing.T) {
 	}
 }
 
-func TestColumbineIntersect(t *testing.T) {
+func TestIntersect(t *testing.T) {
 	sender, _ := connect(t)
 	defer sender.Close()
 	lbl := []string{"a", "b", "c", "d", "e"}
 	c, err := New(sender, lbl)
 	if err != nil {
-		t.Fatalf("Unexpected error when creating Columbine: %s", err)
+		t.Fatalf("Unexpected error when creating TabManager: %s", err)
 	}
+	c.Reset("")
+	defer c.Reset("about:logo")
 
 	js := `window.title=arguments[0];` +
 		`document.querySelector('head').innerHTML=` +
@@ -111,19 +119,19 @@ func TestColumbineIntersect(t *testing.T) {
 	}
 }
 
-func TestColumbineConcurrent(t *testing.T) {
+func TestConcurrent(t *testing.T) {
 	sender, _ := connect(t)
 	defer sender.Close()
 	lbl := []string{"a", "b", "c", "d", "e"}
 	c, err := New(sender, lbl)
 	if err != nil {
-		t.Fatalf("Unexpected error when creating Columbine: %s", err)
+		t.Fatalf("Unexpected error when creating TabManager: %s", err)
 	}
+	c.Reset("")
+	defer c.Reset("about:logo")
 
-	htmlTmpl := `<html><head><title>%s</title></head><body><div>%s</div></body></html>`
-	js := `const el = document.createElement('div');` +
-		`el.innerText=arguments[0];` +
-		`document.querySelector('body').appendChild(el);`
+	htmlTmpl := `<html><head></head><body>%s</body></html>`
+	js := `document.querySelector('body').innerHTML=arguments[0];`
 	t.Run("group", func(t *testing.T) {
 		for _, l := range lbl {
 			l := l
@@ -147,9 +155,10 @@ func TestColumbineConcurrent(t *testing.T) {
 						err,
 					)
 				}
-				if s := fmt.Sprintf(htmlTmpl, l+l, l); src != s {
+				if s := fmt.Sprintf(htmlTmpl, l); src != s {
 					t.Fatalf(
-						"unexpected source for tab %s: %s", l, src,
+						"unexpected source for tab %s: %s",
+						l, src,
 					)
 				}
 
@@ -158,14 +167,16 @@ func TestColumbineConcurrent(t *testing.T) {
 	})
 }
 
-func TestColumbineWaitForOK(t *testing.T) {
+func TestWaitForOK(t *testing.T) {
 	sender, _ := connect(t)
 	defer sender.Close()
 	lbl := []string{"a", "b", "c", "d", "e"}
 	c, err := New(sender, lbl)
 	if err != nil {
-		t.Fatalf("Unexpected error when creating Columbine: %s", err)
+		t.Fatalf("Unexpected error when creating TabManager: %s", err)
 	}
+	c.Reset("about:about")
+	defer c.Reset("about:logo")
 
 	tab := c.GetTab("a")
 	js := `setTimeout(() => document.querySelector('div').setAttribute('class', 'test'), 3000);`
@@ -183,14 +194,16 @@ func TestColumbineWaitForOK(t *testing.T) {
 	}
 }
 
-func TestColumbineWaitForFail(t *testing.T) {
+func TestWaitForFail(t *testing.T) {
 	sender, _ := connect(t)
 	defer sender.Close()
 	lbl := []string{"a", "b", "c", "d", "e"}
 	c, err := New(sender, lbl)
 	if err != nil {
-		t.Fatalf("Unexpected error when creating Columbine: %s", err)
+		t.Fatalf("Unexpected error when creating TabManager: %s", err)
 	}
+	c.Reset("")
+	defer c.Reset("about:logo")
 
 	tab := c.GetTab("b")
 	_, err = tab.WaitFor("div.test", 5)
