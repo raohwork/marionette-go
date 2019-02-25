@@ -9,6 +9,8 @@ import (
 )
 
 // Sync is very basic synchronized client
+//
+// This client is not tested as most of logics are in Conn, which is tested.
 type Sync struct {
 	Conn *Conn
 
