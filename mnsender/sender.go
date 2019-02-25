@@ -19,7 +19,7 @@ type Sender interface {
 }
 
 // NewTCPSender creates a Sender with default tcp options
-func NewSenderFromAddr(addr string, bufSize int) (ret Sender, err error) {
+func NewTCPSender(addr string, bufSize int) (ret Sender, err error) {
 	tcpaddr, err := net.ResolveTCPAddr("tcp", addr)
 	if err != nil {
 		return
