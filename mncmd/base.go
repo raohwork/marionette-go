@@ -8,6 +8,7 @@ package mncmd
 
 import (
 	"encoding/json"
+	"reflect"
 
 	marionette "github.com/raohwork/marionette-go"
 )
@@ -64,7 +65,7 @@ func (p parameter) SetNotB(key string, data bool) {
 }
 
 func (p parameter) SetP(key string, data interface{}) {
-	if data != nil {
+	if data != nil && !reflect.ValueOf(data).IsNil() {
 		p[key] = data
 	}
 }

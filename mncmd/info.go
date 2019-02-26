@@ -44,11 +44,10 @@ func (c *NewSession) Command() (ret string) {
 }
 
 func (c *NewSession) Param() (data interface{}) {
-	ret := map[string]interface{}{}
 	cap := parameter(map[string]interface{}{})
 
 	if c.SessionID != "" {
-		ret["sessionId"] = c.SessionID
+		cap.SetS("sessionId", c.SessionID)
 	}
 
 	cap.SetS("pageLoadStrategy", c.PageLoadStrategy)
@@ -60,10 +59,10 @@ func (c *NewSession) Param() (data interface{}) {
 	cap.SetB("moz:webdriverClick", c.WebdriverClick)
 
 	if len(cap) > 0 {
-		ret["capabilities"] = cap
+		return cap
 	}
 
-	return ret
+	return nil
 }
 
 func (c *NewSession) Validate() (ok bool) {
