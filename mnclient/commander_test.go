@@ -36,6 +36,15 @@ func TestCommander(t *testing.T) {
 	t.Run("CloseWindow", tc.testCloseWindow)
 	t.Run("Navigate", tc.testNavigate)
 	t.Run("GetCurrentURL", tc.testGetCurrentURL)
+
+	// browser toolbar actions
+	t.Run("Back", tc.with(tc.testBack))
+	t.Run("Forward", tc.with(tc.testForward))
+	t.Run("Refresh", tc.with(tc.testRefresh))
+	t.Run("GetSetWindowRect", tc.testGetSetWindowRect)
+	t.Run("FullscreenWindow", tc.testFullscreenWindow)
+	t.Run("MaximizeWindow", tc.testMaximizeWindow)
+	// minimize is not tested as it might cause weird result in some os
 }
 
 type cmdrTestCase struct {
