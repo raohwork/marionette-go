@@ -97,7 +97,7 @@ func (tc *cmdrTestCase) testCloseWindow(t *testing.T) {
 }
 
 func (tc *cmdrTestCase) testGetCurrentURL(t *testing.T) {
-	t.Run("ensure-tabs", tc.ensureSingleTab)
+	tc.must(t, "ensure-tabs", tc.ensureSingleTab)
 	if err := tc.Navigate("about:about"); err != nil {
 		t.Fatalf("cannot go to about:about: %s", err)
 	}

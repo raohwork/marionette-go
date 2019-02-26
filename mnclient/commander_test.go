@@ -100,10 +100,19 @@ func (tc *cmdrTestCase) nav(uri string) (ret func(*testing.T)) {
 	}
 }
 
+func (tc *cmdrTestCase) must(t *testing.T, name string, f func(*testing.T)) {
+	if !t.Run(name, f) {
+		t.SkipNow()
+	}
+}
+
 // run selected test case with setup and teardown
 func (tc *cmdrTestCase) with(f func(*testing.T)) (ret func(*testing.T)) {
 	return func(t *testing.T) {
-		t.Run("Setup", tc.setup)
+		ok := t.Run("Setup", tc.setup)
+		if !ok {
+			t.Skip("setup failed, skipping")
+		}
 		t.Run("Case", f)
 		t.Run("Teardown", tc.teardown)
 	}

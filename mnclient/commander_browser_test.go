@@ -6,8 +6,8 @@ import (
 )
 
 func (tc *cmdrTestCase) testBack(t *testing.T) {
-	t.Run("goto-google", tc.nav("https://google.com"))
-	t.Run("goto-logo", tc.nav("about:logo"))
+	tc.must(t, "goto-google", tc.nav("https://google.com"))
+	tc.must(t, "goto-logo", tc.nav("about:logo"))
 	if err := tc.Back(); err != nil {
 		t.Fatalf("cannot go back: %s", err)
 	}
@@ -21,7 +21,7 @@ func (tc *cmdrTestCase) testBack(t *testing.T) {
 }
 
 func (tc *cmdrTestCase) testForward(t *testing.T) {
-	t.Run("back", tc.testBack)
+	tc.must(t, "back", tc.testBack)
 	if err := tc.Forward(); err != nil {
 		t.Fatalf("cannot go forward: %s", err)
 	}
@@ -35,7 +35,7 @@ func (tc *cmdrTestCase) testForward(t *testing.T) {
 }
 
 func (tc *cmdrTestCase) testRefresh(t *testing.T) {
-	t.Run("back", tc.testBack)
+	tc.must(t, "back", tc.testBack)
 	if err := tc.Refresh(); err != nil {
 		t.Fatalf("cannot refresh: %s", err)
 	}
