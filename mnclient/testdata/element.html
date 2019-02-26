@@ -1,0 +1,13 @@
+<html>
+  <head>
+    <title>Element Test</title>
+  </head>
+  <body>
+    <div id="ctrl" style="display: none">
+      <input id="text" name="" type="text" value=""/>
+      <script>document.querySelector("#text").myProp = "test";</script>
+      <button id="run" onclick="document.querySelector('result').innerHTML = document.querySelector('#text').value"></button>
+    </div>
+    <div id="result"></div>
+  </body>
+</html>

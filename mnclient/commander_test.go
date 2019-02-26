@@ -2,6 +2,7 @@ package mnclient
 
 import (
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/raohwork/marionette-go/mnsender"
@@ -45,10 +46,35 @@ func TestCommander(t *testing.T) {
 	t.Run("FullscreenWindow", tc.testFullscreenWindow)
 	t.Run("MaximizeWindow", tc.testMaximizeWindow)
 	// minimize is not tested as it might cause weird result in some os
+
+	// elements
+	t.Run("FindElement", tc.with(tc.testFindElement))
+	t.Run("FindElements", tc.with(tc.testFindElements))
+	t.Run("GetElementAttribute", tc.with(tc.testGetElementAttribute))
+	t.Run("GetElementCSSValue", tc.with(tc.testGetElementCSSValue))
+	t.Run("GetElementProperty", tc.with(tc.testGetElementProperty))
+	t.Run("GetElementRect", tc.with(tc.testGetElementRect))
 }
 
 type cmdrTestCase struct {
 	*Commander
+}
+
+func (tc *cmdrTestCase) loadTestHTML(fn string) (ret func(*testing.T)) {
+	return func(t *testing.T) {
+		pwd, err := os.Getwd()
+		if err != nil {
+			t.Fatalf("cannot get working directory: %s", err)
+		}
+		real, err := filepath.Abs(pwd)
+		if err != nil {
+			t.Fatalf("cannot get absolute path: %s", err)
+		}
+		uri := "file://" + real + "/testdata/" + fn
+		if err = tc.Navigate(uri); err != nil {
+			t.Fatalf("cannot navigate to specified file: %s", err)
+		}
+	}
 }
 
 // ensuring only one tab opened
