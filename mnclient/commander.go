@@ -599,9 +599,31 @@ func (s *Commander) NavigateAsync(url string) (ch chan error) {
 	return
 }
 
-// NewSession creates a new webdriver session
+// NewSession creates a new webdriver session with default options
 func (s *Commander) NewSession() (id string, cap *marionette.Capabilities, err error) {
 	cmd := &mncmd.NewSession{}
+	msg, err := s.Sync(cmd)
+	if err != nil {
+		return
+	}
+
+	return cmd.Decode(msg)
+}
+
+// NewSessionWith creates a new webdriver session with specified options
+//
+// Valid "page" values
+//
+//    - none: no strategy, Navigate() will return immediately
+//    - eager: return when enter "interactive" ready state (after DOMContentLoaded event)
+//    - normal: return when enter "complete" ready state (after load event)
+func (s *Commander) NewSessionWith(page string, insecureCert bool) (
+	id string, cap *marionette.Capabilities, err error,
+) {
+	cmd := &mncmd.NewSession{
+		PageLoadStrategy:    page,
+		AcceptInsecureCerts: insecureCert,
+	}
 	msg, err := s.Sync(cmd)
 	if err != nil {
 		return
