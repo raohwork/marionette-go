@@ -25,7 +25,8 @@ func NewTCPSender(addr string, bufSize int) (ret Sender, err error) {
 		return
 	}
 
-	if conn, err := net.DialTCP("tcp", nil, tcpaddr); err == nil {
+	conn, err := net.DialTCP("tcp", nil, tcpaddr)
+	if err == nil {
 		ret = NewSender(conn, bufSize)
 	}
 
