@@ -51,8 +51,8 @@ func (c *ElementClick) Validate() (ok bool) {
 // See GeckoDriver.prototype.sendKeysToElement
 // https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L2504
 type ElementSendKeys struct {
-	Element *marionette.WebElement
-	Text    string
+	Element *marionette.WebElement `json:"id"`
+	Text    string                 `json:"text"`
 }
 
 func (c *ElementSendKeys) Command() (ret string) {
@@ -60,14 +60,11 @@ func (c *ElementSendKeys) Command() (ret string) {
 }
 
 func (c *ElementSendKeys) Param() (ret interface{}) {
-	return map[string]interface{}{
-		"id":   c.Element.UUID,
-		"text": c.Text,
-	}
+	return c
 }
 
 func (c *ElementSendKeys) Validate() (ok bool) {
-	return c.Element != nil
+	return c.Element != nil && c.Text != ""
 }
 
 // FindElement defines "WebDriver:FindElement" command
