@@ -83,6 +83,12 @@ func TestCommander(t *testing.T) {
 	prereq = []func(*testing.T){tc.loadTestHTML("element.html")}
 	t.Run("GetTitle", tc.with(tc.testGetTitle, prereq...))
 	t.Run("GetPageSource", tc.with(tc.testGetPageSource, prereq...))
+
+	// js commands
+	t.Run("ExecuteScript", tc.with(tc.testExecuteScript))
+	t.Run("ExecuteScriptIn", tc.with(tc.testExecuteScriptIn))
+	t.Run("ExecuteAsyncScript", tc.with(tc.testExecuteAsyncScript))
+	t.Run("ExecuteAsyncScriptIn", tc.with(tc.testExecuteAsyncScriptIn))
 }
 
 type cmdrTestCase struct {
