@@ -3,6 +3,7 @@ package mnclient
 import (
 	"os"
 	"path/filepath"
+	"strconv"
 	"testing"
 
 	"github.com/raohwork/marionette-go/mnsender"
@@ -39,21 +40,24 @@ func TestCommander(t *testing.T) {
 	t.Run("GetCurrentURL", tc.testGetCurrentURL)
 
 	// browser toolbar actions
-	t.Run("Back", tc.with(tc.testBack))
-	t.Run("Forward", tc.with(tc.testForward))
-	t.Run("Refresh", tc.with(tc.testRefresh))
+	t.Run("Back", tc.with(tc.testBack, tc.testNavigate))
+	t.Run("Forward", tc.with(tc.testForward, tc.testBack))
+	t.Run("Refresh", tc.with(tc.testRefresh, tc.testBack))
 	t.Run("GetSetWindowRect", tc.testGetSetWindowRect)
 	t.Run("FullscreenWindow", tc.testFullscreenWindow)
 	t.Run("MaximizeWindow", tc.testMaximizeWindow)
 	// minimize is not tested as it might cause weird result in some os
 
+	var prereq []func(*testing.T)
 	// elements
-	t.Run("FindElement", tc.with(tc.testFindElement))
-	t.Run("FindElements", tc.with(tc.testFindElements))
-	t.Run("GetElementAttribute", tc.with(tc.testGetElementAttribute))
-	t.Run("GetElementCSSValue", tc.with(tc.testGetElementCSSValue))
-	t.Run("GetElementProperty", tc.with(tc.testGetElementProperty))
-	t.Run("GetElementRect", tc.with(tc.testGetElementRect))
+	prereq = []func(*testing.T){tc.loadTestHTML("element.html")}
+	t.Run("FindElement", tc.with(tc.testFindElement, prereq...))
+	t.Run("FindElements", tc.with(tc.testFindElements, prereq...))
+	prereq = append(prereq, tc.testFindElement)
+	t.Run("GetElementAttribute", tc.with(tc.testGetElementAttribute, prereq...))
+	t.Run("GetElementCSSValue", tc.with(tc.testGetElementCSSValue, prereq...))
+	t.Run("GetElementProperty", tc.with(tc.testGetElementProperty, prereq...))
+	t.Run("GetElementRect", tc.with(tc.testGetElementRect, prereq...))
 }
 
 type cmdrTestCase struct {
@@ -133,12 +137,29 @@ func (tc *cmdrTestCase) must(t *testing.T, name string, f func(*testing.T)) {
 }
 
 // run selected test case with setup and teardown
-func (tc *cmdrTestCase) with(f func(*testing.T)) (ret func(*testing.T)) {
+func (tc *cmdrTestCase) with(
+	f func(*testing.T), reqs ...func(*testing.T),
+) (ret func(*testing.T)) {
 	return func(t *testing.T) {
 		ok := t.Run("Setup", tc.setup)
 		if !ok {
 			t.Skip("setup failed, skipping")
 		}
+
+		if len(reqs) > 0 {
+			ok = t.Run("PreReq", func(t *testing.T) {
+				for idx, f := range reqs {
+					t.Run(
+						"#"+strconv.Itoa(idx),
+						f,
+					)
+				}
+			})
+			if !ok {
+				t.Skip("pre-requirement failed, skipping")
+			}
+		}
+
 		t.Run("Case", f)
 		t.Run("Teardown", tc.teardown)
 	}

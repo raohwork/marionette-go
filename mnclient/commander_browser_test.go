@@ -21,7 +21,6 @@ func (tc *cmdrTestCase) testBack(t *testing.T) {
 }
 
 func (tc *cmdrTestCase) testForward(t *testing.T) {
-	tc.must(t, "back", tc.testBack)
 	if err := tc.Forward(); err != nil {
 		t.Fatalf("cannot go forward: %s", err)
 	}
@@ -35,7 +34,6 @@ func (tc *cmdrTestCase) testForward(t *testing.T) {
 }
 
 func (tc *cmdrTestCase) testRefresh(t *testing.T) {
-	tc.must(t, "back", tc.testBack)
 	if err := tc.Refresh(); err != nil {
 		t.Fatalf("cannot refresh: %s", err)
 	}

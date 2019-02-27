@@ -7,8 +7,6 @@ import (
 )
 
 func (tc *cmdrTestCase) testFindElement(t *testing.T) {
-	tc.must(t, "element-html", tc.loadTestHTML("element.html"))
-
 	f := func(by marionette.FindStrategy, qstr string, root *marionette.WebElement) func(*testing.T) {
 		return func(t *testing.T) {
 			el, err := tc.FindElement(by, qstr, root)
@@ -85,8 +83,6 @@ func (tc *cmdrTestCase) testFindElement(t *testing.T) {
 }
 
 func (tc *cmdrTestCase) testFindElements(t *testing.T) {
-	tc.must(t, "element-html", tc.loadTestHTML("element.html"))
-
 	f := func(want int, by marionette.FindStrategy, qstr string, root *marionette.WebElement) func(*testing.T) {
 		return func(t *testing.T) {
 			el, err := tc.FindElements(by, qstr, root)
@@ -114,8 +110,6 @@ func (tc *cmdrTestCase) testFindElements(t *testing.T) {
 }
 
 func (tc *cmdrTestCase) testGetElementAttribute(t *testing.T) {
-	tc.must(t, "element-html", tc.loadTestHTML("element.html"))
-
 	el, _ := tc.FindElement(marionette.Selector, "#text", nil)
 
 	val, err := tc.GetElementAttribute(el, "id")
@@ -128,7 +122,6 @@ func (tc *cmdrTestCase) testGetElementAttribute(t *testing.T) {
 }
 
 func (tc *cmdrTestCase) testGetElementCSSValue(t *testing.T) {
-	tc.must(t, "element-html", tc.loadTestHTML("element.html"))
 	el, _ := tc.FindElement(marionette.ID, "ctrl", nil)
 
 	val, err := tc.GetElementCSSValue(el, "display")
@@ -141,7 +134,6 @@ func (tc *cmdrTestCase) testGetElementCSSValue(t *testing.T) {
 }
 
 func (tc *cmdrTestCase) testGetElementProperty(t *testing.T) {
-	tc.must(t, "element-html", tc.loadTestHTML("element.html"))
 	el, _ := tc.FindElement(marionette.Selector, "body", nil)
 
 	val, err := tc.GetElementProperty(el, "nodeName")
@@ -158,7 +150,6 @@ func (tc *cmdrTestCase) testGetElementProperty(t *testing.T) {
 }
 
 func (tc *cmdrTestCase) testGetElementRect(t *testing.T) {
-	tc.must(t, "element-html", tc.loadTestHTML("element.html"))
 	el, _ := tc.FindElement(marionette.Selector, "body", nil)
 
 	rect, err := tc.GetElementRect(el)
