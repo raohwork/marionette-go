@@ -60,6 +60,7 @@ func TestCommander(t *testing.T) {
 	t.Run("GetElementProperty", tc.with(tc.testGetElementProperty, prereq...))
 	t.Run("GetElementRect", tc.with(tc.testGetElementRect, prereq...))
 	t.Run("GetElementText", tc.with(tc.testGetElementText, prereq...))
+	t.Run("GetElementTagName", tc.with(tc.testGetElementTagName, prereq...))
 	t.Run("IsElementDisplayed", tc.with(tc.testIsElementDisplayed, prereq...))
 	t.Run("IsElementSelected", tc.with(tc.testIsElementSelected, prereq...))
 	t.Run("IsElementEnabled", tc.with(tc.testIsElementEnabled, prereq...))

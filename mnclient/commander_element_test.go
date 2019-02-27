@@ -159,6 +159,19 @@ func (tc *cmdrTestCase) testGetElementProperty(t *testing.T) {
 	}
 }
 
+func (tc *cmdrTestCase) testGetElementTagName(t *testing.T) {
+	el, _ := tc.FindElement(marionette.ID, "ctrl", nil)
+
+	tag, err := tc.GetElementTagName(el)
+	if err != nil {
+		t.Fatalf("cannot get tag name: %s", err)
+	}
+
+	if tag != "div" {
+		t.Fatalf("unexpected tag name: %s", tag)
+	}
+}
+
 func (tc *cmdrTestCase) testGetElementRect(t *testing.T) {
 	el, _ := tc.FindElement(marionette.Selector, "body", nil)
 
