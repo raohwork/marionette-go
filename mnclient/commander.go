@@ -425,6 +425,45 @@ func (s *Commander) GetElementProperty(
 	return cmd.Decode(msg)
 }
 
+// GetElementPropertyStr retrieves specified property of the element as string
+//
+// It just calls GetElementProperty and cast the result, be aware of typing panic!
+func (s *Commander) GetElementPropertyStr(
+	el *marionette.WebElement, key string,
+) (ret string, err error) {
+	val, err := s.GetElementProperty(el, key)
+	if err == nil {
+		ret = val.(string)
+	}
+	return
+}
+
+// GetElementPropertyNum retrieves specified property of the element as float64
+//
+// It just calls GetElementProperty and cast the result, be aware of typing panic!
+func (s *Commander) GetElementPropertyNum(
+	el *marionette.WebElement, key string,
+) (ret float64, err error) {
+	val, err := s.GetElementProperty(el, key)
+	if err == nil {
+		ret = val.(float64)
+	}
+	return
+}
+
+// GetElementPropertyBool retrieves specified property of the element as bool
+//
+// It just calls GetElementProperty and cast the result, be aware of typing panic!
+func (s *Commander) GetElementPropertyBool(
+	el *marionette.WebElement, key string,
+) (ret bool, err error) {
+	val, err := s.GetElementProperty(el, key)
+	if err == nil {
+		ret = val.(bool)
+	}
+	return
+}
+
 // GetElementRect retrieves the bounding rect of the element
 //
 // The X(left) and Y(top) are computed aginst origin(top-left) of the document.
