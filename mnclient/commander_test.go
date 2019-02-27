@@ -50,6 +50,7 @@ func TestCommander(t *testing.T) {
 
 	var prereq []func(*testing.T)
 	// elements
+	t.Run("GetActiveElement", tc.with(tc.testGetActiveElement))
 	prereq = []func(*testing.T){tc.loadTestHTML("element.html")}
 	t.Run("FindElement", tc.with(tc.testFindElement, prereq...))
 	t.Run("FindElements", tc.with(tc.testFindElements, prereq...))
@@ -58,6 +59,22 @@ func TestCommander(t *testing.T) {
 	t.Run("GetElementCSSValue", tc.with(tc.testGetElementCSSValue, prereq...))
 	t.Run("GetElementProperty", tc.with(tc.testGetElementProperty, prereq...))
 	t.Run("GetElementRect", tc.with(tc.testGetElementRect, prereq...))
+	t.Run("GetElementText", tc.with(tc.testGetElementText, prereq...))
+	t.Run("IsElementDisplayed", tc.with(tc.testIsElementDisplayed, prereq...))
+	t.Run("IsElementSelected", tc.with(tc.testIsElementSelected, prereq...))
+	t.Run("IsElementEnabled", tc.with(tc.testIsElementEnabled, prereq...))
+	t.Run("ElementClick", tc.with(
+		tc.testElementClick,
+		append(prereq, tc.testGetElementText)...,
+	))
+	t.Run("ElementClear", tc.with(
+		tc.testElementClear,
+		append(prereq, tc.testGetElementProperty)...,
+	))
+	t.Run("ElementSendKeys", tc.with(
+		tc.testElementSendKeys,
+		append(prereq, tc.testGetElementProperty)...,
+	))
 }
 
 type cmdrTestCase struct {

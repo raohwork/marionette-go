@@ -6,6 +6,16 @@ import (
 	marionette "github.com/raohwork/marionette-go"
 )
 
+func (tc *cmdrTestCase) testGetActiveElement(t *testing.T) {
+	el, err := tc.GetActiveElement()
+	if err != nil {
+		t.Fatalf("cannot get active element: %s", err)
+	}
+	if el == nil {
+		t.Fatal("empty element")
+	}
+}
+
 func (tc *cmdrTestCase) testFindElement(t *testing.T) {
 	f := func(by marionette.FindStrategy, qstr string, root *marionette.WebElement) func(*testing.T) {
 		return func(t *testing.T) {
@@ -96,7 +106,7 @@ func (tc *cmdrTestCase) testFindElements(t *testing.T) {
 	}
 
 	t.Run("by-id", f(1, marionette.ID, "text", nil))
-	t.Run("by-selector", f(2, marionette.Selector, "div", nil))
+	t.Run("by-selector", f(3, marionette.Selector, "div", nil))
 	t.Run("none", func(t *testing.T) {
 		el, err := tc.FindElements(marionette.ID, "test", nil)
 		if len(el) != 0 {
@@ -122,7 +132,7 @@ func (tc *cmdrTestCase) testGetElementAttribute(t *testing.T) {
 }
 
 func (tc *cmdrTestCase) testGetElementCSSValue(t *testing.T) {
-	el, _ := tc.FindElement(marionette.ID, "ctrl", nil)
+	el, _ := tc.FindElement(marionette.ID, "hidden", nil)
 
 	val, err := tc.GetElementCSSValue(el, "display")
 	if err != nil {
@@ -158,4 +168,131 @@ func (tc *cmdrTestCase) testGetElementRect(t *testing.T) {
 	}
 
 	t.Log(rect)
+}
+
+func (tc *cmdrTestCase) testGetElementText(t *testing.T) {
+	el, _ := tc.FindElement(marionette.ID, "ctrl", nil)
+
+	txt, err := tc.GetElementText(el)
+	if err != nil {
+		t.Fatalf("cannot get element text: %s", err)
+	}
+
+	if txt != "try go" {
+		t.Fatalf("unexpected text: %s", txt)
+	}
+}
+
+func (tc *cmdrTestCase) testElementClick(t *testing.T) {
+	el, _ := tc.FindElement(marionette.ID, "run", nil)
+	t.Log(el)
+
+	err := tc.ElementClick(el)
+	if err != nil {
+		t.Fatalf("cannot click on element: %s", err)
+	}
+
+	el, _ = tc.FindElement(marionette.ID, "result", nil)
+	txt, _ := tc.GetElementText(el)
+	if txt != "demo" {
+		t.Fatalf("unexpected result: %s", txt)
+	}
+}
+
+func (tc *cmdrTestCase) testElementClear(t *testing.T) {
+	el, _ := tc.FindElement(marionette.ID, "text", nil)
+
+	err := tc.ElementClear(el)
+	if err != nil {
+		t.Fatalf("cannot clear element: %s", err)
+	}
+
+	val, _ := tc.GetElementPropertyStr(el, "value")
+	if val != "" {
+		t.Fatalf("unexpected value: %s", val)
+	}
+}
+
+func (tc *cmdrTestCase) testElementSendKeys(t *testing.T) {
+	el, _ := tc.FindElement(marionette.ID, "text", nil)
+	tc.ElementClear(el)
+
+	err := tc.ElementSendKeys(el, "test")
+	if err != nil {
+		t.Fatalf("cannot send keys to element: %s", err)
+	}
+
+	val, _ := tc.GetElementPropertyStr(el, "value")
+	if val != "test" {
+		t.Fatalf("unexpected value: %s", val)
+	}
+}
+
+func (tc *cmdrTestCase) testIsElementDisplayed(t *testing.T) {
+	t.Run("displayed", func(t *testing.T) {
+		el, _ := tc.FindElement(marionette.ID, "text", nil)
+		ok, err := tc.IsElementDisplayed(el)
+		if err != nil {
+			t.Fatalf("cannot check displayness: %s", err)
+		}
+		if !ok {
+			t.Fatal("not displayed")
+		}
+	})
+	t.Run("hidden", func(t *testing.T) {
+		el, _ := tc.FindElement(marionette.ID, "hidden", nil)
+		ok, err := tc.IsElementDisplayed(el)
+		if err != nil {
+			t.Fatalf("cannot check displayness: %s", err)
+		}
+		if ok {
+			t.Fatal("not hidden")
+		}
+	})
+}
+
+func (tc *cmdrTestCase) testIsElementSelected(t *testing.T) {
+	t.Run("selected", func(t *testing.T) {
+		el, _ := tc.FindElement(marionette.ID, "checked", nil)
+		ok, err := tc.IsElementSelected(el)
+		if err != nil {
+			t.Fatalf("cannot check if selected: %s", err)
+		}
+		if !ok {
+			t.Fatal("not selected")
+		}
+	})
+	t.Run("hidden", func(t *testing.T) {
+		el, _ := tc.FindElement(marionette.ID, "unchecked", nil)
+		ok, err := tc.IsElementSelected(el)
+		if err != nil {
+			t.Fatalf("cannot check if selected: %s", err)
+		}
+		if ok {
+			t.Fatal("not unselected")
+		}
+	})
+}
+
+func (tc *cmdrTestCase) testIsElementEnabled(t *testing.T) {
+	t.Run("enabled", func(t *testing.T) {
+		el, _ := tc.FindElement(marionette.ID, "enabled", nil)
+		ok, err := tc.IsElementEnabled(el)
+		if err != nil {
+			t.Fatalf("cannot check if enabled: %s", err)
+		}
+		if !ok {
+			t.Fatal("not enabled")
+		}
+	})
+	t.Run("hidden", func(t *testing.T) {
+		el, _ := tc.FindElement(marionette.ID, "disabled", nil)
+		ok, err := tc.IsElementEnabled(el)
+		if err != nil {
+			t.Fatalf("cannot check if disabled: %s", err)
+		}
+		if ok {
+			t.Fatal("not disabled")
+		}
+	})
 }
