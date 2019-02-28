@@ -1,8 +1,8 @@
 package mnclient
 
 import (
+	"net/http"
 	"os"
-	"path/filepath"
 	"strconv"
 	"testing"
 
@@ -18,6 +18,16 @@ func init() {
 }
 
 func TestCommander(t *testing.T) {
+	// start a test webserver
+	mux := http.NewServeMux()
+	websrv := &http.Server{
+		Addr:    "127.0.0.1:9487",
+		Handler: mux,
+	}
+	mux.Handle("/", http.FileServer(http.Dir("./testdata")))
+	go websrv.ListenAndServe()
+	defer websrv.Close()
+
 	sender, err := mnsender.NewTCPSender(addr, 0)
 	if err != nil {
 		t.Fatalf("unexpected error in NewTCPSender(): %s", err)
@@ -89,6 +99,9 @@ func TestCommander(t *testing.T) {
 	t.Run("ExecuteScriptIn", tc.with(tc.testExecuteScriptIn))
 	t.Run("ExecuteAsyncScript", tc.with(tc.testExecuteAsyncScript))
 	t.Run("ExecuteAsyncScriptIn", tc.with(tc.testExecuteAsyncScriptIn))
+
+	// cookie
+	t.Run("Cookies", tc.with(tc.testCookies, prereq...))
 }
 
 type cmdrTestCase struct {
@@ -97,16 +110,8 @@ type cmdrTestCase struct {
 
 func (tc *cmdrTestCase) loadTestHTML(fn string) (ret func(*testing.T)) {
 	return func(t *testing.T) {
-		pwd, err := os.Getwd()
-		if err != nil {
-			t.Fatalf("cannot get working directory: %s", err)
-		}
-		real, err := filepath.Abs(pwd)
-		if err != nil {
-			t.Fatalf("cannot get absolute path: %s", err)
-		}
-		uri := "file://" + real + "/testdata/" + fn
-		if err = tc.Navigate(uri); err != nil {
+		uri := "http://localhost:9487/" + fn
+		if err := tc.Navigate(uri); err != nil {
 			t.Fatalf("cannot navigate to specified file: %s", err)
 		}
 	}
