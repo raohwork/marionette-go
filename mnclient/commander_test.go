@@ -90,6 +90,7 @@ func TestCommander(t *testing.T) {
 	// informational commands
 	t.Run("GetCapabilities", tc.testGetCapabilities)
 	t.Run("GetTimeouts", tc.testGetTimeouts)
+	t.Run("SetTimeouts", tc.with(tc.testSetTimeouts, tc.testGetTimeouts))
 	prereq = []func(*testing.T){tc.loadTestHTML("element.html")}
 	t.Run("GetTitle", tc.with(tc.testGetTitle, prereq...))
 	t.Run("GetPageSource", tc.with(tc.testGetPageSource, prereq...))

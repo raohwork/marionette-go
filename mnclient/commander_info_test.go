@@ -36,6 +36,14 @@ func (tc *cmdrTestCase) testGetTimeouts(t *testing.T) {
 	t.Log(tim)
 }
 
+func (tc *cmdrTestCase) testSetTimeouts(t *testing.T) {
+	tim, _ := tc.GetTimeouts()
+	err := tc.SetTimeouts(tim)
+	if err != nil {
+		t.Fatalf("cannot set timeouts: %s", err)
+	}
+}
+
 func (tc *cmdrTestCase) testGetPageSource(t *testing.T) {
 	src, err := tc.GetPageSource()
 	if err != nil {
