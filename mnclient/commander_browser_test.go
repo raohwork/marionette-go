@@ -6,7 +6,7 @@ import (
 )
 
 func (tc *cmdrTestCase) testBack(t *testing.T) {
-	tc.must(t, "goto-google", tc.nav("https://google.com"))
+	tc.must(t, "goto-about", tc.nav("about:about"))
 	tc.must(t, "goto-logo", tc.nav("about:logo"))
 	if err := tc.Back(); err != nil {
 		t.Fatalf("cannot go back: %s", err)
@@ -15,7 +15,7 @@ func (tc *cmdrTestCase) testBack(t *testing.T) {
 	if err != nil {
 		t.Fatalf("cannot get current url: %s", err)
 	}
-	if uri != "https://www.google.com/" {
+	if uri != "about:about" {
 		t.Fatalf("unexpected url: %s", uri)
 	}
 }
@@ -41,7 +41,7 @@ func (tc *cmdrTestCase) testRefresh(t *testing.T) {
 	if err != nil {
 		t.Fatalf("cannot get current url: %s", err)
 	}
-	if uri != "https://www.google.com/" {
+	if uri != "about:about" {
 		t.Fatalf("unexpected url: %s", uri)
 	}
 }

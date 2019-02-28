@@ -27,7 +27,7 @@ func (tc *cmdrTestCase) testNewSessionWith(t *testing.T) {
 }
 
 func (tc *cmdrTestCase) testNavigate(t *testing.T) {
-	err := tc.Navigate("https://www.google.com")
+	err := tc.Navigate("about:about")
 	if err != nil {
 		t.Fatalf("unexpected error in Navigate(): %s", err)
 	}
