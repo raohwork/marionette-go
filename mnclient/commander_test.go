@@ -102,6 +102,20 @@ func TestCommander(t *testing.T) {
 
 	// cookie
 	t.Run("Cookies", tc.with(tc.testCookies, prereq...))
+
+	// dialog
+	prereq = []func(*testing.T){
+		tc.loadTestHTML("element.html"),
+		tc.testExecuteScript,
+	}
+	t.Run("AcceptAlert", tc.with(tc.testAcceptAlert, prereq...))
+	t.Run("DismissAlert", tc.with(tc.testDismissAlert, prereq...))
+	t.Run("GetAlertText", tc.with(tc.testGetAlertText, prereq...))
+	t.Run("SendAlertText", tc.with(tc.testSendAlertText, append(
+		prereq,
+		tc.testAcceptAlert,
+		tc.testDismissAlert,
+	)...))
 }
 
 type cmdrTestCase struct {
