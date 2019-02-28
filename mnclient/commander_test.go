@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"testing"
 
+	marionette "github.com/raohwork/marionette-go"
 	"github.com/raohwork/marionette-go/mnsender"
 )
 
@@ -117,6 +118,41 @@ func TestCommander(t *testing.T) {
 		tc.testAcceptAlert,
 		tc.testDismissAlert,
 	)...))
+
+	// screenshot
+	prereq = []func(*testing.T){
+		func(t *testing.T) {
+			tc.must(t, "can-script", tc.testExecuteScript)
+			tc.must(t, "can-resize", tc.testGetSetWindowRect)
+			tc.SetWindowRect(marionette.Rect{
+				X: 100, Y: 100,
+				W: 800, H: 600,
+			})
+			var w, h float64
+			_ = tc.ExecuteScript(
+				`return window.innerWidth`,
+				&w,
+			)
+			_ = tc.ExecuteScript(
+				`return window.innerHeight`,
+				&h,
+			)
+
+			ok := w == 800 && h == 600
+			if !ok {
+				tc.SetWindowRect(marionette.Rect{
+					X: 100, Y: 100,
+					W: 800 + (800 - w),
+					H: 600 + (600 - h),
+				})
+			}
+		},
+		tc.loadTestHTML("element.html"),
+	}
+	t.Run("ScreenshotDocument", tc.with(tc.testScreenshotDocument, prereq...))
+	t.Run("ScreenshotViewport", tc.with(tc.testScreenshotViewport, prereq...))
+	prereq = append(prereq, tc.testFindElement)
+	t.Run("ScreenshotElement", tc.with(tc.testScreenshotElement, prereq...))
 }
 
 type cmdrTestCase struct {
