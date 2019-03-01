@@ -46,7 +46,7 @@ func (s *mySender) Async(cmd mncmd.Command) (ch chan *marionette.Message, err er
 // It will check if active tab is desired one right before executing commands, and
 // switch to it if needed.
 //
-// Commands not in following list are supported:
+// Here's a list of unsupported commands:
 //
 //   - CloseChromeWindow
 //   - CloseWindow
@@ -54,6 +54,13 @@ func (s *mySender) Async(cmd mncmd.Command) (ch chan *marionette.Message, err er
 //   - NewWindow
 //   - SwitchToWindow
 //   - SwitchToWindowBG
+//
+// And a list of "USE AT YOUR OWN RISK" commands:
+//
+//   - Moz commands like MozGetContext
+//   - Reftest commands
+//
+// Also, modal dialogs may cause undesired effect to many commands.
 //
 // Executing unsupported commands leads to panic!
 type Tab struct {
