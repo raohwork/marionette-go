@@ -2,7 +2,6 @@ package tabmgr
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"testing"
 	"time"
@@ -12,12 +11,11 @@ import (
 	"github.com/raohwork/marionette-go/mnsender"
 )
 
-var addr string
+var addr = "127.0.0.1:2828"
 
 func init() {
-	addr = os.Getenv("MARIONETTE_ADDR")
-	if addr == "" {
-		log.Fatal("You must set envvar MARIONETTE_ADDR to run tests")
+	if x := os.Getenv("MARIONETTE_ADDR"); x != "" {
+		addr = x
 	}
 }
 
