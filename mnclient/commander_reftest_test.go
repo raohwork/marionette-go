@@ -21,17 +21,14 @@ func (tc *cmdrTestCase) testReftest(t *testing.T) {
 		t.Fatalf("cannot initialize reftest: %s", err)
 	}
 
-	rule := &marionette.ReftestRef{
-		URL: "http://localhost:9487/ref_expect.html",
-		Rel: marionette.RelEQ,
-	}
-	rules := marionette.ReftestRefList([]*marionette.ReftestRef{rule})
+	rules := (marionette.ReftestRefList{}).
+		Or("http://localhost:9487/ref_unexpect.html", marionette.RelNE)
 
 	result, err := tc.ReftestRun(
 		victim,
 		marionette.ReftestPass,
 		rules,
-		30000,
+		10000,
 	)
 	if err != nil {
 		t.Fatalf("cannot run reftest: %s", err)
