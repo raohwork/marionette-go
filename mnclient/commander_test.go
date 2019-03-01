@@ -164,6 +164,18 @@ func TestCommander(t *testing.T) {
 	}
 	t.Run("PerformActions", tc.with(tc.testPerformAction, prereq...))
 	t.Run("ReleaseActions", tc.testReleaseActions)
+
+	// frames
+	prereq = []func(*testing.T){
+		tc.loadTestHTML("element.html"),
+		tc.testFindElement,
+		tc.testGetElementText,
+		tc.loadTestHTML("frameset.html"),
+	}
+	t.Run("SwitchToParentFrame", tc.with(tc.testSwitchToParentFrame, prereq...))
+	t.Run("SwitchToFrame", tc.with(tc.testSwitchToFrame, prereq...))
+	prereq = append(prereq, tc.testSwitchToFrame)
+	t.Run("GetActiveFrame", tc.with(tc.testGetActiveFrame, prereq...))
 }
 
 type cmdrTestCase struct {
@@ -189,16 +201,16 @@ func (tc *cmdrTestCase) ensureSingleTab(t *testing.T) {
 	if err = tc.SwitchToWindow(tabs[0]); err != nil {
 		t.Fatalf("Setup: cannot switch to first tab: %s", err)
 	}
-	if l := len(tabs); l > 1 {
-		for l > 1 {
-			tabs, err = tc.CloseWindow()
-			l = len(tabs)
-			if err != nil {
-				t.Fatalf("Setup: cannot close window: %s", err)
-			}
-			if err = tc.SwitchToWindow(tabs[0]); err != nil {
-				t.Fatalf("Setup: cannot switch to next tab: %s", err)
-			}
+
+	l := len(tabs)
+	for l > 1 {
+		tabs, err = tc.CloseWindow()
+		l = len(tabs)
+		if err != nil {
+			t.Fatalf("Setup: cannot close window: %s", err)
+		}
+		if err = tc.SwitchToWindow(tabs[0]); err != nil {
+			t.Fatalf("Setup: cannot switch to next tab: %s", err)
 		}
 	}
 }
