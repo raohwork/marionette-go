@@ -153,6 +153,17 @@ func TestCommander(t *testing.T) {
 	t.Run("ScreenshotViewport", tc.with(tc.testScreenshotViewport, prereq...))
 	prereq = append(prereq, tc.testFindElement)
 	t.Run("ScreenshotElement", tc.with(tc.testScreenshotElement, prereq...))
+
+	// actions
+	prereq = []func(*testing.T){
+		tc.loadTestHTML("element.html"),
+		tc.testFindElement,
+		tc.testGetElementRect,
+		tc.testExecuteScript,
+		tc.testGetElementText,
+	}
+	t.Run("PerformActions", tc.with(tc.testPerformAction, prereq...))
+	t.Run("ReleaseActions", tc.testReleaseActions)
 }
 
 type cmdrTestCase struct {
