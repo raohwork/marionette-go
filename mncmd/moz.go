@@ -21,7 +21,6 @@ func (c *MozGetContext) Command() (ret string) {
 // https://github.com/mozilla/gecko-dev/blob/master/testing/marionette/driver.js#L822
 type MozSetContext struct {
 	Context string `json:"value"`
-	returnStr
 }
 
 func (c *MozSetContext) Command() (ret string) {

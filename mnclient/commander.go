@@ -863,14 +863,9 @@ func (s *Commander) MozGetContext() (ret string, err error) {
 }
 
 // MozSetContext sets current context (content or chrome)
-func (s *Commander) MozSetContext(context string) (ret string, err error) {
+func (s *Commander) MozSetContext(context string) (err error) {
 	cmd := &mncmd.MozSetContext{Context: context}
-	msg, err := s.Sync(cmd)
-	if err != nil {
-		return
-	}
-
-	return cmd.Decode(msg)
+	return s.runSync(cmd)
 }
 
 // MozGetWindowType retrieves application type

@@ -176,6 +176,10 @@ func TestCommander(t *testing.T) {
 	t.Run("SwitchToFrame", tc.with(tc.testSwitchToFrame, prereq...))
 	prereq = append(prereq, tc.testSwitchToFrame)
 	t.Run("GetActiveFrame", tc.with(tc.testGetActiveFrame, prereq...))
+
+	// context
+	t.Run("MozGetContext", tc.testMozGetContext)
+	t.Run("MozSetContext", tc.with(tc.testMozSetContext, tc.testMozGetContext))
 }
 
 type cmdrTestCase struct {
