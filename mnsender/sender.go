@@ -81,6 +81,7 @@ func (s *mixed) Wait() {
 func (s *mixed) Close() {
 	s.client.Stop()
 	s.client.Conn.Close()
+	s.client.Conn.Cleanup()
 }
 
 // Sync send command synchronously (block until response actually)

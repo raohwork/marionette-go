@@ -19,8 +19,6 @@ func TestConn(t *testing.T) {
 	}
 
 	t.Run("send", func(t *testing.T) {
-		defer w.Reset()
-
 		id, err := cl.Send("test", nil)
 		if err != nil {
 			t.Fatalf("unexpected error: %s", err)
@@ -52,6 +50,8 @@ func TestConn(t *testing.T) {
 	})
 
 	cl.Close()
+	cl.Cleanup()
+
 	if err = cl.Wait(); err != nil {
 		t.Fatalf("unexpected error in Wait(): %s", err)
 	}

@@ -45,6 +45,12 @@ func NewConn(c io.ReadWriteCloser, resultBufferSize uint) (ret *Conn, err error)
 	return
 }
 
+// Cleanup discards all unread messages, SHOULD NOT be called before Close()
+func (c *Conn) Cleanup() {
+	for _ = range c.ch {
+	}
+}
+
 // Wait blocks until first transport error, or nil if connnection is closed without error
 func (c *Conn) Wait() (err error) {
 	if c == nil {
