@@ -942,7 +942,10 @@ func (s *Commander) MozUninstallAddon(id string) (err error) {
 
 // ReftestSetup initializes reftest mode
 //
-// you have to switch to chrome context to run this command.
+// WARNING: TBH I'm not having enough knowledge about all reftest commands. Since
+// it's nothing but command wrappers, the promise of compatibility will keep valid.
+//
+// You have to switch to chrome context to run this command.
 //
 // Valid screenshot modes
 //
@@ -958,6 +961,9 @@ func (s *Commander) ReftestSetup(urls map[string]uint, mode string) (err error) 
 }
 
 // ReftestRun runs specified reftest
+//
+// WARNING: TBH I'm not having enough knowledge about all reftest commands. Since
+// it's nothing but command wrappers, the promise of compatibility will keep valid.
 //
 // Parameters
 //
@@ -982,6 +988,9 @@ func (s *Commander) ReftestRun(
 }
 
 // ReftestTeardown deinitializes reftest mode
+//
+// WARNING: TBH I'm not having enough knowledge about all reftest commands. Since
+// it's nothing but command wrappers, the promise of compatibility will keep valid.
 func (s *Commander) ReftestTeardown() (err error) {
 	cmd := &mncmd.ReftestTeardown{}
 	return s.runSync(cmd)
