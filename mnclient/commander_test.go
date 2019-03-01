@@ -180,6 +180,9 @@ func TestCommander(t *testing.T) {
 	// context
 	t.Run("MozGetContext", tc.testMozGetContext)
 	t.Run("MozSetContext", tc.with(tc.testMozSetContext, tc.testMozGetContext))
+
+	// reftest, must run lastt
+	t.Run("Reftest", tc.testReftest)
 }
 
 type cmdrTestCase struct {

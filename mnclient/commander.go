@@ -939,3 +939,50 @@ func (s *Commander) MozUninstallAddon(id string) (err error) {
 	cmd := &mncmd.MozUninstallAddon{ID: id}
 	return s.runSync(cmd)
 }
+
+// ReftestSetup initializes reftest mode
+//
+// you have to switch to chrome context to run this command.
+//
+// Valid screenshot modes
+//
+//   - "always": always take screen shot
+//   - "fail": takes screenshot when test failed
+//   - "unexpected": takes screenshot when test result is unexpected
+func (s *Commander) ReftestSetup(urls map[string]uint, mode string) (err error) {
+	cmd := &mncmd.ReftestSetup{
+		URLCount:   urls,
+		Screenshot: mode,
+	}
+	return s.runSync(cmd)
+}
+
+// ReftestRun runs specified reftest
+//
+// Parameters
+//
+//   - uri: the url to be test, should be one of urls passed in ReftestSetup
+//   - expected: expected result, can be marionette.ReftestPass/ReftestFail
+//   - ref: rules to check
+func (s *Commander) ReftestRun(
+	uri, expected string, ref marionette.ReftestRefList, timeout int,
+) (ret *marionette.ReftestResult, err error) {
+	cmd := &mncmd.ReftestRun{
+		TestURL: uri,
+		Ref:     ref,
+		Expect:  expected,
+		Timeout: timeout,
+	}
+	msg, err := s.Sync(cmd)
+	if err != nil {
+		return
+	}
+
+	return cmd.Decode(msg)
+}
+
+// ReftestTeardown deinitializes reftest mode
+func (s *Commander) ReftestTeardown() (err error) {
+	cmd := &mncmd.ReftestTeardown{}
+	return s.runSync(cmd)
+}

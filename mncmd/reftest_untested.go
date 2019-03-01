@@ -44,9 +44,11 @@ func (c *ReftestRun) Decode(msg *marionette.Message) (
 		return
 	}
 
-	var data marionette.ReftestResult
+	var data struct {
+		Value *marionette.ReftestResult `json:"value"`
+	}
 	if err = recode(msg, &data); err == nil {
-		ret = &data
+		ret = data.Value
 	}
 
 	return
@@ -60,7 +62,7 @@ func (c *ReftestRun) Param() (ret interface{}) {
 	return c
 }
 
-func (c *ReftestRun) Valid() (ok bool) {
+func (c *ReftestRun) Validate() (ok bool) {
 	return c.TestURL != "" &&
 		c.Ref != nil &&
 		c.Expect != "" &&
