@@ -6,31 +6,22 @@
 //
 //     import (
 //         marionette "github.com/raohwork/marionette-go"
-//         "github.com/raohwork/marionette-go/ito"
-//         "github.com/raohwork/marionette-go/shirogane"
+//         "github.com/raohwork/marionette-go/mnclient"
+//         "github.com/raohwork/marionette-go/mnsender"
 //     )
 //
 //     func main() {
-//         client := &shirogane.Mixed{} // use default address
-//         go client.Start()
+//         s, err := mnsender.NewSender("127.0.0.1:2828", 0)
+//         // handler error here
 //
-//         client.Sync(&ito.NewSession{})
-//         client.Sync(&ito.Navigate{URL: "https://google.com"})
-//
-//         // get title using marionette service
-//         cmdTitle := &ito.GetTitle{}
-//         msg, _ := client.Sync(cmdTitle)
-//         title, _ := cmdTitle.Decode(msg)
-//         log.Print("Page title: ", title)
-//
-//         // get title using javascript
-//         cmdJS := &ito.ExecuteScript{
-//             Script: `return document.title`,
-//             Args: []interface{}{},
+//         if err := s.Start(); err != nil {
+//             // handle error
 //         }
-//         msg, _ = client.Sync(cmdJS)
-//         var jsTitle string
-//         cmdJS.Decode(msg, &jsTitle)
-//         log.Print("Page title: ", jsTitle)
+//         defer s.Stop()
+//
+//         cl := &mnclient.Commander{Sender: s}
+//
+//         // go to google
+//         cl.Navigate("https://www.google.com")
 //     }
 package marionette // import "github.com/raohwork/marionette-go"
