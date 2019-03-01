@@ -35,7 +35,7 @@ func (tc *cmdrTestCase) testFindElement(t *testing.T) {
 	ok = ok && t.Run("none", func(t *testing.T) {
 		el, err := tc.FindElement(marionette.ID, "test", nil)
 		if el != nil {
-			t.Errorf("non-empty el: %s", el)
+			t.Errorf("non-empty el: %+v", el)
 		}
 
 		if err == nil {
@@ -74,7 +74,7 @@ func (tc *cmdrTestCase) testFindElement(t *testing.T) {
 
 		el, err := tc.FindElement(marionette.ID, "ctrl", root)
 		if el != nil {
-			t.Errorf("non-empty el: %s", el)
+			t.Errorf("non-empty el: %+v", el)
 		}
 
 		if err == nil {
@@ -110,7 +110,7 @@ func (tc *cmdrTestCase) testFindElements(t *testing.T) {
 	t.Run("none", func(t *testing.T) {
 		el, err := tc.FindElements(marionette.ID, "test", nil)
 		if len(el) != 0 {
-			t.Errorf("non-empty el: %s", el)
+			t.Errorf("non-empty el: %+v", el)
 		}
 
 		if err != nil {
