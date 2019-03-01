@@ -65,6 +65,7 @@ func (c *Conn) Close() {
 		return
 	}
 	c.cancel()
+	c.conn.Close()
 }
 
 // ResultChan retrieves the channel instance for reading results.
