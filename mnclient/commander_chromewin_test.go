@@ -1,6 +1,8 @@
 package mnclient
 
-import "testing"
+import (
+	"testing"
+)
 
 func (tc *cmdrTestCase) testGetChromeHandles(t *testing.T) {
 	handles, err := tc.GetChromeWindowHandles()
@@ -21,7 +23,15 @@ func (tc *cmdrTestCase) testGetChromeHandles(t *testing.T) {
 }
 
 func (tc *cmdrTestCase) testCloseChromeWindow(t *testing.T) {
-	_, _, _ = tc.NewWindow("window", true)
+	me, _ := tc.GetChromeWindowHandle()
+	newMe, _, _ := tc.NewWindow("window", true)
+	if me == newMe {
+		t.Error("new chrome window == current")
+	}
+	newMe, _ = tc.GetChromeWindowHandle()
+	if me != newMe {
+		t.Error("marionette switched to new window")
+	}
 
 	handles, _ := tc.GetChromeWindowHandles()
 	if l := len(handles); l != 2 {

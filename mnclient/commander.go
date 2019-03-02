@@ -41,7 +41,9 @@ func (s *Commander) Back() (err error) {
 
 // CloseChromeWindow closes current active chrome window
 //
-// It returns a list of currently opened chrome window
+// A chrome window is a window itself contains tabs.
+//
+// It returns a list of currently opened chrome window.
 func (s *Commander) CloseChromeWindow() (handles []string, err error) {
 	cmd := &mncmd.CloseChromeWindow{}
 	msg, err := s.Sync(cmd)
@@ -50,7 +52,7 @@ func (s *Commander) CloseChromeWindow() (handles []string, err error) {
 
 // CloseChromeWindow closes current active window/tab
 //
-// It returns a list of currently opened window/tab
+// It returns a list of currently opened window/tab.
 func (s *Commander) CloseWindow() (handles []string, err error) {
 	cmd := &mncmd.CloseWindow{}
 	msg, err := s.Sync(cmd)
@@ -337,6 +339,8 @@ func (s *Commander) GetCapabilities() (ret *marionette.Capabilities, err error) 
 }
 
 // GetChromeWindowHandle retrieves current active chrome window handler
+//
+// A chrome window is a window itself contains tabs.
 func (s *Commander) GetChromeWindowHandle() (ret string, err error) {
 	cmd := &mncmd.GetChromeWindowHandle{}
 	msg, err := s.Sync(cmd)
@@ -347,6 +351,8 @@ func (s *Commander) GetChromeWindowHandle() (ret string, err error) {
 }
 
 // GetChromeWindowHandles retrieves all opened chrome window handlers
+//
+// A chrome window is a window itself contains tabs.
 func (s *Commander) GetChromeWindowHandles() (ret []string, err error) {
 	cmd := &mncmd.GetChromeWindowHandles{}
 	msg, err := s.Sync(cmd)
@@ -672,6 +678,16 @@ func (s *Commander) NewSessionWith(page string, insecureCert bool) (
 }
 
 // NewWindow opens a new window
+//
+// The "typ" can be
+//
+//   - "window": opens a new chrome window
+//   - "tab": opens a new tab in current chrome window (this is default)
+//
+// Pitfall
+//
+// Setting focus doesn't mean to "switch" to it. The result of GetWindowHandle and
+// GetChromeWindowHandle will remain same old one.
 func (s *Commander) NewWindow(typ string, focus bool) (id, winType string, err error) {
 	cmd := &mncmd.NewWindow{Type: typ, Focus: focus}
 	msg, err := s.Sync(cmd)

@@ -47,6 +47,7 @@ func (tc *cmdrTestCase) testGetWindowHandles(t *testing.T) {
 }
 
 func (tc *cmdrTestCase) testNewWindow(t *testing.T) {
+	me, _ := tc.GetWindowHandle()
 	id, typ, err := tc.NewWindow("tab", true)
 	if err != nil {
 		t.Fatalf("unexpected error in NewWindow(): %s", err)
@@ -56,6 +57,11 @@ func (tc *cmdrTestCase) testNewWindow(t *testing.T) {
 	}
 	if typ != "tab" {
 		t.Errorf("unexpected type: %s", typ)
+	}
+
+	newMe, _ := tc.GetWindowHandle()
+	if me != newMe {
+		t.Error("marionette switched to new tab")
 	}
 }
 
