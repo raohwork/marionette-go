@@ -30,6 +30,38 @@ func main() {
 }
 ```
 
+# Promise of compatibility
+
+From the first stable version (3.0.0), new versions will strictly following these
+rules.
+
+### bugfix version (last digit)
+
+- Fixes bug.
+
+Codes depends on older/newer version will work unchanged (if not depends on the buggy behavier I fixed).
+
+### minor version (mid digit)
+
+- New feature is introduced.
+- Marks some features to be deprecated.
+- Alone with some bug fixes.
+
+Codes depends on older version will work unchanged (if not depends on the buggy behavier I fixed).
+
+### major version (first digit)
+
+- Remove deprecated feature in previous major version.
+- Mozilla changes the command semantically in new version Firefox.
+- Mozilla introduces new command in new version Firefox.
+- Mozilla removes the support to some command in new version Firefox.
+- Marionette protocol version changed.
+- Refactor/rewrite the code.
+
+Your code will work differently or fail to compile.
+
+There will be a release note to address the changes and lowest supported Firefox version.
+
 # License
 
-You should explicitly choose one license from MIT, GPL or LGPL before using this library. Default to LGPLv3 if not claimed explicitly.
+LGPLv3
