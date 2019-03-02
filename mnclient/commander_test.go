@@ -181,6 +181,13 @@ func TestCommander(t *testing.T) {
 	t.Run("MozGetContext", tc.testMozGetContext)
 	t.Run("MozSetContext", tc.with(tc.testMozSetContext, tc.testMozGetContext))
 
+	// chrome window
+	t.Run("GetChromeHandles", tc.testGetChromeHandles)
+	t.Run("CloseChromeWindow", tc.with(
+		tc.testCloseChromeWindow,
+		tc.testGetChromeHandles,
+	))
+
 	// reftest, must run last
 	//
 	// it's not stable so I will comment this test and rewrite when I have
