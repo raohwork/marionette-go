@@ -39,17 +39,24 @@ type TabManager struct {
 	client     *mnclient.Commander
 	tabClients map[string]*Tab
 
-	lock sync.Mutex
+	lock sync.Locker
 }
 
-// New creates a TabManager
+// New is identical to NewWithLock(m, tabs, &sync.Mutex{})
+//
+// See NewWithLock() for further information.
+func New(m mnsender.Sender, tabs []string) (ret *TabManager, err error) {
+	return NewWithLock(m, tabs, &sync.Mutex{})
+}
+
+// NewWithLock creates a TabManager with predefined lock instance
 //
 // You have to start/issue new session/stop the *real client* (passed in m) before
 // calling New(). It will open tabs in current window or close other window/tab if
 // needed.
 //
 // Passing empty tab names leads to panic!
-func New(m mnsender.Sender, tabs []string) (ret *TabManager, err error) {
+func NewWithLock(m mnsender.Sender, tabs []string, lock sync.Locker) (ret *TabManager, err error) {
 	if len(tabs) == 0 {
 		panic(errors.New("tabs cannot be empty"))
 	}
@@ -59,6 +66,7 @@ func New(m mnsender.Sender, tabs []string) (ret *TabManager, err error) {
 		allTabs:    map[string]string{},
 		tabClients: map[string]*Tab{},
 		client:     &mnclient.Commander{Sender: m},
+		lock:       lock,
 	}
 
 	// get current tabs
