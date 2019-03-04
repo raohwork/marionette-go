@@ -95,6 +95,72 @@ steps:
   - name: opt
     path: /opt
 
+- name: test-tabmgr-go1.10.8-fx64.0
+  image: ronmi/go-firefox
+  commands:
+  - run-test.sh go test -p 2 -bench ./tabmgr -benchmem -cover
+  environment:
+    FX_VER: 64.0
+    GO_VER: 1.10.8
+  volumes:
+  - name: opt
+    path: /opt
+
+- name: test-tabmgr-go1.10.8-fx65.0
+  image: ronmi/go-firefox
+  commands:
+  - run-test.sh go test -p 2 -bench ./tabmgr -benchmem -cover
+  environment:
+    FX_VER: 65.0
+    GO_VER: 1.10.8
+  volumes:
+  - name: opt
+    path: /opt
+
+- name: test-tabmgr-go1.11.5-fx64.0
+  image: ronmi/go-firefox
+  commands:
+  - run-test.sh go test -p 2 -bench ./tabmgr -benchmem -cover
+  environment:
+    FX_VER: 64.0
+    GO_VER: 1.11.5
+  volumes:
+  - name: opt
+    path: /opt
+
+- name: test-tabmgr-go1.11.5-fx65.0
+  image: ronmi/go-firefox
+  commands:
+  - run-test.sh go test -p 2 -bench ./tabmgr -benchmem -cover
+  environment:
+    FX_VER: 65.0
+    GO_VER: 1.11.5
+  volumes:
+  - name: opt
+    path: /opt
+
+- name: test-tabmgr-go1.12-fx64.0
+  image: ronmi/go-firefox
+  commands:
+  - run-test.sh go test -p 2 -bench ./tabmgr -benchmem -cover
+  environment:
+    FX_VER: 64.0
+    GO_VER: 1.12
+  volumes:
+  - name: opt
+    path: /opt
+
+- name: test-tabmgr-go1.12-fx65.0
+  image: ronmi/go-firefox
+  commands:
+  - run-test.sh go test -p 2 -bench ./tabmgr -benchmem -cover
+  environment:
+    FX_VER: 65.0
+    GO_VER: 1.12
+  volumes:
+  - name: opt
+    path: /opt
+
 volumes:
 - name: opt
   temp:

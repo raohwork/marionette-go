@@ -1,6 +1,22 @@
 local paths = [".", "mnsender", "mnclient", "tabmgr"];
 local govers = ["1.10.8", "1.11.5", "1.12"];
 local fxvers = ["66.0b9", "66.0b12"];
+local tabmgrfx = ["64.0", "65.0"];
+
+local TestTabmgrStep(go, fx) = {
+  name: "test-tabmgr-go"+go+"-fx"+fx,
+  image: "ronmi/go-firefox",
+  environment: {
+    GO_VER: go,
+    FX_VER: fx,
+  },
+  commands: [
+    "run-test.sh go test -p 2 -bench ./tabmgr -benchmem -cover",
+  ],
+  volumes: [
+    {name: "opt", path: "/opt"},
+  ],
+};
 
 local TestCmd(dir) = [
   "run-test.sh go test -p 2 -bench ./"+dir+" -benchmem -cover",
@@ -37,7 +53,11 @@ local TestPipeline() = {
     path: "src/github.com/raohwork/marionette-go"
   },
   steps: [
-  ] + byGo(),
+  ] + byGo() + [
+    TestTabmgrStep(go, fx)
+    for go in govers
+    for fx in tabmgrfx
+  ],
   volumes: [
     {name: "opt", temp: {size_limit: "5g"}},
   ],
