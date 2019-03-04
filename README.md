@@ -1,3 +1,7 @@
+[![Build Status](https://cloud.drone.io/api/badges/raohwork/marionette-go/status.svg)](https://cloud.drone.io/raohwork/marionette-go)
+[![GoDoc](https://godoc.org/github.com/raohwork/marionette-go?status.svg)](https://godoc.org/github.com/raohwork/marionette-go)
+[![Go Report Card](https://goreportcard.com/badge/github.com/raohwork/marionette-go)](https://goreportcard.com/report/github.com/raohwork/marionette-go)
+
 # What is marionette 
 
 1. A marionette is a puppet controlled from above using wires or strings depending on regional variations. (Wikipedia)
