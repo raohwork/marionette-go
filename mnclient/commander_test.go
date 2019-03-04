@@ -57,13 +57,13 @@ func TestCommander(t *testing.T) {
 	t.Run("NewSessionWith", tc.testNewSessionWith)
 
 	// basic commands, need these to use tc.with()
-	t.Run("NewWindow", tc.testNewWindow)
-	t.Run("SwitchToWindow", tc.testSwitchToWindow)
-	t.Run("GetWindowHandles", tc.testGetWindowHandles)
-	t.Run("GetWindowHandle", tc.testGetWindowHandle)
-	t.Run("CloseWindow", tc.testCloseWindow)
-	t.Run("Navigate", tc.testNavigate)
-	t.Run("GetCurrentURL", tc.testGetCurrentURL)
+	tc.must(t, "NewWindow", tc.testNewWindow)
+	tc.must(t, "SwitchToWindow", tc.testSwitchToWindow)
+	tc.must(t, "GetWindowHandles", tc.testGetWindowHandles)
+	tc.must(t, "GetWindowHandle", tc.testGetWindowHandle)
+	tc.must(t, "CloseWindow", tc.testCloseWindow)
+	tc.must(t, "Navigate", tc.testNavigate)
+	tc.must(t, "GetCurrentURL", tc.testGetCurrentURL)
 
 	// browser toolbar actions
 	t.Run("Back", tc.with(tc.testBack, tc.testNavigate))
