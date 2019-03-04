@@ -24,18 +24,15 @@ import (
 	"github.com/raohwork/marionette-go/mnsender"
 )
 
-// Colubine is a client focus on multi-tab/window environment
+// TabManager is a client focus on multi-tab environment
 //
-// You give her a list of tab names, she will take care of your commands, making
+// You give it a list of tab names, it will take care of your commands, making
 // sure they are executed in correct tab.
 //
 // As commands are mean to be executed in specified tab only, some commands are not
 // supported like NewWindow and SwitchToWindow (see Tab for full list).
 //
 // Only content window and conext are supported.
-//
-// The name comes from Japanese comic "Karakuri circus", which is an tabmgr
-// created by Faceless commander.
 type TabManager struct {
 	currentTab string
 	allTabs    map[string]string
@@ -45,10 +42,11 @@ type TabManager struct {
 	lock sync.Mutex
 }
 
-// NewColumbine creates a Columbine instance
+// New creates a TabManager
 //
-// You have to start/issue new session/stop the *real client* (passed in m) by
-// your self.
+// You have to start/issue new session/stop the *real client* (passed in m) before
+// calling New(). It will open tabs in current window or close other window/tab if
+// needed.
 //
 // Passing empty tab names leads to panic!
 func New(m mnsender.Sender, tabs []string) (ret *TabManager, err error) {
