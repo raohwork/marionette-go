@@ -1,6 +1,6 @@
 ---
 kind: pipeline
-name: .-go1.10.8-fx66.0b9
+name: testing
 
 platform:
   os: linux
@@ -11,519 +11,92 @@ workspace:
   path: src/github.com/raohwork/marionette-go
 
 steps:
-- name: test
+- name: test-go1.10.8-fx66.0b9
   image: ronmi/go-firefox
   commands:
-  - cd .
-  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -p 2 -bench ./. -benchmem -cover
+  - run-test.sh go test -p 2 -bench ./mnsender -benchmem -cover
+  - run-test.sh go test -p 2 -bench ./mnclient -benchmem -cover
+  - run-test.sh go test -p 2 -bench ./tabmgr -benchmem -cover
   environment:
     FX_VER: 66.0b9
     GO_VER: 1.10.8
+  volumes:
+  - name: opt
+    path: /opt
 
----
-kind: pipeline
-name: mnsender-go1.10.8-fx66.0b9
-
-platform:
-  os: linux
-  arch: amd64
-
-workspace:
-  base: /go
-  path: src/github.com/raohwork/marionette-go
-
-steps:
-- name: test
+- name: test-go1.10.8-fx66.0b12
   image: ronmi/go-firefox
   commands:
-  - cd mnsender
-  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
-  environment:
-    FX_VER: 66.0b9
-    GO_VER: 1.10.8
-
----
-kind: pipeline
-name: mnclient-go1.10.8-fx66.0b9
-
-platform:
-  os: linux
-  arch: amd64
-
-workspace:
-  base: /go
-  path: src/github.com/raohwork/marionette-go
-
-steps:
-- name: test
-  image: ronmi/go-firefox
-  commands:
-  - cd mnclient
-  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
-  environment:
-    FX_VER: 66.0b9
-    GO_VER: 1.10.8
-
----
-kind: pipeline
-name: tabmgr-go1.10.8-fx66.0b9
-
-platform:
-  os: linux
-  arch: amd64
-
-workspace:
-  base: /go
-  path: src/github.com/raohwork/marionette-go
-
-steps:
-- name: test
-  image: ronmi/go-firefox
-  commands:
-  - cd tabmgr
-  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
-  environment:
-    FX_VER: 66.0b9
-    GO_VER: 1.10.8
-
----
-kind: pipeline
-name: .-go1.10.8-fx66.0b12
-
-platform:
-  os: linux
-  arch: amd64
-
-workspace:
-  base: /go
-  path: src/github.com/raohwork/marionette-go
-
-steps:
-- name: test
-  image: ronmi/go-firefox
-  commands:
-  - cd .
-  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -p 2 -bench ./. -benchmem -cover
+  - run-test.sh go test -p 2 -bench ./mnsender -benchmem -cover
+  - run-test.sh go test -p 2 -bench ./mnclient -benchmem -cover
+  - run-test.sh go test -p 2 -bench ./tabmgr -benchmem -cover
   environment:
     FX_VER: 66.0b12
     GO_VER: 1.10.8
+  volumes:
+  - name: opt
+    path: /opt
 
----
-kind: pipeline
-name: mnsender-go1.10.8-fx66.0b12
-
-platform:
-  os: linux
-  arch: amd64
-
-workspace:
-  base: /go
-  path: src/github.com/raohwork/marionette-go
-
-steps:
-- name: test
+- name: test-go1.11.5-fx66.0b9
   image: ronmi/go-firefox
   commands:
-  - cd mnsender
-  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
-  environment:
-    FX_VER: 66.0b12
-    GO_VER: 1.10.8
-
----
-kind: pipeline
-name: mnclient-go1.10.8-fx66.0b12
-
-platform:
-  os: linux
-  arch: amd64
-
-workspace:
-  base: /go
-  path: src/github.com/raohwork/marionette-go
-
-steps:
-- name: test
-  image: ronmi/go-firefox
-  commands:
-  - cd mnclient
-  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
-  environment:
-    FX_VER: 66.0b12
-    GO_VER: 1.10.8
-
----
-kind: pipeline
-name: tabmgr-go1.10.8-fx66.0b12
-
-platform:
-  os: linux
-  arch: amd64
-
-workspace:
-  base: /go
-  path: src/github.com/raohwork/marionette-go
-
-steps:
-- name: test
-  image: ronmi/go-firefox
-  commands:
-  - cd tabmgr
-  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
-  environment:
-    FX_VER: 66.0b12
-    GO_VER: 1.10.8
-
----
-kind: pipeline
-name: .-go1.11.5-fx66.0b9
-
-platform:
-  os: linux
-  arch: amd64
-
-workspace:
-  base: /go
-  path: src/github.com/raohwork/marionette-go
-
-steps:
-- name: test
-  image: ronmi/go-firefox
-  commands:
-  - cd .
-  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -p 2 -bench ./. -benchmem -cover
+  - run-test.sh go test -p 2 -bench ./mnsender -benchmem -cover
+  - run-test.sh go test -p 2 -bench ./mnclient -benchmem -cover
+  - run-test.sh go test -p 2 -bench ./tabmgr -benchmem -cover
   environment:
     FX_VER: 66.0b9
     GO_VER: 1.11.5
+  volumes:
+  - name: opt
+    path: /opt
 
----
-kind: pipeline
-name: mnsender-go1.11.5-fx66.0b9
-
-platform:
-  os: linux
-  arch: amd64
-
-workspace:
-  base: /go
-  path: src/github.com/raohwork/marionette-go
-
-steps:
-- name: test
+- name: test-go1.11.5-fx66.0b12
   image: ronmi/go-firefox
   commands:
-  - cd mnsender
-  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
-  environment:
-    FX_VER: 66.0b9
-    GO_VER: 1.11.5
-
----
-kind: pipeline
-name: mnclient-go1.11.5-fx66.0b9
-
-platform:
-  os: linux
-  arch: amd64
-
-workspace:
-  base: /go
-  path: src/github.com/raohwork/marionette-go
-
-steps:
-- name: test
-  image: ronmi/go-firefox
-  commands:
-  - cd mnclient
-  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
-  environment:
-    FX_VER: 66.0b9
-    GO_VER: 1.11.5
-
----
-kind: pipeline
-name: tabmgr-go1.11.5-fx66.0b9
-
-platform:
-  os: linux
-  arch: amd64
-
-workspace:
-  base: /go
-  path: src/github.com/raohwork/marionette-go
-
-steps:
-- name: test
-  image: ronmi/go-firefox
-  commands:
-  - cd tabmgr
-  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
-  environment:
-    FX_VER: 66.0b9
-    GO_VER: 1.11.5
-
----
-kind: pipeline
-name: .-go1.11.5-fx66.0b12
-
-platform:
-  os: linux
-  arch: amd64
-
-workspace:
-  base: /go
-  path: src/github.com/raohwork/marionette-go
-
-steps:
-- name: test
-  image: ronmi/go-firefox
-  commands:
-  - cd .
-  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -p 2 -bench ./. -benchmem -cover
+  - run-test.sh go test -p 2 -bench ./mnsender -benchmem -cover
+  - run-test.sh go test -p 2 -bench ./mnclient -benchmem -cover
+  - run-test.sh go test -p 2 -bench ./tabmgr -benchmem -cover
   environment:
     FX_VER: 66.0b12
     GO_VER: 1.11.5
+  volumes:
+  - name: opt
+    path: /opt
 
----
-kind: pipeline
-name: mnsender-go1.11.5-fx66.0b12
-
-platform:
-  os: linux
-  arch: amd64
-
-workspace:
-  base: /go
-  path: src/github.com/raohwork/marionette-go
-
-steps:
-- name: test
+- name: test-go1.12-fx66.0b9
   image: ronmi/go-firefox
   commands:
-  - cd mnsender
-  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
-  environment:
-    FX_VER: 66.0b12
-    GO_VER: 1.11.5
-
----
-kind: pipeline
-name: mnclient-go1.11.5-fx66.0b12
-
-platform:
-  os: linux
-  arch: amd64
-
-workspace:
-  base: /go
-  path: src/github.com/raohwork/marionette-go
-
-steps:
-- name: test
-  image: ronmi/go-firefox
-  commands:
-  - cd mnclient
-  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
-  environment:
-    FX_VER: 66.0b12
-    GO_VER: 1.11.5
-
----
-kind: pipeline
-name: tabmgr-go1.11.5-fx66.0b12
-
-platform:
-  os: linux
-  arch: amd64
-
-workspace:
-  base: /go
-  path: src/github.com/raohwork/marionette-go
-
-steps:
-- name: test
-  image: ronmi/go-firefox
-  commands:
-  - cd tabmgr
-  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
-  environment:
-    FX_VER: 66.0b12
-    GO_VER: 1.11.5
-
----
-kind: pipeline
-name: .-go1.12-fx66.0b9
-
-platform:
-  os: linux
-  arch: amd64
-
-workspace:
-  base: /go
-  path: src/github.com/raohwork/marionette-go
-
-steps:
-- name: test
-  image: ronmi/go-firefox
-  commands:
-  - cd .
-  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -p 2 -bench ./. -benchmem -cover
+  - run-test.sh go test -p 2 -bench ./mnsender -benchmem -cover
+  - run-test.sh go test -p 2 -bench ./mnclient -benchmem -cover
+  - run-test.sh go test -p 2 -bench ./tabmgr -benchmem -cover
   environment:
     FX_VER: 66.0b9
     GO_VER: 1.12
+  volumes:
+  - name: opt
+    path: /opt
 
----
-kind: pipeline
-name: mnsender-go1.12-fx66.0b9
-
-platform:
-  os: linux
-  arch: amd64
-
-workspace:
-  base: /go
-  path: src/github.com/raohwork/marionette-go
-
-steps:
-- name: test
+- name: test-go1.12-fx66.0b12
   image: ronmi/go-firefox
   commands:
-  - cd mnsender
-  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
-  environment:
-    FX_VER: 66.0b9
-    GO_VER: 1.12
-
----
-kind: pipeline
-name: mnclient-go1.12-fx66.0b9
-
-platform:
-  os: linux
-  arch: amd64
-
-workspace:
-  base: /go
-  path: src/github.com/raohwork/marionette-go
-
-steps:
-- name: test
-  image: ronmi/go-firefox
-  commands:
-  - cd mnclient
-  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
-  environment:
-    FX_VER: 66.0b9
-    GO_VER: 1.12
-
----
-kind: pipeline
-name: tabmgr-go1.12-fx66.0b9
-
-platform:
-  os: linux
-  arch: amd64
-
-workspace:
-  base: /go
-  path: src/github.com/raohwork/marionette-go
-
-steps:
-- name: test
-  image: ronmi/go-firefox
-  commands:
-  - cd tabmgr
-  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
-  environment:
-    FX_VER: 66.0b9
-    GO_VER: 1.12
-
----
-kind: pipeline
-name: .-go1.12-fx66.0b12
-
-platform:
-  os: linux
-  arch: amd64
-
-workspace:
-  base: /go
-  path: src/github.com/raohwork/marionette-go
-
-steps:
-- name: test
-  image: ronmi/go-firefox
-  commands:
-  - cd .
-  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -p 2 -bench ./. -benchmem -cover
+  - run-test.sh go test -p 2 -bench ./mnsender -benchmem -cover
+  - run-test.sh go test -p 2 -bench ./mnclient -benchmem -cover
+  - run-test.sh go test -p 2 -bench ./tabmgr -benchmem -cover
   environment:
     FX_VER: 66.0b12
     GO_VER: 1.12
+  volumes:
+  - name: opt
+    path: /opt
 
----
-kind: pipeline
-name: mnsender-go1.12-fx66.0b12
-
-platform:
-  os: linux
-  arch: amd64
-
-workspace:
-  base: /go
-  path: src/github.com/raohwork/marionette-go
-
-steps:
-- name: test
-  image: ronmi/go-firefox
-  commands:
-  - cd mnsender
-  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
-  environment:
-    FX_VER: 66.0b12
-    GO_VER: 1.12
-
----
-kind: pipeline
-name: mnclient-go1.12-fx66.0b12
-
-platform:
-  os: linux
-  arch: amd64
-
-workspace:
-  base: /go
-  path: src/github.com/raohwork/marionette-go
-
-steps:
-- name: test
-  image: ronmi/go-firefox
-  commands:
-  - cd mnclient
-  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
-  environment:
-    FX_VER: 66.0b12
-    GO_VER: 1.12
-
----
-kind: pipeline
-name: tabmgr-go1.12-fx66.0b12
-
-platform:
-  os: linux
-  arch: amd64
-
-workspace:
-  base: /go
-  path: src/github.com/raohwork/marionette-go
-
-steps:
-- name: test
-  image: ronmi/go-firefox
-  commands:
-  - cd tabmgr
-  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
-  environment:
-    FX_VER: 66.0b12
-    GO_VER: 1.12
+volumes:
+- name: opt
+  temp:
 
 ...
