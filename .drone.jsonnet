@@ -9,14 +9,18 @@ local TestStep(go, fx, dir) = {
     base: "/go",
     path: "src/github.com/raohwork/marionette-go"
   },
-  environment: {
-    GO_VER: go,
-    FX_VER: fx,
-  },
-  commands: [
-    "cd " + dir,
-    "go test -v -p 2 -bench . -benchmem -cover",
-  ],
+  steps: [{
+    name: "test",
+    image: "ronmi/go-firefox",
+    environment: {
+      GO_VER: go,
+      FX_VER: fx,
+    },
+    commands: [
+      "cd " + dir,
+      "go test -v -p 2 -bench . -benchmem -cover",
+    ],
+  }],
 };
 
 local byDir(go, fx) = [
