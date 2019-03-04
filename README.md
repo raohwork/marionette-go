@@ -34,6 +34,15 @@ func main() {
 }
 ```
 
+# Pitfalls
+
+- The behavier of screenshot commands varies with versions and headless mode.
+  Since it still "take screenshot on the document/viewport/element", I will not 
+  write workarounds about it.
+- The essential command "NewWindow" is not implemented in Firefox 65 (and lower).
+- I am not native English speaker so some sentences in docs may look weird. Feel 
+  free to submit issue/PR about that.
+
 # Promise of compatibility
 
 From the first stable version (3.0.0), new versions will strictly following these
