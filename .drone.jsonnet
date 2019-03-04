@@ -39,7 +39,7 @@ local TestPipeline() = {
   steps: [
   ] + byGo(),
   volumes: [
-    {name: "opt", temp: {}},
+    {name: "opt", temp: {size_limit: "5g"}},
   ],
 };
 

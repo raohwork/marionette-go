@@ -98,5 +98,6 @@ steps:
 volumes:
 - name: opt
   temp:
+    size_limit: 5GiB
 
 ...
