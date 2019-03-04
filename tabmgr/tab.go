@@ -56,7 +56,7 @@ func (s *mySender) Async(cmd mncmd.Command) (ch chan *marionette.Message, err er
 	return
 }
 
-// Tab represents a tab under Columbine's controll
+// Tab represents a tab under manager's control
 //
 // It will check if active tab is desired one right before executing commands, and
 // switch to it if needed.

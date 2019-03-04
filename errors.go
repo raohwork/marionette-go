@@ -81,7 +81,7 @@ func (e *ErrResponseDecode) String() (ret string) {
 	return e.Err.Error()
 }
 
-// ErrConnection denotes some network related problem occured
+// ErrConnection denotes some network related problem occurred
 type ErrConnection struct {
 	When   string
 	Origin error

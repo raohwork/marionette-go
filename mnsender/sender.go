@@ -56,7 +56,7 @@ func NewSender(c io.ReadWriteCloser, bufSize int) (ret Sender) {
 	}
 }
 
-// mixed is an asychronous client supports both blocking and non-blocking call
+// mixed is an asynchronous client supports both blocking and non-blocking call
 type mixed struct {
 	tcpConn io.ReadWriteCloser
 	bufSize int

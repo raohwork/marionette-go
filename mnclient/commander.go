@@ -487,7 +487,7 @@ func (s *Commander) GetElementPropertyBool(
 
 // GetElementRect retrieves the bounding rect of the element
 //
-// The X(left) and Y(top) are computed aginst origin(top-left) of the document.
+// The X(left) and Y(top) are computed against origin(top-left) of the document.
 func (s *Commander) GetElementRect(el *marionette.WebElement) (ret marionette.Rect, err error) {
 	cmd := &mncmd.GetElementRect{
 		Element: el,

@@ -64,7 +64,7 @@ func (s *Async) Send(cmd mncmd.Command) (resp chan *marionette.Message, err erro
 	return
 }
 
-// Start runs the main loop at background to recieve/dispatch messages
+// Start runs the main loop at background to receive/dispatch messages
 func (s *Async) Start() {
 	s.mapLock.Lock()
 	s.pending = map[uint32]chan *marionette.Message{}
