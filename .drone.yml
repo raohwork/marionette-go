@@ -15,7 +15,7 @@ steps:
   image: ronmi/go-firefox
   commands:
   - cd .
-  - go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
   environment:
     FX_VER: 66.0b9
     GO_VER: 1.10.8
@@ -37,7 +37,7 @@ steps:
   image: ronmi/go-firefox
   commands:
   - cd mnsender
-  - go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
   environment:
     FX_VER: 66.0b9
     GO_VER: 1.10.8
@@ -59,7 +59,7 @@ steps:
   image: ronmi/go-firefox
   commands:
   - cd mnclient
-  - go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
   environment:
     FX_VER: 66.0b9
     GO_VER: 1.10.8
@@ -81,7 +81,7 @@ steps:
   image: ronmi/go-firefox
   commands:
   - cd tabmgr
-  - go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
   environment:
     FX_VER: 66.0b9
     GO_VER: 1.10.8
@@ -103,7 +103,7 @@ steps:
   image: ronmi/go-firefox
   commands:
   - cd .
-  - go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
   environment:
     FX_VER: 66.0b12
     GO_VER: 1.10.8
@@ -125,7 +125,7 @@ steps:
   image: ronmi/go-firefox
   commands:
   - cd mnsender
-  - go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
   environment:
     FX_VER: 66.0b12
     GO_VER: 1.10.8
@@ -147,7 +147,7 @@ steps:
   image: ronmi/go-firefox
   commands:
   - cd mnclient
-  - go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
   environment:
     FX_VER: 66.0b12
     GO_VER: 1.10.8
@@ -169,7 +169,7 @@ steps:
   image: ronmi/go-firefox
   commands:
   - cd tabmgr
-  - go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
   environment:
     FX_VER: 66.0b12
     GO_VER: 1.10.8
@@ -191,7 +191,7 @@ steps:
   image: ronmi/go-firefox
   commands:
   - cd .
-  - go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
   environment:
     FX_VER: 66.0b9
     GO_VER: 1.11.5
@@ -213,7 +213,7 @@ steps:
   image: ronmi/go-firefox
   commands:
   - cd mnsender
-  - go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
   environment:
     FX_VER: 66.0b9
     GO_VER: 1.11.5
@@ -235,7 +235,7 @@ steps:
   image: ronmi/go-firefox
   commands:
   - cd mnclient
-  - go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
   environment:
     FX_VER: 66.0b9
     GO_VER: 1.11.5
@@ -257,7 +257,7 @@ steps:
   image: ronmi/go-firefox
   commands:
   - cd tabmgr
-  - go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
   environment:
     FX_VER: 66.0b9
     GO_VER: 1.11.5
@@ -279,7 +279,7 @@ steps:
   image: ronmi/go-firefox
   commands:
   - cd .
-  - go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
   environment:
     FX_VER: 66.0b12
     GO_VER: 1.11.5
@@ -301,7 +301,7 @@ steps:
   image: ronmi/go-firefox
   commands:
   - cd mnsender
-  - go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
   environment:
     FX_VER: 66.0b12
     GO_VER: 1.11.5
@@ -323,7 +323,7 @@ steps:
   image: ronmi/go-firefox
   commands:
   - cd mnclient
-  - go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
   environment:
     FX_VER: 66.0b12
     GO_VER: 1.11.5
@@ -345,7 +345,7 @@ steps:
   image: ronmi/go-firefox
   commands:
   - cd tabmgr
-  - go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
   environment:
     FX_VER: 66.0b12
     GO_VER: 1.11.5
@@ -367,7 +367,7 @@ steps:
   image: ronmi/go-firefox
   commands:
   - cd .
-  - go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
   environment:
     FX_VER: 66.0b9
     GO_VER: 1.12
@@ -389,7 +389,7 @@ steps:
   image: ronmi/go-firefox
   commands:
   - cd mnsender
-  - go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
   environment:
     FX_VER: 66.0b9
     GO_VER: 1.12
@@ -411,7 +411,7 @@ steps:
   image: ronmi/go-firefox
   commands:
   - cd mnclient
-  - go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
   environment:
     FX_VER: 66.0b9
     GO_VER: 1.12
@@ -433,7 +433,7 @@ steps:
   image: ronmi/go-firefox
   commands:
   - cd tabmgr
-  - go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
   environment:
     FX_VER: 66.0b9
     GO_VER: 1.12
@@ -455,7 +455,7 @@ steps:
   image: ronmi/go-firefox
   commands:
   - cd .
-  - go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
   environment:
     FX_VER: 66.0b12
     GO_VER: 1.12
@@ -477,7 +477,7 @@ steps:
   image: ronmi/go-firefox
   commands:
   - cd mnsender
-  - go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
   environment:
     FX_VER: 66.0b12
     GO_VER: 1.12
@@ -499,7 +499,7 @@ steps:
   image: ronmi/go-firefox
   commands:
   - cd mnclient
-  - go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
   environment:
     FX_VER: 66.0b12
     GO_VER: 1.12
@@ -521,7 +521,7 @@ steps:
   image: ronmi/go-firefox
   commands:
   - cd tabmgr
-  - go test -v -p 2 -bench . -benchmem -cover
+  - run-test.sh go test -v -p 2 -bench . -benchmem -cover
   environment:
     FX_VER: 66.0b12
     GO_VER: 1.12

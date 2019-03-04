@@ -18,7 +18,7 @@ local TestStep(go, fx, dir) = {
     },
     commands: [
       "cd " + dir,
-      "go test -v -p 2 -bench . -benchmem -cover",
+      "run-test.sh go test -v -p 2 -bench . -benchmem -cover",
     ],
   }],
 };
