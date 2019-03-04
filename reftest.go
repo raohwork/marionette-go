@@ -42,7 +42,7 @@ type ReftestRefList []*reftestRef
 // And creates a new list that represnets "uri AND l"
 func (l ReftestRefList) And(uri, rel string) (ret ReftestRefList) {
 	return []*reftestRef{
-		&reftestRef{
+		{
 			URL: uri,
 			Ref: l,
 			Rel: rel,

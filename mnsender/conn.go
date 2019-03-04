@@ -62,7 +62,7 @@ func NewConn(c io.ReadWriteCloser, resultBufferSize uint) (ret *Conn, err error)
 
 // Cleanup discards all unread messages, SHOULD NOT be called before Close()
 func (c *Conn) Cleanup() {
-	for _ = range c.ch {
+	for range c.ch {
 	}
 }
 
