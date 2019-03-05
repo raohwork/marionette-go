@@ -49,6 +49,9 @@ Refer `dev-test.sh` and `.drone.yaml` for example usage of this image.
 
 # Pitfalls
 
+- I am still learning how actions works. It does not work as expected now. I will
+  fix it sometime, maybe next major version as data structures will doubtlessly
+  need redesigning.
 - The behavier of screenshot commands varies with versions and headless mode.
   Since it still "take screenshot on the document/viewport/element", I will not 
   write workarounds about it.
