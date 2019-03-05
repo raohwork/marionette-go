@@ -34,6 +34,19 @@ func main() {
 }
 ```
 
+# Helper Docker image
+
+There's a Docker image hosted at [Docker Hub](https://hub.docker.com/r/ronmi/go-firefox).
+It is a helper for me (and projects using marionette-go, maybe) to run tests at local machine or docker based CI env like [DroneCI](https://drone.io).
+
+The image accepts 3 envvars
+
+- `GO_VER`: Go version to download, like `1.11.5`.
+- `FX_VER`: Firefox version to download, like `65.0.1`.
+- `XVFB`: Disable headless mode, use xvfb instead.
+
+Refer `dev-test.sh` and `.drone.yaml` for example usage of this image.
+
 # Pitfalls
 
 - The behavier of screenshot commands varies with versions and headless mode.
