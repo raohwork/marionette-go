@@ -110,18 +110,43 @@ func NewWithLock(m mnsender.Sender, tabs []string, lock sync.Locker) (ret *TabMa
 		allTabs[tab] = curTabs[idx]
 	}
 
+	ret = NewWithMap(m, allTabs, lock)
+
+	// compatible with 3.0.0: switch to first tab
+	ret.allocateTab(tabs[0])
+	ret.releaseTab()
+	return
+}
+
+// NewWithMap creates a TabManager with predefined tabs
+//
+// You have to start/issue new session/stop the *real client* (passed in m) before
+// calling New(). It will open tabs in current window or close other window/tab if
+// needed.
+//
+// Passing empty tab mapping leads to panic!
+//
+// It is impossible for go map to determine "first" element, NewWithMap will switch
+// to randomly choosed one of managed tabs before returning created TabManager.
+//
+// With this function, external packages may write their own logic to create
+// windows/tabs, and let TabManager take care about race conditions.
+func NewWithMap(m mnsender.Sender, tabs map[string]string, lock sync.Locker) (ret *TabManager) {
+	cl := &mnclient.Commander{Sender: m}
 	ret = &TabManager{
 		tabClients:  map[string]*Tab{},
-		LockManager: NewLockManager(allTabs, cl, lock),
+		LockManager: NewLockManager(tabs, cl, lock),
 	}
 
 	// create tab clients
-	for _, tab := range tabs {
-		ret.tabClients[tab] = NewTab(tab, ret, m)
+	var tab string
+	for n, _ := range tabs {
+		tab = n
+		ret.tabClients[n] = NewTab(n, ret, m)
 	}
 
-	// switch to first tab
-	ret.allocateTab(tabs[0])
+	// switch to a random tab
+	ret.allocateTab(tab)
 	ret.releaseTab()
 
 	return
