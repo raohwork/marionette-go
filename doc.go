@@ -26,7 +26,7 @@
 //     )
 //
 //     func main() {
-//         s, err := mnsender.NewSender("127.0.0.1:2828", 0)
+//         s, err := mnsender.NewTCPSender("127.0.0.1:2828", 0)
 //         // handler error here
 //
 //         if err := s.Start(); err != nil {
