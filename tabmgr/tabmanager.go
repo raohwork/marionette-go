@@ -34,35 +34,34 @@ import (
 //
 // Only content window and conext are supported.
 type TabManager struct {
-	currentTab string
-	allTabs    map[string]string
-	client     *mnclient.Commander
 	tabClients map[string]*Tab
-
-	lock sync.Mutex
+	LockManager
 }
 
-// New creates a TabManager
+// New is identical to NewWithLock(m, tabs, &sync.Mutex{})
+//
+// See NewWithLock() for further information.
+func New(m mnsender.Sender, tabs []string) (ret *TabManager, err error) {
+	return NewWithLock(m, tabs, &sync.Mutex{})
+}
+
+// NewWithLock creates a TabManager with predefined lock instance
 //
 // You have to start/issue new session/stop the *real client* (passed in m) before
 // calling New(). It will open tabs in current window or close other window/tab if
 // needed.
 //
 // Passing empty tab names leads to panic!
-func New(m mnsender.Sender, tabs []string) (ret *TabManager, err error) {
+func NewWithLock(m mnsender.Sender, tabs []string, lock sync.Locker) (ret *TabManager, err error) {
 	if len(tabs) == 0 {
 		panic(errors.New("tabs cannot be empty"))
 	}
 
-	ret = &TabManager{
-		currentTab: tabs[0],
-		allTabs:    map[string]string{},
-		tabClients: map[string]*Tab{},
-		client:     &mnclient.Commander{Sender: m},
-	}
+	cl := &mnclient.Commander{Sender: m}
+	allTabs := map[string]string{}
 
 	// get current tabs
-	curTabs, err := ret.client.GetWindowHandles()
+	curTabs, err := cl.GetWindowHandles()
 	if err != nil {
 		return
 	}
@@ -73,7 +72,7 @@ func New(m mnsender.Sender, tabs []string) (ret *TabManager, err error) {
 	fx65workround := false
 	for x := len(curTabs); x < wanted; x++ {
 		if !fx65workround {
-			_, _, err = ret.client.NewWindow("tab", false)
+			_, _, err = cl.NewWindow("tab", false)
 			if err != nil {
 				e, ok := err.(*marionette.ErrDriver)
 				if !ok {
@@ -86,7 +85,7 @@ func New(m mnsender.Sender, tabs []string) (ret *TabManager, err error) {
 			}
 		}
 		if fx65workround {
-			err = ret.client.ExecuteScript(
+			err = cl.ExecuteScript(
 				`window.open('about:blank')`, nil,
 			)
 			if err != nil {
@@ -96,58 +95,61 @@ func New(m mnsender.Sender, tabs []string) (ret *TabManager, err error) {
 	}
 	// close old tabs if needed
 	for x := len(curTabs); x > wanted; x-- {
-		list, err := ret.client.CloseWindow()
+		list, err := cl.CloseWindow()
 		if err != nil {
 			return nil, err
 		}
-		ret.client.SwitchToWindow(list[0])
+		cl.SwitchToWindow(list[0])
 	}
 	// no matter what, just fetch tabs list again
-	if curTabs, err = ret.client.GetWindowHandles(); err != nil {
+	if curTabs, err = cl.GetWindowHandles(); err != nil {
 		return
 	}
 
 	for idx, tab := range tabs {
-		ret.allTabs[tab] = curTabs[idx]
+		allTabs[tab] = curTabs[idx]
 	}
 
-	// switch to current tab
-	if err = ret.client.SwitchToWindow(ret.allTabs[ret.currentTab]); err != nil {
-		return
+	ret = NewWithMap(m, allTabs, lock)
+
+	// compatible with 3.0.0: switch to first tab
+	ret.allocateTab(tabs[0])
+	ret.releaseTab()
+	return
+}
+
+// NewWithMap creates a TabManager with predefined tabs
+//
+// You have to start/issue new session/stop the *real client* (passed in m) before
+// calling New(). It will open tabs in current window or close other window/tab if
+// needed.
+//
+// Passing empty tab mapping leads to panic!
+//
+// It is impossible for go map to determine "first" element, NewWithMap will switch
+// to randomly choosed one of managed tabs before returning created TabManager.
+//
+// With this function, external packages may write their own logic to create
+// windows/tabs, and let TabManager take care about race conditions.
+func NewWithMap(m mnsender.Sender, tabs map[string]string, lock sync.Locker) (ret *TabManager) {
+	cl := &mnclient.Commander{Sender: m}
+	ret = &TabManager{
+		tabClients:  map[string]*Tab{},
+		LockManager: NewLockManager(tabs, cl, lock),
 	}
 
 	// create tab clients
-	for _, tab := range tabs {
-		c := &mySender{
-			name:   tab,
-			mgr:    ret,
-			Sender: m,
-		}
-		ret.tabClients[tab] = &Tab{
-			mySender:  c,
-			Commander: &mnclient.Commander{Sender: c},
-		}
+	var tab string
+	for n, _ := range tabs {
+		tab = n
+		ret.tabClients[n] = NewTab(n, ret, m)
 	}
+
+	// switch to a random tab
+	ret.allocateTab(tab)
+	ret.releaseTab()
 
 	return
-}
-
-func (c *TabManager) allocateTab(tab string) (err error) {
-	c.lock.Lock()
-	if c.currentTab == tab {
-		return
-	}
-
-	if err = c.client.SwitchToWindow(c.allTabs[tab]); err != nil {
-		return
-	}
-
-	c.currentTab = tab
-	return
-}
-
-func (c *TabManager) releaseTab() {
-	c.lock.Unlock()
 }
 
 // GetTab retrieves specified Tab instance by tab name you gave to TabManager
