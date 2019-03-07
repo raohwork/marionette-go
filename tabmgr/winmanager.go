@@ -30,8 +30,9 @@ import (
 //   w, _ := WindowManager(sender, map[string][]string{"w1": {"t1", "t2"}})
 //   tab := w.GetTab("w1:t1")
 //
-// It creates/closes windows and tabs automatically, does not cooperate with other
-// managers well.
+// It creates/closes windows and tabs automatically (using mnclient.TabCreator,
+// refer there for implementation details), does not cooperate with other managers
+// well. That's the reason why there's no "lock" argument here.
 func WindowManager(
 	s mnsender.Sender, windows map[string][]string,
 ) (ret *TabManager, err error) {
