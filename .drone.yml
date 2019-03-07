@@ -14,10 +14,10 @@ steps:
 - name: test-go1.10.8-fx66.0b9
   image: ronmi/go-firefox
   commands:
-  - run-test.sh go test -p 2 -bench ./. -benchmem -cover
-  - run-test.sh go test -p 2 -bench ./mnsender -benchmem -cover
-  - run-test.sh go test -p 2 -bench ./mnclient -benchmem -cover
-  - run-test.sh go test -p 2 -bench ./tabmgr -benchmem -cover
+  - run-test.sh go test -p 2 -bench . -benchmem -cover ./.
+  - run-test.sh go test -p 2 -bench . -benchmem -cover ./mnsender
+  - run-test.sh go test -p 2 -bench . -benchmem -cover ./mnclient
+  - run-test.sh go test -p 2 -bench . -benchmem -cover ./tabmgr
   environment:
     FX_VER: 66.0b9
     GO_VER: 1.10.8
@@ -28,10 +28,10 @@ steps:
 - name: test-go1.10.8-fx66.0b12
   image: ronmi/go-firefox
   commands:
-  - run-test.sh go test -p 2 -bench ./. -benchmem -cover
-  - run-test.sh go test -p 2 -bench ./mnsender -benchmem -cover
-  - run-test.sh go test -p 2 -bench ./mnclient -benchmem -cover
-  - run-test.sh go test -p 2 -bench ./tabmgr -benchmem -cover
+  - run-test.sh go test -p 2 -bench . -benchmem -cover ./.
+  - run-test.sh go test -p 2 -bench . -benchmem -cover ./mnsender
+  - run-test.sh go test -p 2 -bench . -benchmem -cover ./mnclient
+  - run-test.sh go test -p 2 -bench . -benchmem -cover ./tabmgr
   environment:
     FX_VER: 66.0b12
     GO_VER: 1.10.8
@@ -42,10 +42,10 @@ steps:
 - name: test-go1.11.5-fx66.0b9
   image: ronmi/go-firefox
   commands:
-  - run-test.sh go test -p 2 -bench ./. -benchmem -cover
-  - run-test.sh go test -p 2 -bench ./mnsender -benchmem -cover
-  - run-test.sh go test -p 2 -bench ./mnclient -benchmem -cover
-  - run-test.sh go test -p 2 -bench ./tabmgr -benchmem -cover
+  - run-test.sh go test -p 2 -bench . -benchmem -cover ./.
+  - run-test.sh go test -p 2 -bench . -benchmem -cover ./mnsender
+  - run-test.sh go test -p 2 -bench . -benchmem -cover ./mnclient
+  - run-test.sh go test -p 2 -bench . -benchmem -cover ./tabmgr
   environment:
     FX_VER: 66.0b9
     GO_VER: 1.11.5
@@ -56,10 +56,10 @@ steps:
 - name: test-go1.11.5-fx66.0b12
   image: ronmi/go-firefox
   commands:
-  - run-test.sh go test -p 2 -bench ./. -benchmem -cover
-  - run-test.sh go test -p 2 -bench ./mnsender -benchmem -cover
-  - run-test.sh go test -p 2 -bench ./mnclient -benchmem -cover
-  - run-test.sh go test -p 2 -bench ./tabmgr -benchmem -cover
+  - run-test.sh go test -p 2 -bench . -benchmem -cover ./.
+  - run-test.sh go test -p 2 -bench . -benchmem -cover ./mnsender
+  - run-test.sh go test -p 2 -bench . -benchmem -cover ./mnclient
+  - run-test.sh go test -p 2 -bench . -benchmem -cover ./tabmgr
   environment:
     FX_VER: 66.0b12
     GO_VER: 1.11.5
@@ -70,10 +70,10 @@ steps:
 - name: test-go1.12-fx66.0b9
   image: ronmi/go-firefox
   commands:
-  - run-test.sh go test -p 2 -bench ./. -benchmem -cover
-  - run-test.sh go test -p 2 -bench ./mnsender -benchmem -cover
-  - run-test.sh go test -p 2 -bench ./mnclient -benchmem -cover
-  - run-test.sh go test -p 2 -bench ./tabmgr -benchmem -cover
+  - run-test.sh go test -p 2 -bench . -benchmem -cover ./.
+  - run-test.sh go test -p 2 -bench . -benchmem -cover ./mnsender
+  - run-test.sh go test -p 2 -bench . -benchmem -cover ./mnclient
+  - run-test.sh go test -p 2 -bench . -benchmem -cover ./tabmgr
   environment:
     FX_VER: 66.0b9
     GO_VER: 1.12
@@ -84,10 +84,10 @@ steps:
 - name: test-go1.12-fx66.0b12
   image: ronmi/go-firefox
   commands:
-  - run-test.sh go test -p 2 -bench ./. -benchmem -cover
-  - run-test.sh go test -p 2 -bench ./mnsender -benchmem -cover
-  - run-test.sh go test -p 2 -bench ./mnclient -benchmem -cover
-  - run-test.sh go test -p 2 -bench ./tabmgr -benchmem -cover
+  - run-test.sh go test -p 2 -bench . -benchmem -cover ./.
+  - run-test.sh go test -p 2 -bench . -benchmem -cover ./mnsender
+  - run-test.sh go test -p 2 -bench . -benchmem -cover ./mnclient
+  - run-test.sh go test -p 2 -bench . -benchmem -cover ./tabmgr
   environment:
     FX_VER: 66.0b12
     GO_VER: 1.12
@@ -98,7 +98,7 @@ steps:
 - name: test-tabmgr-go1.10.8-fx64.0
   image: ronmi/go-firefox
   commands:
-  - run-test.sh go test -p 2 -bench ./tabmgr -benchmem -cover
+  - run-test.sh go test -p 2 -run TestTabManager -cover ./tabmgr
   environment:
     FX_VER: 64.0
     GO_VER: 1.10.8
@@ -109,7 +109,7 @@ steps:
 - name: test-tabmgr-go1.10.8-fx65.0
   image: ronmi/go-firefox
   commands:
-  - run-test.sh go test -p 2 -bench ./tabmgr -benchmem -cover
+  - run-test.sh go test -p 2 -run TestTabManager -cover ./tabmgr
   environment:
     FX_VER: 65.0
     GO_VER: 1.10.8
@@ -120,7 +120,7 @@ steps:
 - name: test-tabmgr-go1.11.5-fx64.0
   image: ronmi/go-firefox
   commands:
-  - run-test.sh go test -p 2 -bench ./tabmgr -benchmem -cover
+  - run-test.sh go test -p 2 -run TestTabManager -cover ./tabmgr
   environment:
     FX_VER: 64.0
     GO_VER: 1.11.5
@@ -131,7 +131,7 @@ steps:
 - name: test-tabmgr-go1.11.5-fx65.0
   image: ronmi/go-firefox
   commands:
-  - run-test.sh go test -p 2 -bench ./tabmgr -benchmem -cover
+  - run-test.sh go test -p 2 -run TestTabManager -cover ./tabmgr
   environment:
     FX_VER: 65.0
     GO_VER: 1.11.5
@@ -142,7 +142,7 @@ steps:
 - name: test-tabmgr-go1.12-fx64.0
   image: ronmi/go-firefox
   commands:
-  - run-test.sh go test -p 2 -bench ./tabmgr -benchmem -cover
+  - run-test.sh go test -p 2 -run TestTabManager -cover ./tabmgr
   environment:
     FX_VER: 64.0
     GO_VER: 1.12
@@ -153,7 +153,7 @@ steps:
 - name: test-tabmgr-go1.12-fx65.0
   image: ronmi/go-firefox
   commands:
-  - run-test.sh go test -p 2 -bench ./tabmgr -benchmem -cover
+  - run-test.sh go test -p 2 -run TestTabManager -cover ./tabmgr
   environment:
     FX_VER: 65.0
     GO_VER: 1.12

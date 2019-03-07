@@ -51,7 +51,18 @@ func connect(t *testing.T) (m mnsender.Sender, c *mnclient.Commander) {
 	return
 }
 
-func TestInit(t *testing.T) {
+func TestTabManager(t *testing.T) {
+	t.Run("Init", testInit)
+	t.Run("Ordered", testOrdered)
+	t.Run("Intersect", testIntersect)
+	t.Run("Concurrent", testConcurrent)
+	t.Run("WaitFor", func(t *testing.T) {
+		t.Run("OK", testWaitForOK)
+		t.Run("Fail", testWaitForFail)
+	})
+}
+
+func testInit(t *testing.T) {
 	sender, client := connect(t)
 	defer sender.Close()
 
@@ -71,7 +82,7 @@ func TestInit(t *testing.T) {
 	}
 }
 
-func TestOrdered(t *testing.T) {
+func testOrdered(t *testing.T) {
 	sender, _ := connect(t)
 	defer sender.Close()
 	lbl := []string{"a", "b", "c", "d", "e"}
@@ -102,7 +113,7 @@ func TestOrdered(t *testing.T) {
 	}
 }
 
-func TestIntersect(t *testing.T) {
+func testIntersect(t *testing.T) {
 	sender, _ := connect(t)
 	defer sender.Close()
 	lbl := []string{"a", "b", "c", "d", "e"}
@@ -132,7 +143,7 @@ func TestIntersect(t *testing.T) {
 	}
 }
 
-func TestConcurrent(t *testing.T) {
+func testConcurrent(t *testing.T) {
 	sender, _ := connect(t)
 	defer sender.Close()
 	lbl := []string{"a", "b", "c", "d", "e"}
@@ -180,7 +191,7 @@ func TestConcurrent(t *testing.T) {
 	})
 }
 
-func TestWaitForOK(t *testing.T) {
+func testWaitForOK(t *testing.T) {
 	sender, _ := connect(t)
 	defer sender.Close()
 	lbl := []string{"a", "b", "c", "d", "e"}
@@ -207,7 +218,7 @@ func TestWaitForOK(t *testing.T) {
 	}
 }
 
-func TestWaitForFail(t *testing.T) {
+func testWaitForFail(t *testing.T) {
 	sender, _ := connect(t)
 	defer sender.Close()
 	lbl := []string{"a", "b", "c", "d", "e"}

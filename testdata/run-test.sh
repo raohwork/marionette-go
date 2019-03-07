@@ -33,6 +33,7 @@ then
         set -x
         eval "$@"
     )
+    RET=$?
     
     if [[ $XVFB != "" ]]
     then
@@ -41,4 +42,6 @@ then
     kill %1 > /dev/null 2>&1
     wait > /dev/null 2>&1
     rm -fr "$FX_PROFILE" > /dev/null 2>&1
+
+    exit $RET
 fi
