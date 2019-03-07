@@ -61,3 +61,49 @@ func TestNewWindowMgr3Win(t *testing.T) {
 		t.Fatal("tab w2:t2 not with w2:t1")
 	}
 }
+
+func TestNewWindowMgr1Win(t *testing.T) {
+	sender, cl := connect(t)
+	defer sender.Close()
+
+	windows := map[string][]string{
+		"w1": {"t1"},
+	}
+	wm, err := WindowManager(sender, windows)
+	if err != nil {
+		t.Fatalf("cannot create window manager: %s", err)
+	}
+
+	wins, err := cl.GetChromeWindowHandles()
+	if err != nil {
+		t.Fatalf("cannot get list of opened windows: %s", err)
+	}
+	if l := len(wins); l != 1 {
+		t.Fatalf("expected 1 window, got %d", l)
+	}
+
+	tabs, err := cl.GetWindowHandles()
+	if err != nil {
+		t.Fatalf("cannot get list of opened tabs: %s", err)
+	}
+	if l := len(tabs); l != 1 {
+		t.Fatalf("expected 1 tab, got %d", l)
+	}
+
+	tm := wm.GetTab("w1:t1")
+	win, err := tm.GetChromeWindowHandle()
+	if err != nil {
+		t.Fatalf("cannot get window handle: %s", err)
+	}
+	if win != wins[0] {
+		t.Error("unexpected window")
+	}
+
+	tab, err := tm.GetWindowHandle()
+	if err != nil {
+		t.Fatalf("cannot get tab handle: %s", err)
+	}
+	if tab != tabs[0] {
+		t.Error("unexpected tab")
+	}
+}
