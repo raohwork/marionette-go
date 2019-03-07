@@ -11,7 +11,7 @@ local TestTabmgrStep(go, fx) = {
     FX_VER: fx,
   },
   commands: [
-    "run-test.sh go test -p 2 -bench ./tabmgr -benchmem -cover",
+    "run-test.sh go test -p 2 -run TestTabManager -cover ./tabmgr",
   ],
   volumes: [
     {name: "opt", path: "/opt"},
@@ -19,7 +19,7 @@ local TestTabmgrStep(go, fx) = {
 };
 
 local TestCmd(dir) = [
-  "run-test.sh go test -p 2 -bench ./"+dir+" -benchmem -cover",
+  "run-test.sh go test -p 2 -bench . -benchmem -cover ./"+dir,
 ];
 
 local TestStep(go, fx) = {
