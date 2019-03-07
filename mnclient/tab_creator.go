@@ -27,7 +27,8 @@ type TabCreator interface {
 	//
 	// Passing empty array to have leads to panic. It returns empty array if
 	// want = 0, but there might be one window left due to Marionette design,
-	// which is mean to prevent disconnecting.
+	// which is mean to prevent disconnecting. Passing negative numbers to want
+	// leads to panic.
 	EnsureWindowNumber(have []string, want int) (windows []string, err error)
 
 	// Open or close tabs to ensure number of tabs
@@ -38,7 +39,8 @@ type TabCreator interface {
 	//
 	// Passing empty array to have leads to panic. It returns empty array if
 	// want = 0, but there might be one tab left due to Marionette design, which
-	// is mean to prevent disconnecting.
+	// is mean to prevent disconnecting. Passing negative numbers to want leads
+	// to panic.
 	EnsureTabNumber(have []string, want int) (tabs []string, err error)
 }
 
@@ -92,9 +94,10 @@ func (c *tabCreator) EnsureTabNumber(
 		if err = c.cl.SwitchToWindow(have[0]); err != nil {
 			return
 		}
-		if have, err = c.cl.CloseWindow(); err != nil {
+		if _, err = c.cl.CloseWindow(); err != nil {
 			return
 		}
+		have = have[1:]
 	}
 	tabs = have
 
@@ -129,9 +132,10 @@ func (c *tabCreator) EnsureWindowNumber(
 		if err = c.cl.SwitchToWindow(have[0]); err != nil {
 			return
 		}
-		if have, err = c.cl.CloseChromeWindow(); err != nil {
+		if _, err = c.cl.CloseChromeWindow(); err != nil {
 			return
 		}
+		have = have[1:]
 	}
 	windows = have
 
