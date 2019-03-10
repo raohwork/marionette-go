@@ -37,11 +37,16 @@ function runtest {
 }
 
 CNT=0
+MAX=3
+if [[ $DEBUG != "" ]]
+then
+    MAX=1
+fi
 
 function jobc {
     CNT=$((CNT+1))
 
-    if [[ $CNT -ge 3 ]]
+    if [[ $CNT -ge $MAX ]]
     then
         wait
         CNT=0
