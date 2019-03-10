@@ -9,4 +9,4 @@
 //
 // See License.txt for further information.
 
-module github.com/raohwork/marionette-go
+module github.com/raohwork/marionette-go/v3
