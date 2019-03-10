@@ -93,4 +93,4 @@ There will be a release note to address the changes and lowest supported Firefox
 
 # License
 
-LGPLv3
+LGPLv3 | MPL2.0
