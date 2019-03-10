@@ -12,7 +12,7 @@
 package mncmd
 
 import (
-	marionette "github.com/raohwork/marionette-go/v3"
+	marionette "github.com/raohwork/marionette-go"
 )
 
 // NewSession represents "WebDriver:NewSession" command

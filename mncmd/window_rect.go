@@ -11,7 +11,7 @@
 
 package mncmd
 
-import marionette "github.com/raohwork/marionette-go/v3"
+import marionette "github.com/raohwork/marionette-go"
 
 type returnRect struct{}
 

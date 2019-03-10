@@ -16,8 +16,8 @@ import (
 	"io"
 	"net"
 
-	marionette "github.com/raohwork/marionette-go/v3"
-	"github.com/raohwork/marionette-go/v3/mncmd"
+	marionette "github.com/raohwork/marionette-go"
+	"github.com/raohwork/marionette-go/mncmd"
 )
 
 // Sender abstracts an async client which supports blocking and non-blocking call

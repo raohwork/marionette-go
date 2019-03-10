@@ -17,9 +17,9 @@ import (
 	"testing"
 	"time"
 
-	marionette "github.com/raohwork/marionette-go/v3"
-	"github.com/raohwork/marionette-go/v3/mnclient"
-	"github.com/raohwork/marionette-go/v3/mnsender"
+	marionette "github.com/raohwork/marionette-go"
+	"github.com/raohwork/marionette-go/mnclient"
+	"github.com/raohwork/marionette-go/mnsender"
 )
 
 var addr = "127.0.0.1:2828"

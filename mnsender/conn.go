@@ -17,7 +17,7 @@ import (
 	"errors"
 	"io"
 
-	marionette "github.com/raohwork/marionette-go/v3"
+	marionette "github.com/raohwork/marionette-go"
 )
 
 // Conn represents a cnnection to Marionette server

@@ -50,7 +50,7 @@ local TestPipeline() = {
   name: "testing",
   workspace: {
     base: "/go",
-    path: "src/github.com/raohwork/marionette-go/v3"
+    path: "src/github.com/raohwork/marionette-go"
   },
   steps: [
   ] + byGo() + [

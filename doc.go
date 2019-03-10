@@ -16,9 +16,9 @@
 //     package main
 //
 //     import (
-//         marionette "github.com/raohwork/marionette-go/v3"
-//         "github.com/raohwork/marionette-go/v3/mnclient"
-//         "github.com/raohwork/marionette-go/v3/mnsender"
+//         marionette "github.com/raohwork/marionette-go"
+//         "github.com/raohwork/marionette-go/mnclient"
+//         "github.com/raohwork/marionette-go/mnsender"
 //     )
 //
 //     func main() {

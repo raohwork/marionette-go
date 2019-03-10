@@ -15,8 +15,8 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/raohwork/marionette-go/v3/mnclient"
-	"github.com/raohwork/marionette-go/v3/mnsender"
+	"github.com/raohwork/marionette-go/mnclient"
+	"github.com/raohwork/marionette-go/mnsender"
 )
 
 // WindowManager creates a TabManager instance to control tabs in multiple window
