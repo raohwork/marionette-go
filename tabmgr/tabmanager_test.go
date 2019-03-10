@@ -1,17 +1,13 @@
 // This file is part of marionette-go
 //
-// marionette-go is free software: you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as published by the
-// Free Software Foundation, either version 3 of the License, or (at your option)
-// any later version.
+// marionette-go is distributed in two licenses: The Mozilla Public License,
+// v. 2.0 and the GNU Lesser Public License.
 //
 // marionette-go is distributed in the hope that it will be useful, but WITHOUT
 // ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-// FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
-// details.
+// FOR A PARTICULAR PURPOSE.
 //
-// You should have received a copy of the GNU Lesser General Public License along
-// with marionette-go. If not, see <https://www.gnu.org/licenses/>.
+// See License.txt for further information.
 
 package tabmgr
 
@@ -51,7 +47,18 @@ func connect(t *testing.T) (m mnsender.Sender, c *mnclient.Commander) {
 	return
 }
 
-func TestInit(t *testing.T) {
+func TestTabManager(t *testing.T) {
+	t.Run("Init", testInit)
+	t.Run("Ordered", testOrdered)
+	t.Run("Intersect", testIntersect)
+	t.Run("Concurrent", testConcurrent)
+	t.Run("WaitFor", func(t *testing.T) {
+		t.Run("OK", testWaitForOK)
+		t.Run("Fail", testWaitForFail)
+	})
+}
+
+func testInit(t *testing.T) {
 	sender, client := connect(t)
 	defer sender.Close()
 
@@ -71,7 +78,7 @@ func TestInit(t *testing.T) {
 	}
 }
 
-func TestOrdered(t *testing.T) {
+func testOrdered(t *testing.T) {
 	sender, _ := connect(t)
 	defer sender.Close()
 	lbl := []string{"a", "b", "c", "d", "e"}
@@ -102,7 +109,7 @@ func TestOrdered(t *testing.T) {
 	}
 }
 
-func TestIntersect(t *testing.T) {
+func testIntersect(t *testing.T) {
 	sender, _ := connect(t)
 	defer sender.Close()
 	lbl := []string{"a", "b", "c", "d", "e"}
@@ -132,7 +139,7 @@ func TestIntersect(t *testing.T) {
 	}
 }
 
-func TestConcurrent(t *testing.T) {
+func testConcurrent(t *testing.T) {
 	sender, _ := connect(t)
 	defer sender.Close()
 	lbl := []string{"a", "b", "c", "d", "e"}
@@ -180,7 +187,7 @@ func TestConcurrent(t *testing.T) {
 	})
 }
 
-func TestWaitForOK(t *testing.T) {
+func testWaitForOK(t *testing.T) {
 	sender, _ := connect(t)
 	defer sender.Close()
 	lbl := []string{"a", "b", "c", "d", "e"}
@@ -207,7 +214,7 @@ func TestWaitForOK(t *testing.T) {
 	}
 }
 
-func TestWaitForFail(t *testing.T) {
+func testWaitForFail(t *testing.T) {
 	sender, _ := connect(t)
 	defer sender.Close()
 	lbl := []string{"a", "b", "c", "d", "e"}

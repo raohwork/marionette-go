@@ -1,17 +1,13 @@
 // This file is part of marionette-go
 //
-// marionette-go is free software: you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as published by the
-// Free Software Foundation, either version 3 of the License, or (at your option)
-// any later version.
+// marionette-go is distributed in two licenses: The Mozilla Public License,
+// v. 2.0 and the GNU Lesser Public License.
 //
 // marionette-go is distributed in the hope that it will be useful, but WITHOUT
 // ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-// FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
-// details.
+// FOR A PARTICULAR PURPOSE.
 //
-// You should have received a copy of the GNU Lesser General Public License along
-// with marionette-go. If not, see <https://www.gnu.org/licenses/>.
+// See License.txt for further information.
 
 package tabmgr
 
@@ -21,40 +17,8 @@ import (
 
 	marionette "github.com/raohwork/marionette-go"
 	"github.com/raohwork/marionette-go/mnclient"
-	"github.com/raohwork/marionette-go/mncmd"
 	"github.com/raohwork/marionette-go/mnsender"
 )
-
-type tabManager interface {
-	allocateTab(tab string) error
-	releaseTab()
-}
-
-type mySender struct {
-	name string
-	mgr  tabManager
-	mnsender.Sender
-}
-
-func (s *mySender) Sync(cmd mncmd.Command) (msg *marionette.Message, err error) {
-	if err = s.mgr.allocateTab(s.name); err != nil {
-		return
-	}
-	msg, err = s.Sender.Sync(cmd)
-	s.mgr.releaseTab()
-
-	return
-}
-
-func (s *mySender) Async(cmd mncmd.Command) (ch chan *marionette.Message, err error) {
-	if err = s.mgr.allocateTab(s.name); err != nil {
-		return
-	}
-	ch, err = s.Sender.Async(cmd)
-	s.mgr.releaseTab()
-
-	return
-}
 
 // Tab represents a tab under manager's control
 //
@@ -79,8 +43,21 @@ func (s *mySender) Async(cmd mncmd.Command) (ch chan *marionette.Message, err er
 //
 // Executing unsupported commands leads to panic!
 type Tab struct {
-	mySender *mySender
+	mySender *lockedSender
 	*mnclient.Commander
+}
+
+// NewTab creates a new Tab instance
+func NewTab(name string, mgr LockManager, sender mnsender.Sender) (ret *Tab) {
+	s := &lockedSender{
+		name:   name,
+		mgr:    mgr,
+		Sender: sender,
+	}
+	return &Tab{
+		mySender:  s,
+		Commander: &mnclient.Commander{Sender: s},
+	}
 }
 
 func (t *Tab) CloseChromeWindow() (handles []string, err error) {
@@ -104,7 +81,7 @@ func (t *Tab) SwitchToWindowBG(s string) (err error) {
 
 // GetName returns current tab name
 func (t *Tab) GetName() (ret string) {
-	return t.mySender.name
+	return t.mySender.GetName()
 }
 
 // WaitFor periodically check if specified element presents

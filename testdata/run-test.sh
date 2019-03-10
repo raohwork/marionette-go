@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# This file is part of marionette-go
+#
+# marionette-go is distributed in two licenses: The Mozilla Public License,
+# v. 2.0 and the GNU Lesser Public License.
+#
+# marionette-go is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+# See License.txt for further information.
+
 /usr/local/bin/install-deps.sh
 
 godir="/opt/go/${GO_VER}"
@@ -33,6 +44,7 @@ then
         set -x
         eval "$@"
     )
+    RET=$?
     
     if [[ $XVFB != "" ]]
     then
@@ -41,4 +53,6 @@ then
     kill %1 > /dev/null 2>&1
     wait > /dev/null 2>&1
     rm -fr "$FX_PROFILE" > /dev/null 2>&1
+
+    exit $RET
 fi
