@@ -85,7 +85,9 @@ func (s *Async) mainLoop() {
 	for {
 		select {
 		case x := <-s.Conn.ResultChan():
-			s.dispatch(x)
+			if x != nil {
+				s.dispatch(x)
+			}
 		case <-s.ctx.Done():
 			s.mapLock.Lock()
 			defer s.mapLock.Unlock()
