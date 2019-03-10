@@ -35,4 +35,4 @@
 //         // go to google
 //         cl.Navigate("https://www.google.com")
 //     }
-package marionette // import "github.com/raohwork/marionette-go"
+package marionette // import "github.com/raohwork/marionette-go/v3"
