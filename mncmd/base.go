@@ -21,7 +21,7 @@ import (
 	"encoding/json"
 	"reflect"
 
-	marionette "github.com/raohwork/marionette-go"
+	marionette "github.com/raohwork/marionette-go/v3"
 )
 
 // Command defines a command

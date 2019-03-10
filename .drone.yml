@@ -8,7 +8,7 @@ platform:
 
 workspace:
   base: /go
-  path: src/github.com/raohwork/marionette-go
+  path: src/github.com/raohwork/marionette-go/v3
 
 steps:
 - name: test-go1.10.8-fx66.0b9

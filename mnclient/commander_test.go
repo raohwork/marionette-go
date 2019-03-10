@@ -17,8 +17,8 @@ import (
 	"strconv"
 	"testing"
 
-	marionette "github.com/raohwork/marionette-go"
-	"github.com/raohwork/marionette-go/mnsender"
+	marionette "github.com/raohwork/marionette-go/v3"
+	"github.com/raohwork/marionette-go/v3/mnsender"
 )
 
 var addr = "127.0.0.1:2828"

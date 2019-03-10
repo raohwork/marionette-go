@@ -14,10 +14,10 @@ package tabmgr
 import (
 	"sync"
 
-	marionette "github.com/raohwork/marionette-go"
-	"github.com/raohwork/marionette-go/mnclient"
-	"github.com/raohwork/marionette-go/mncmd"
-	"github.com/raohwork/marionette-go/mnsender"
+	marionette "github.com/raohwork/marionette-go/v3"
+	"github.com/raohwork/marionette-go/v3/mnclient"
+	"github.com/raohwork/marionette-go/v3/mncmd"
+	"github.com/raohwork/marionette-go/v3/mnsender"
 )
 
 // LockManager ensures later commands are issued to correct tab

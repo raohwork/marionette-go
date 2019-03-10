@@ -12,7 +12,7 @@
 # See License.txt for further information.
 
 
-DIR="/go/src/github.com/raohwork/marionette-go"
+DIR="/go/src/github.com/raohwork/marionette-go/v3"
 mkdir -p .cache/opt
 
 function runtest {

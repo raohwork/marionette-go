@@ -18,8 +18,8 @@ import (
 	"testing"
 	"time"
 
-	marionette "github.com/raohwork/marionette-go"
-	"github.com/raohwork/marionette-go/mncmd"
+	marionette "github.com/raohwork/marionette-go/v3"
+	"github.com/raohwork/marionette-go/v3/mncmd"
 )
 
 type fakeSenderForCtx struct {

@@ -15,7 +15,7 @@ import (
 	"strings"
 	"testing"
 
-	marionette "github.com/raohwork/marionette-go"
+	marionette "github.com/raohwork/marionette-go/v3"
 )
 
 func (tc *cmdrTestCase) testSwitchToFrame(t *testing.T) {

@@ -14,7 +14,7 @@ package mnclient
 import (
 	"testing"
 
-	marionette "github.com/raohwork/marionette-go"
+	marionette "github.com/raohwork/marionette-go/v3"
 )
 
 func (tc *cmdrTestCase) testCookies(t *testing.T) {

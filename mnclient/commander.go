@@ -14,9 +14,9 @@ package mnclient
 import (
 	"encoding/base64"
 
-	marionette "github.com/raohwork/marionette-go"
-	"github.com/raohwork/marionette-go/mncmd"
-	"github.com/raohwork/marionette-go/mnsender"
+	marionette "github.com/raohwork/marionette-go/v3"
+	"github.com/raohwork/marionette-go/v3/mncmd"
+	"github.com/raohwork/marionette-go/v3/mnsender"
 )
 
 // Commander is a client mixin which wraps supported commands into methods

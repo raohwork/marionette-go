@@ -14,7 +14,7 @@ package mnclient
 import (
 	"testing"
 
-	"github.com/raohwork/marionette-go/mnsender"
+	"github.com/raohwork/marionette-go/v3/mnsender"
 )
 
 func TestTabCreator(t *testing.T) {
