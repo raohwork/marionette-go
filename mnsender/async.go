@@ -81,29 +81,34 @@ func (s *Async) Stop() {
 	s.Wait()
 }
 
+func (s *Async) shutdown() {
+	s.mapLock.Lock()
+	defer s.mapLock.Unlock()
+	s.ctx = nil
+	errMsg := errors.New("client exit")
+	for id, x := range s.pending {
+		if len(x) == 0 {
+			x <- &marionette.Message{
+				Error:  errMsg,
+				Serial: id,
+			}
+		}
+		close(x)
+	}
+	s.pending = nil
+	close(s.running)
+}
+
 func (s *Async) mainLoop() {
+	defer s.shutdown()
 	for {
 		select {
 		case x := <-s.Conn.ResultChan():
-			if x != nil {
-				s.dispatch(x)
+			if x == nil {
+				return
 			}
+			s.dispatch(x)
 		case <-s.ctx.Done():
-			s.mapLock.Lock()
-			defer s.mapLock.Unlock()
-			s.ctx = nil
-			errMsg := errors.New("client exit")
-			for id, x := range s.pending {
-				if len(x) == 0 {
-					x <- &marionette.Message{
-						Error:  errMsg,
-						Serial: id,
-					}
-				}
-				close(x)
-			}
-			s.pending = nil
-			close(s.running)
 			return
 		}
 	}
